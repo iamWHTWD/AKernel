@@ -1,0 +1,3 @@
+{
+  "repository_pattern": "^(registry(-vpc)?\\.[a-z0-9-]+\\.aliyuncs\\.com|[a-z0-9-]+\\.[a-z0-9-]+\\.cr\\.aliyuncs\\.com)/[a-zA-Z0-9_./-]+$"
+}

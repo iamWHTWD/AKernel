@@ -30,6 +30,7 @@ image_repository_override=""
 image_tag_override=""
 install_monitor_override=""
 install_dragonfly_override=""
+node_image_pull_mode_override=""
 chunk_db_size_override=""
 enable_runc_override=""
 schedule_placement_policy_override=""
@@ -116,6 +117,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --install-dragonfly)
       install_dragonfly_override="$2"
+      shift 2
+      ;;
+    --node-image-pull-mode)
+      node_image_pull_mode_override="$2"
       shift 2
       ;;
     --chunk-db-size)
@@ -238,6 +243,60 @@ esac
 set_or_prompt image_tag "All-in-one image tag" "${default_tag}" "${image_tag_override}"
 set_or_prompt install_monitor "Install monitor chart (true/false)" "true" "${install_monitor_override}"
 set_or_prompt install_dragonfly "Install Dragonfly and dedicated node pools (true/false)" "false" "${install_dragonfly_override}"
+node_image_pull_mode="direct"
+if [[ "${vendor}" == "aliyun" ]]; then
+  default_pull_mode="auto"
+  # Re-generating an old profile must not implicitly opt an existing cluster in.
+  existing_profile="$(state_dir "${env_name}")"
+  state_file="${TERRAFORM_STATE_FILE:-${existing_profile}/terraform.tfstate}"
+  data_dir="${TERRAFORM_DATA_DIR:-${TF_DATA_DIR:-${existing_profile}/.terraform}}"
+  if [[ -f "${existing_profile}/terraform.tfvars" || -f "${existing_profile}/config.env" ||
+        -e "${state_file}" || -e "${state_file}.backup" ||
+        -e "${data_dir}/terraform.tfstate" || -e "${ROOT}/deploy/terraform/aliyun/.terraform/terraform.tfstate" ]] ||
+     compgen -G "${existing_profile}/*.tfstate*" >/dev/null; then
+    default_pull_mode="direct"
+    if python3 - "${existing_profile}/terraform.tfvars" "${existing_profile}/config.env" "${state_file}" <<'PY'
+import json, pathlib, re, sys
+variables, config, state = map(pathlib.Path, sys.argv[1:])
+if variables.is_file():
+    auto = re.search(r'(?m)^\s*node_image_pull_mode\s*=\s*"auto"\s*(?:#.*)?$', variables.read_text())
+elif config.is_file():
+    auto = re.search(r'(?m)^NODE_IMAGE_PULL_MODE=auto\s*$', config.read_text())
+else:
+    # Prefer current state to backup and root Helm state to pool templates.
+    # A partial first deployment can have auto pools before Helm is installed.
+    if not state.is_file():
+        state = pathlib.Path(str(state) + '.backup')
+    resources = [item for item in json.loads(state.read_text()).get('resources', [])
+                 if not item.get('module') and item.get('instances')] if state.is_file() else []
+    releases = {item['name'] for item in resources if item.get('type') == 'helm_release'}
+    auto = 'akernel_core_dragonfly' in releases
+    if not auto and 'akernel_core' not in releases:
+        auto = any(label.get('key') == 'akernel.io/image-pull-profile' and label.get('value') == 'ack-dragonfly-v1'
+                   for item in resources if item.get('type') == 'alicloud_cs_kubernetes_node_pool'
+                   for instance in item['instances'] for label in ((instance.get('attributes') or {}).get('labels') or []))
+raise SystemExit(0 if auto else 1)
+PY
+    then
+      default_pull_mode="auto"
+    fi
+  fi
+  set_or_prompt node_image_pull_mode "ACK worker image pulls (auto/direct)" "${default_pull_mode}" "${node_image_pull_mode_override}"
+  case "${node_image_pull_mode}" in
+    auto | direct) ;;
+    *) die "NODE_IMAGE_PULL_MODE must be auto or direct" ;;
+  esac
+  if [[ "${node_image_pull_mode}" == "auto" ]]; then
+    python3 - "${image_repository}" "${ROOT}/deploy/terraform/aliyun/node-image-pull-policy.json" <<'PY'
+import json, pathlib, re, sys
+policy = json.loads(pathlib.Path(sys.argv[2]).read_text())
+if not re.fullmatch(policy['repository_pattern'], sys.argv[1]):
+    sys.exit('auto image pulls support Alibaba ACR repositories only; set NODE_IMAGE_PULL_MODE=direct for other registries')
+PY
+  fi
+elif [[ -n "${node_image_pull_mode_override}" && "${node_image_pull_mode_override}" != "direct" ]]; then
+  die "auto image-pull bootstrap currently supports Aliyun ACK only"
+fi
 set_or_prompt chunk_db_size "Shared ChunkDB capacity (empty uses distill-fs default)" "" "${chunk_db_size_override}"
 if [[ -n "${chunk_db_size}" && ! "${chunk_db_size}" =~ ^[0-9]+(B|KiB|MiB|GiB|TiB)?$ ]]; then
   die "CHUNK_DB_SIZE must be whole bytes or an integer with B/KiB/MiB/GiB/TiB"
@@ -292,11 +351,16 @@ case "${vendor}" in
     zone_ids="$(csv_to_hcl_list "${zone_ids_csv}")"
     vswitch_cidrs="$(csv_to_hcl_list "${vswitch_cidrs_csv}")"
     node_pool_instance_types="$(csv_to_hcl_list "${node_pool_instance_types_csv}")"
+    profile_acr_registry_url=""
+    if [[ "${node_image_pull_mode}" == "auto" ]]; then
+      profile_acr_registry_url="${image_repository%/*}"
+    fi
 
     cat > "${tfvars_file}" <<EOF
 region       = "${region}"
 acr_region   = "${region}"
 acr_namespace = "${acr_namespace}"
+acr_registry_url = "${profile_acr_registry_url}"
 cluster_name = "${cluster_name}"
 
 zone_ids      = ${zone_ids}
@@ -323,6 +387,7 @@ node_pool_extra_data_disk_size       = 300
 node_pool_extra_data_disk_mount_path = "/home/akernel"
 node_pool_extra_data_disk_fs_type    = "xfs"
 node_pool_key_name             = "${node_pool_key_name}"
+node_image_pull_mode           = "${node_image_pull_mode}"
 
 core_namespace = "akernel"
 
@@ -413,6 +478,7 @@ IMAGE_TAG=${image_tag}
 CORE_NAMESPACE=akernel
 MONITOR_NAMESPACE=akernel-monitor
 INSTALL_DRAGONFLY=${install_dragonfly}
+NODE_IMAGE_PULL_MODE=${node_image_pull_mode}
 CHUNK_DB_SIZE=${chunk_db_size}
 AKERNEL_ENABLE_RUNC=${enable_runc}
 SCHEDULE_PLACEMENT_POLICY=${schedule_placement_policy}

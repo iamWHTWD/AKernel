@@ -40,6 +40,26 @@ resource "null_resource" "input_validation" {
       condition     = length(var.master_image_tag) > 0 && length(var.node_image_tag) > 0
       error_message = "master_image_tag and node_image_tag must be set to a published AKernel image tag."
     }
+    precondition {
+      condition     = var.node_image_pull_mode != "auto" || var.create_cluster
+      error_message = "auto image-pull bootstrap is supported only for new Terraform-managed ACK clusters; existing-cluster migration requires a separate rollout."
+    }
+    precondition {
+      condition     = var.node_image_pull_mode != "auto" || (var.node_pool_image_type == "AliyunLinux3" && var.node_pool_image_id == "")
+      error_message = "The first auto image-pull release supports official AliyunLinux3 node images only. Use direct for other OS or custom image IDs."
+    }
+    precondition {
+      condition     = var.node_image_pull_mode != "auto" || can(regex(jsondecode(file("${path.module}/node-image-pull-policy.json")).repository_pattern, local.node_image_repo))
+      error_message = "auto image pulls require a fully qualified Alibaba ACR node_image_repository without a tag or digest. Use direct for other registries."
+    }
+    precondition {
+      condition     = !local.node_image_pull_auto || !local.acr_secret_enabled || split("/", local.node_image_repo)[0] == local.acr_host
+      error_message = "ACR imagePullSecret must match the effective node image registry. Set acr_registry_url to that registry/namespace; credentials are not copied to a different registry host."
+    }
+    precondition {
+      condition     = var.node_image_pull_mode != "auto" || can(regex("^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$", var.dragonfly_namespace))
+      error_message = "auto image pulls require a DNS-label Dragonfly namespace (at most 63 characters)."
+    }
     # Skipped: DescribeAvailableResource API is unreliable in some regions (e.g. ap-southeast-3),
     # reporting types as unavailable when they can actually be provisioned via console/ACK.
     # precondition {
@@ -91,10 +111,10 @@ locals {
     sandboxd_nat_backend = var.sandboxd_nat_backend
     max_user_namespaces  = var.node_pool_max_user_namespaces
   })
-  node_pool_bootstrap_user_data = join("\n", [
+  node_pool_bootstrap_user_data = join("\n", concat([
     local.node_pool_bootstrap_base,
     templatefile("${path.module}/../shared/node-pid-budget.sh.tftpl", {}),
-  ])
+  ], local.node_image_pull_auto ? [local.node_image_pull_user_data] : []))
   dragonfly_seed_user_data = var.dragonfly_seed_node_pool.mount_local_nvme ? join("\n", [
     local.node_pool_bootstrap_base,
     templatefile("${path.module}/../shared/local-nvme-mount.sh.tftpl", {
@@ -134,6 +154,29 @@ locals {
   master_image_repo = length(var.master_image_repository) > 0 ? var.master_image_repository : "${local.acr_registry}/all-in-one"
   node_image_repo   = length(var.node_image_repository) > 0 ? var.node_image_repository : "${local.acr_registry}/all-in-one"
 
+  # Do not change the Terraform default: old saved profiles must remain direct.
+  # The profile generator explicitly opts new Aliyun environments into auto.
+  node_image_pull_auto = var.node_image_pull_mode == "auto" && var.create_cluster
+  # Terraform dependencies are static, even through a count=0 barrier.
+  # Only the auto variant may depend on the Dragonfly release. Its address
+  # stays stable when optional Dragonfly installation is enabled/disabled.
+  core_chart_hash = sha256(join("", [for f in fileset("${path.module}/../../akernel/charts/core", "**") : filesha256("${path.module}/../../akernel/charts/core/${f}")]))
+  node_image_pull_labels = local.node_image_pull_auto ? {
+    "akernel.io/image-pull-profile" = "ack-dragonfly-v1"
+    "akernel.io/image-pull-ready"   = "false"
+  } : {}
+  node_image_pull_user_data = local.node_image_pull_auto ? templatefile("${path.module}/node-image-pull.sh.tftpl", {
+    helper_gzip_b64 = base64gzip(file("${path.module}/node-image-pull.py"))
+    profile_b64 = base64encode(jsonencode({
+      cluster_id    = alicloud_cs_managed_kubernetes.ack[0].id
+      region        = var.region
+      registry      = split("/", local.node_image_repo)[0]
+      domain        = "dragonfly-seed-client.${var.dragonfly_namespace}.svc.cluster.local"
+      service_cidr  = var.service_cidr
+      helper_sha256 = filesha256("${path.module}/node-image-pull.py")
+    }))
+  }) : ""
+
   core_values = templatefile("${path.module}/values-akernel.yaml.tmpl", {
     adx_public_service_enabled  = var.adx_public_service_enabled
     adx_service_type            = var.adx_service_type
@@ -151,6 +194,7 @@ locals {
     schedule_placement_policy   = var.schedule_placement_policy
     node_image_repository       = local.node_image_repo
     node_image_tag              = var.node_image_tag
+    node_image_pull_auto        = local.node_image_pull_auto
     enable_kruise               = var.install_prereqs
     sandboxd_nat_backend        = var.sandboxd_nat_backend
     chunk_db_size               = var.chunk_db_size
@@ -431,13 +475,15 @@ resource "alicloud_cs_kubernetes_node_pool" "default_with_key" {
 
   key_name  = var.node_pool_key_name
   user_data = local.node_pool_bootstrap_user_data
-  tags      = var.tags
+  # Keep the pending template label from being copied back onto running nodes.
+  update_nodes = false
+  tags         = var.tags
 
   dynamic "labels" {
-    for_each = var.node_pool_exclusive_eni ? [1] : []
+    for_each = merge(var.node_pool_exclusive_eni ? { "k8s.aliyun.com/exclusive-mode-eni-type" = "eniOnly" } : {}, local.node_image_pull_labels)
     content {
-      key   = "k8s.aliyun.com/exclusive-mode-eni-type"
-      value = "eniOnly"
+      key   = labels.key
+      value = labels.value
     }
   }
 }
@@ -478,15 +524,16 @@ resource "alicloud_cs_kubernetes_node_pool" "default_with_password" {
     }
   }
 
-  password  = length(var.node_pool_login_password) > 0 ? var.node_pool_login_password : null
-  user_data = local.node_pool_bootstrap_user_data
-  tags      = var.tags
+  password     = length(var.node_pool_login_password) > 0 ? var.node_pool_login_password : null
+  user_data    = local.node_pool_bootstrap_user_data
+  update_nodes = false
+  tags         = var.tags
 
   dynamic "labels" {
-    for_each = var.node_pool_exclusive_eni ? [1] : []
+    for_each = merge(var.node_pool_exclusive_eni ? { "k8s.aliyun.com/exclusive-mode-eni-type" = "eniOnly" } : {}, local.node_image_pull_labels)
     content {
-      key   = "k8s.aliyun.com/exclusive-mode-eni-type"
-      value = "eniOnly"
+      key   = labels.key
+      value = labels.value
     }
   }
 }
@@ -537,9 +584,13 @@ resource "alicloud_cs_kubernetes_node_pool" "extra" {
   key_name = length(var.node_pool_key_name) > 0 ? var.node_pool_key_name : null
   password = length(var.node_pool_key_name) == 0 && length(var.node_pool_login_password) > 0 ? var.node_pool_login_password : null
   tags     = var.tags
+  # User-defined extra pools are AKernel compute pools. Generated Dragonfly
+  # server pools are excluded, as is the separately managed Dragonfly seed pool.
+  user_data    = local.node_image_pull_auto && each.value.use_akernel_data_disk ? join("\n", [local.node_pool_bootstrap_base, local.node_image_pull_user_data]) : null
+  update_nodes = false
 
   dynamic "labels" {
-    for_each = each.value.labels
+    for_each = merge(each.value.labels, local.node_image_pull_auto && each.value.use_akernel_data_disk ? local.node_image_pull_labels : {})
     content {
       key   = labels.key
       value = labels.value
@@ -778,7 +829,14 @@ resource "helm_release" "prereq_openkruise" {
   depends_on = [data.alicloud_cs_cluster_credential.ack, alicloud_cs_kubernetes_node_pool.default_with_key, alicloud_cs_kubernetes_node_pool.default_with_password, null_resource.ensure_prereq_namespace]
 }
 
+moved {
+  from = helm_release.akernel_core
+  to   = helm_release.akernel_core[0]
+}
+
 resource "helm_release" "akernel_core" {
+  count = local.node_image_pull_auto ? 0 : 1
+
   name                       = "akernel-core"
   chart                      = "${path.module}/../../akernel/charts/core"
   namespace                  = var.core_namespace
@@ -791,10 +849,31 @@ resource "helm_release" "akernel_core" {
   # Force Terraform to detect changes in chart files (templates, configs, etc.)
   set {
     name  = "chartContentHash"
-    value = sha256(join("", [for f in fileset("${path.module}/../../akernel/charts/core", "**") : filesha256("${path.module}/../../akernel/charts/core/${f}")]))
+    value = local.core_chart_hash
   }
 
   depends_on = [data.alicloud_cs_cluster_credential.ack, helm_release.prereq_openkruise, null_resource.ensure_core_namespace, null_resource.ensure_adx_secret, null_resource.create_storage_class]
+}
+
+# Keep the legacy release independent of Dragonfly. The moved block above
+# preserves existing state without uninstalling/recreating the Helm release.
+resource "helm_release" "akernel_core_dragonfly" {
+  count = local.node_image_pull_auto ? 1 : 0
+
+  name                       = "akernel-core"
+  chart                      = "${path.module}/../../akernel/charts/core"
+  namespace                  = var.core_namespace
+  create_namespace           = false
+  timeout                    = 900
+  disable_openapi_validation = true
+  values                     = [local.core_values]
+
+  set {
+    name  = "chartContentHash"
+    value = local.core_chart_hash
+  }
+
+  depends_on = [data.alicloud_cs_cluster_credential.ack, helm_release.prereq_openkruise, null_resource.ensure_core_namespace, null_resource.ensure_adx_secret, null_resource.create_storage_class, helm_release.dragonfly]
 }
 
 resource "helm_release" "akernel_monitor" {

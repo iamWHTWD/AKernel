@@ -46,6 +46,10 @@ node_pool_exclusive_eni = true
 #   node_pool_instance_types = ["ecs.r9i.4xlarge", "ecs.r5.8xlarge", "ecs.se1ne.8xlarge"]
 node_pool_instance_types       = ["ecs.c7.3xlarge"]
 node_pool_image_type           = "AliyunLinux3"
+# New ACK cluster only: install host DNS + Dragonfly mirror, retaining ACR fallback.
+# Missing variable in old saved profiles defaults to direct; do not enable on
+# an existing cluster without a separate node migration plan.
+node_image_pull_mode           = "auto"
 # Optional: pin ACK node image to a specific official/custom image ID.
 # node_pool_image_id           = "aliyun_3_x64_20G_alibase_20230110.vhd"
 # Optional: pin node pool to one zone in zone_ids.

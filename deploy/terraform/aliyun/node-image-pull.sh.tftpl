@@ -1,0 +1,32 @@
+# Install after the existing ACK post-join bootstrap has succeeded. The service
+# retries asynchronously, so ACK node-pool creation never waits for CoreDNS or
+# Dragonfly. The readiness label gates AKernel workloads sharing its image.
+test ! -L /etc/akernel
+test ! -L /etc/akernel/image-pull
+install -d -m 0700 /etc/akernel/image-pull
+printf '%s' '${helper_gzip_b64}' | base64 --decode | gzip --decompress > /etc/akernel/image-pull/bootstrap.py
+printf '%s' '${profile_b64}' | base64 --decode > /etc/akernel/image-pull/profile.json
+chmod 0600 /etc/akernel/image-pull/bootstrap.py /etc/akernel/image-pull/profile.json
+
+cat >/etc/systemd/system/akernel-image-pull.service <<'AKERNEL_IMAGE_PULL_UNIT'
+[Unit]
+Description=Configure ACK worker DNS and Dragonfly mirror with ACR fallback
+After=network-online.target NetworkManager.service kubelet.service
+Wants=network-online.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 -B /etc/akernel/image-pull/bootstrap.py
+RemainAfterExit=yes
+Restart=on-failure
+RestartSec=15
+TimeoutStartSec=180
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target
+AKERNEL_IMAGE_PULL_UNIT
+systemctl daemon-reload
+systemctl enable akernel-image-pull.service
+systemctl start --no-block akernel-image-pull.service

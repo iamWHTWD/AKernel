@@ -67,7 +67,7 @@ make config \
   REGION=cn-hangzhou \
   ZONE_IDS=cn-hangzhou-j,cn-hangzhou-j,cn-hangzhou-j \
   NODE_POOL_KEY_NAME=<your-ecs-key-name> \
-  IMAGE_REPOSITORY=registry.example.com/akernel/all-in-one \
+  IMAGE_REPOSITORY=registry.cn-hangzhou.aliyuncs.com/akernel/all-in-one \
   IMAGE_TAG=<existing-image-tag>
 ```
 
@@ -183,6 +183,138 @@ creates dedicated seed and server node pools by default, and injects
 AKernel node configuration. Set `oss_proxy_url` to override that address.
 Review `dragonfly_seed_node_pool`, `dragonfly_server_node_pool`, storage, and
 image registry settings before applying the plan.
+
+## Worker image pulls through Dragonfly
+
+New **Aliyun ACK** profiles generated with `make config` explicitly select
+`NODE_IMAGE_PULL_MODE=auto`. `INSTALL_DRAGONFLY` remains independent and defaults
+to `false`: without its Service, containerd falls back to the original ACR.
+Select `INSTALL_DRAGONFLY=true` to provision the dedicated Dragonfly pools too.
+
+| New-cluster configuration | AKernel node image pulls |
+| --- | --- |
+| Generated profile, `auto`, Dragonfly installed | Prefer Dragonfly for image content; retain ACR fallback |
+| Generated profile, `auto`, no Dragonfly Service | Fall back to ACR; no Service readiness gate |
+| `direct`, including raw Terraform defaults and legacy profiles | Pull directly from the configured registry |
+
+This default covers new Aliyun ACK clusters created through `make config`,
+with the supported host configuration below. It does not automatically opt
+other cloud providers or existing clusters in, or install Dragonfly itself.
+
+```bash
+make config VENDOR=aliyun ENV=ack-new \
+  NODE_IMAGE_PULL_MODE=auto INSTALL_DRAGONFLY=true \
+  IMAGE_REPOSITORY=registry.cn-hangzhou.aliyuncs.com/akernel/all-in-one \
+  IMAGE_TAG=<published-tag>
+make plan ENV=ack-new
+# Review the plan and obtain approval before make deploy ENV=ack-new.
+```
+
+First-release scope: newly provisioned clusters using official `AliyunLinux3`
+images, native IPv4 upstream DNS, NetworkManager, Python 3.6+ and containerd
+with an enabled `/etc/containerd/cert.d` or `certs.d` CRI hosts directory.
+Containerd 1.x local pull can use both directories. For the 2.x images plugin,
+multiple roots require explicit `use_local_image_pull=true`; a single root
+works with local pull and Transfer Service. Other multi-root configurations
+remain pending with an error, because Transfer Service can ignore their mirror.
+The helper never rewrites containerd's main configuration to change pull mode.
+Custom images, other operating systems, non-ACR registries, local DNS stubs and
+NodeLocal DNS require a separate adaptation; use `direct` for those profiles.
+The registry is derived from the effective `node_image_repository`, including
+enterprise ACR overrides. The bootstrap does not embed registry credentials.
+For private images, configure `acr_username`/`acr_password` through protected
+inputs or an existing ACK credential provider. Generated auto profiles align
+`acr_registry_url` with the selected image. When overriding `node_image_repository`
+manually, keep that host equal to `acr_registry_url` when using the generated
+`imagePullSecret`; even ACR public and VPC hostnames are distinct credential keys.
+
+The default compute pool and user-defined `extra_node_pools` receive the same
+image-pull bootstrap. Generated Dragonfly server and seed pools are excluded.
+In auto mode only successfully initialized nodes can run the AKernel node
+DaemonSet and ADX Redis, Coordinator and Ingress/API, which share the
+all-in-one image.
+This prevents control Pods from pre-pulling the image before the mirror exists.
+Additional compute pools must be created through this module.
+User-defined extra pools are compute pools, not alternate Dragonfly pools.
+
+The startup order is:
+
+1. ACK registers the node with `akernel.io/image-pull-ready=false`. CNI,
+   CoreDNS and other system Pods can start normally.
+2. Post-join User Data retains the existing module/PID setup and installs
+   `akernel-image-pull.service`. It starts asynchronously and retries failures.
+3. The root-owned helper verifies its own node/cluster/ECS identity using the
+   kubelet client certificate. It saves the original DNS and customized kubelet
+   arguments under `/etc/akernel/image-pull/baseline.json`.
+4. Kubelet receives an independent copy of its original upstream resolver,
+   through ACK's persistent `kubelet-customized-args.conf` mechanism. After the
+   kubelet restart is confirmed, NetworkManager persists the existing CoreDNS
+   Service IP ahead of the original upstream DNS servers on the host. Host
+   `rotate` is removed while other DNS options and the Pod resolver are retained.
+   This avoids forwarding CoreDNS back into itself; no CoreDNS ConfigMap changes.
+5. The helper writes `hosts.toml`, then marks only its own node ready. Service
+   existence and Dragonfly reachability do not gate this step. When auto mode
+   installs Dragonfly, Terraform prepares it before AKernel core. Legacy direct
+   profiles retain their independent Helm ordering.
+
+The helper allows six seconds for containerd's Go resolver to reload the host
+DNS before releasing the node. Hosts with `no-reload` remain pending and need
+a separate adaptation. See [NetworkManager DNS options](https://www.networkmanager.dev/docs/api/latest/settings-ipv4.html)
+and [Go's resolver cache](https://go.dev/src/net/dnsclient_unix.go).
+
+For example, the generated registry file is:
+
+```toml
+server = "https://registry.cn-hangzhou.aliyuncs.com"
+
+[host."http://dragonfly-seed-client.dragonfly-system.svc.cluster.local:4001"]
+  capabilities = ["pull"]
+  [host."http://dragonfly-seed-client.dragonfly-system.svc.cluster.local:4001".header]
+    X-Dragonfly-Registry = ["https://registry.cn-hangzhou.aliyuncs.com"]
+```
+
+Tag resolution stays on ACR; blob pulls prefer Dragonfly. The `server` entry
+preserves direct ACR fallback with the existing kubelet/ImagePullSecret
+authentication and normal TLS validation. DNS/connection failures may add
+runtime retry delays; fallback is not instantaneous, and still requires a
+reachable ACR and valid credentials. A failed Dragonfly Helm installation is
+reported as a deployment failure; runtime fallback does not hide that failure.
+See [containerd's registry-host configuration](https://github.com/containerd/containerd/blob/v2.1.9/docs/hosts.md).
+
+**Scope of impact:** host DNS changes apply to the new worker; the mirror
+affects every Pod on that worker pulling from the same registry. It does not
+select a repository or Pod. Sandbox image distribution continues to use the
+existing `registry.proxy` configuration, independently of this host mirror.
+
+The service validates/reapplies its owned files after reboot. It refuses
+foreign mirrors and unexpected configuration drift, leaving new nodes pending
+with a journal error instead of overwriting operator configuration. Diagnose
+with `systemctl status akernel-image-pull` and
+`journalctl -u akernel-image-pull`, then inspect
+`/etc/akernel/image-pull/status.json`. Never copy kubelet credentials or the
+baseline into reports. Own-node label PATCH permission is required; the helper
+never grants itself cluster-wide RBAC.
+
+Existing profiles that omit `node_image_pull_mode` keep `direct`. Regenerating
+an old profile preserves its choice. State/backup can identify an existing auto
+deployment, including auto pools created before Helm installation; other
+state-only or backend-metadata recovery defaults to `direct`.
+Auto is for new clusters: User Data configures only future nodes, while
+readiness affinity applies immediately. Keep the mode
+fixed after deployment; an existing-cluster migration requires a separate
+rollout and state-address migration. The `moved` block preserves legacy
+`helm_release.akernel_core` as `akernel_core[0]`; new auto deployments use
+`akernel_core_dragonfly[0]`. Toggling `INSTALL_DRAGONFLY` does not change that
+address. Changing the mode alone never restores DNS/mirrors already on hosts.
+
+Run `make ack-image-pull-test` (Terraform and Helm required) and
+`make deploy-script-check` before rollout.
+Offline tests exercise profile compatibility, scoped writes, retry/idempotency,
+resolver isolation and Service absence without contacting a cluster. They do
+not establish real CRI fallback or throughput. On a disposable new ACK cluster,
+verify seed logs for the initial pull, complete-image fallback with Service
+NXDOMAIN and unreachable endpoints, subsequent scale-out, image upgrades/cache
+eviction, and reboot persistence before production use.
 
 ## Public endpoint model
 

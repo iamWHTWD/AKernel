@@ -107,9 +107,21 @@ jobs:
         with:
           python-version: "3.10"
 
+      - name: Set up Terraform for offline template tests
+        uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
+        with:
+          terraform_version: "1.13.4"
+          terraform_wrapper: false
+
+      - name: Set up Helm for offline template tests
+        uses: azure/setup-helm@1a275c3b69536ee54be43f2070a358922e12c8d4 # v4.3.1
+        with:
+          version: "v3.22.0"
+
       - name: Check deployment script syntax
         run: |
           make deploy-script-check
+          make ack-image-pull-test
 
       - name: Test standalone deployment helpers
         run: |

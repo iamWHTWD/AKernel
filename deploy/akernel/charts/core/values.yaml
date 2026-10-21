@@ -33,6 +33,7 @@ adx:
     existingSecret: akernel-adx-tls
   redis:
     mode: managed
+    nodeSelector: {}
     appendfsync: everysec
     external:
       existingSecret: ""
@@ -51,6 +52,7 @@ adx:
         cpu: "1"
         memory: 1Gi
   coordinator:
+    nodeSelector: {}
     replicas: 1
     resources:
       requests:
@@ -60,6 +62,7 @@ adx:
         cpu: "1"
         memory: 1Gi
   ingressApi:
+    nodeSelector: {}
     replicas: 1
     portHostDomain: ""
     publicService:

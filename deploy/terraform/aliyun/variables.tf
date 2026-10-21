@@ -187,6 +187,18 @@ variable "node_pool_image_type" {
   default     = "AliyunLinux3"
 }
 
+variable "node_image_pull_mode" {
+  type        = string
+  description = "ACK new-cluster worker image pulls: direct preserves existing behavior; auto installs a Dragonfly Service-domain mirror with ACR fallback. Generated Aliyun profiles select auto."
+  default     = "direct"
+  nullable    = false
+
+  validation {
+    condition     = contains(["direct", "auto"], var.node_image_pull_mode)
+    error_message = "node_image_pull_mode must be direct or auto."
+  }
+}
+
 variable "node_pool_image_id" {
   type        = string
   description = "Optional ACK node pool image ID. When set, image_type is ignored."

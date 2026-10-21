@@ -1,5 +1,9 @@
 createNamespace: false
 
+image:
+  repository: "${master_image_repository}"
+  tag: "${master_image_tag}"
+
 %{ if acr_secret_enabled ~}
 imagePullSecrets:
   - name: acr-secret
@@ -26,6 +30,10 @@ adx:
     existingSecret: akernel-adx-tls
   redis:
     mode: managed
+%{ if node_image_pull_auto ~}
+    nodeSelector:
+      akernel.io/image-pull-ready: "true"
+%{ endif ~}
     appendfsync: everysec
     persistence:
       enabled: true
@@ -42,6 +50,10 @@ adx:
         memory: "${etcd_memory}"
   coordinator:
     replicas: 1
+%{ if node_image_pull_auto ~}
+    nodeSelector:
+      akernel.io/image-pull-ready: "true"
+%{ endif ~}
     resources:
       limits:
         cpu: "${master_cpu}"
@@ -51,6 +63,10 @@ adx:
         memory: "${master_memory}"
   ingressApi:
     replicas: 1
+%{ if node_image_pull_auto ~}
+    nodeSelector:
+      akernel.io/image-pull-ready: "true"
+%{ endif ~}
     publicService:
       enabled: ${adx_public_service_enabled}
       type: "${adx_service_type}"
@@ -77,6 +93,11 @@ node:
             values:
             - dragonfly-seed
             - dragonfly-server
+%{ if node_image_pull_auto ~}
+          - key: akernel.io/image-pull-ready
+            operator: In
+            values: ["true"]
+%{ endif ~}
   image:
     repository: "${node_image_repository}"
     tag: "${node_image_tag}"

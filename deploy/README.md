@@ -174,6 +174,7 @@ make config \
   ZONE_IDS="${ZONE_IDS}" \
   VSWITCH_CIDRS="${VSWITCH_CIDRS}" \
   IMAGE_REPOSITORY=akerneldev/all-in-one \
+  NODE_IMAGE_PULL_MODE=direct \
   IMAGE_TAG=latest
 
 make plan ENV="${ENV_NAME}"
@@ -197,6 +198,15 @@ and Nydus downloads and as the optional object-storage proxy. The Aliyun module
 creates dedicated seed and server node pools by default, so review their size
 and disk settings in `.akernel/<env>/terraform.tfvars` before applying the
 plan.
+
+New Aliyun ACK profiles also select `NODE_IMAGE_PULL_MODE=auto` to initialize
+the worker host's containerd mirror using the Dragonfly Service domain, with
+the original ACR retained as fallback. Dragonfly installation stays optional.
+Old profiles retain direct pulls. The first release supports official
+AliyunLinux3 workers; use `NODE_IMAGE_PULL_MODE=direct` for other registries or
+unsupported host configurations. See the
+[ACK worker bootstrap guide](terraform/aliyun/README.md#worker-image-pulls-through-dragonfly)
+for startup ordering, scope of impact and rollout checks.
 
 For multiple deployments, pass an explicit local profile name:
 
