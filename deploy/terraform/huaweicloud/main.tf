@@ -158,6 +158,17 @@ locals {
     tempo_pvc_size       = var.tempo_resources.pvc_size
   })
 
+  control_pool = var.control_node_pool.enabled ? [{
+    name              = var.control_node_pool.name
+    size              = var.control_node_pool.size
+    flavor_id         = var.control_node_pool.flavor_id
+    system_disk_size  = var.control_node_pool.system_disk_size
+    data_disk_enabled = false
+    data_disk_size    = null
+    labels            = { "node-role" = "control" }
+    taints            = [{ key = "node-role", value = "control", effect = "NoSchedule" }]
+  }] : []
+
   # Dragonfly server pool (manager + scheduler) — fixed size, goes through extra node pools
   dragonfly_server_pool = var.install_dragonfly && var.dragonfly_server_node_pool.enabled ? [{
     name              = var.dragonfly_server_node_pool.name
@@ -177,7 +188,7 @@ locals {
   }] : []
 
   # Seed pool is created as a dedicated resource (with autoscaling), not via extra
-  all_extra_node_pools = concat(var.extra_node_pools, local.dragonfly_server_pool)
+  all_extra_node_pools = concat(var.extra_node_pools, local.control_pool, local.dragonfly_server_pool)
 
   dragonfly_values = var.install_dragonfly ? templatefile("${path.module}/values-dragonfly.yaml.tmpl", {
     image_registry             = var.dragonfly_image_registry
@@ -757,7 +768,7 @@ resource "helm_release" "akernel_core" {
     value = sha256(join("", [for f in fileset("${path.module}/../../akernel/charts/core", "**") : filesha256("${path.module}/../../akernel/charts/core/${f}")]))
   }
 
-  depends_on = [local_sensitive_file.kubeconfig, helm_release.prereq_openkruise, null_resource.ensure_core_namespace, null_resource.ensure_adx_secret, null_resource.ensure_kruise_webhooks_healthy, null_resource.cleanup_orphaned_helm_releases]
+  depends_on = [local_sensitive_file.kubeconfig, huaweicloud_cce_node_pool.extra, helm_release.prereq_openkruise, null_resource.ensure_core_namespace, null_resource.ensure_adx_secret, null_resource.ensure_kruise_webhooks_healthy, null_resource.cleanup_orphaned_helm_releases]
 }
 
 resource "helm_release" "akernel_monitor" {

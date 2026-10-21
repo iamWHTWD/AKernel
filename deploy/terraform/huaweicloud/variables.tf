@@ -344,6 +344,24 @@ variable "node_pool_max_user_namespaces" {
   default     = 65536
 }
 
+variable "control_node_pool" {
+  description = "Dedicated application-control pool for ADX Redis, Coordinator and Ingress/API. Disable only when supplying an existing control pool."
+  type = object({
+    enabled          = optional(bool, true)
+    name             = optional(string, "control")
+    size             = optional(number, 1)
+    flavor_id        = optional(string)
+    system_disk_size = optional(number)
+  })
+  default  = {}
+  nullable = false
+
+  validation {
+    condition     = !var.control_node_pool.enabled || (var.control_node_pool.size >= 1 && floor(var.control_node_pool.size) == var.control_node_pool.size)
+    error_message = "An enabled control_node_pool requires a positive integer size."
+  }
+}
+
 variable "extra_node_pools" {
   type = list(object({
     name              = string

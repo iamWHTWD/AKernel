@@ -10,6 +10,39 @@ AKernel ships in three deployment modes. Pick the one that matches your target.
 
 ## Guided deployment
 
+### Control and compute placement
+
+The Kubernetes chart places managed ADX Redis, Coordinator and Ingress/API on
+nodes labeled `node-role=control`, with a matching `NoSchedule` toleration.
+The AKernel node DaemonSet excludes these nodes and the Dragonfly infrastructure
+pools. The application control pool is separate from the cloud-managed
+Kubernetes control plane.
+
+New ACK and CCE clusters include one dedicated control node in addition to
+`node_pool_size` compute nodes. The control node inherits the default pool's
+instance type and system-disk settings; override `control_node_pool` in the
+Terraform profile to change its size or instance type. Redis uses its CSI PVC,
+so this pool does not receive the compute data disk or sandbox PID settings.
+
+For an existing cluster, prepare the labeled control pool before upgrading
+Helm. If Terraform should reuse an existing pool, set
+`control_node_pool = { enabled = false }`. The three components' placement is
+configurable independently through `adx.redis.nodeSelector`,
+`adx.coordinator.nodeSelector`, `adx.ingressApi.nodeSelector` and their
+`tolerations` fields (under `core` in the umbrella chart). A different control
+label also requires a corresponding exclusion in `node.affinity`.
+
+Without a matching control node these components remain Pending. There is no
+automatic fallback to compute nodes. Existing Redis PVC zone constraints must
+match the destination control pool, and upgrading placement restarts the
+single-replica control components; review that migration before applying.
+
+Validate the rendered placement without cloud access:
+
+```bash
+python deploy/terraform/test_control_placement.py -v
+```
+
 The image installs the complete gVisor bundle pinned by sandboxd's runtime manifest: runsc, the containerd shim, and adjacent `gvisor-bin/` helpers. Its SHA-512 verifies the archive, not a standalone runsc binary. Keep these executables together when building custom images; replacing only runsc can leave mismatched checkpoint/restore helpers.
 
 For a fresh cloud deployment, prefer the repository-level Makefile. It keeps

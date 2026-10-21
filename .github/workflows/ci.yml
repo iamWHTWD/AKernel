@@ -136,6 +136,12 @@ jobs:
           python -m pip install PyYAML
           helm version --short
 
+      - name: Set up Terraform for offline placement tests
+        uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
+        with:
+          terraform_version: "1.13.4"
+          terraform_wrapper: false
+
       - name: Verify ADX package, standalone, Helm, and Terraform contracts
         run: |
           python builder/scripts/test_adx_service.py -v
@@ -145,6 +151,7 @@ jobs:
           python deploy/scripts/test_get_adx_admin_key.py -v
           python deploy/akernel/charts/core/tests/test_adx_chart.py -v
           python deploy/terraform/test_adx_contract.py -v
+          python deploy/terraform/test_control_placement.py -v
 
   standalone-e2e:
     name: Standalone E2E

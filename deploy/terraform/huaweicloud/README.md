@@ -6,6 +6,16 @@ contract as the Aliyun module: one all-in-one AKernel image, an Agent DX
 identity Secret, managed Redis, a direct ADX public Service, optional public
 Grafana, and local state under `.akernel/<env>/`.
 
+## Control pool
+
+New clusters add one dedicated application-control node, separate from
+`node_pool_size` compute nodes. ADX Redis, Coordinator and Ingress/API select
+`node-role=control`; the AKernel node DaemonSet excludes that pool.
+Use `control_node_pool` to set its size, flavor or system disk.
+Set `enabled=false` only when reusing an existing labeled control pool.
+See [control and compute placement](../../README.md#control-and-compute-placement)
+for existing-cluster migration and Helm overrides.
+
 ## Pod PID budget
 
 [CCE documents `pod-pids-limit=-1` by default](https://support.huaweicloud.com/intl/en-us/usermanual-cce/cce_10_0652.html),

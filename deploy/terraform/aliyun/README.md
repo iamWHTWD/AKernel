@@ -10,10 +10,21 @@ It installs:
 - Optional Dragonfly to `dragonfly_namespace` (controlled by `install_dragonfly`)
 - Optional prereq `openkruise` to `prereq_namespace` (controlled by `install_prereqs`)
 
+## Control pool
+
+New clusters add one dedicated application-control node, separate from
+`node_pool_size` compute nodes. ADX Redis, Coordinator and Ingress/API select
+`node-role=control`; the AKernel node DaemonSet excludes that pool.
+Use `control_node_pool` to set its size, instance types or system disk.
+Set `enabled=false` only when reusing an existing labeled control pool.
+See [control and compute placement](../../README.md#control-and-compute-placement)
+for existing-cluster migration and Helm overrides.
+
 ## Pod PID budget
 
-`node_pool_pids_limit` defaults to `1620780` for the default pool and all
-user-supplied `extra_node_pools`; generated Dragonfly pools are excluded.
+`node_pool_pids_limit` defaults to `1620780` for the default pool and
+user-supplied compute `extra_node_pools`; `node-role=control` and generated
+Dragonfly pools are excluded.
 Override it in `terraform.tfvars` with a positive integer or `-1` (node
 allocatable PID capacity). All sandboxes and runtime services share this
 budget; the per-sandbox limit stays 4096. Size it for node capacity and monitor

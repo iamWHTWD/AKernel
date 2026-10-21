@@ -215,6 +215,14 @@ distill-fs release's packaged manifest.
 
 ## Deploy
 
+Managed ADX Redis, Coordinator and Ingress/API select `node-role=control`
+and tolerate its dedicated `NoSchedule` taint. The node DaemonSet must exclude
+control and Dragonfly nodes, including in cloud values that override its
+default affinity. ACK and CCE add a fixed control pool through the existing
+extra-pool resource; keep it free of compute disks, PID setup and worker
+bootstrap. Existing clusters need a reviewed control-pool/PVC placement
+migration. Test with `python deploy/terraform/test_control_placement.py -v`.
+
 Use [`deploy/README.md`](./deploy/README.md) as the deployment entry point. AKernel supports standalone, existing Kubernetes clusters via Helm, and Terraform-based cloud provisioning.
 
 The [standalone guide](./deploy/standalone/README.md) owns source startup, supported platforms, runtime selection, and SDK setup. Preserve the source launcher's native-daemon architecture selection, clean sandboxd gitlink check, occupied-name preflight, profile locking, unique source image, and node/gateway health checks. Status and stop must verify recorded container identities, images, and data mounts; stop also requires an empty sandbox inventory. Source management is independent of cloud profiles and must preserve unrelated containers.

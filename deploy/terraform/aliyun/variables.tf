@@ -201,7 +201,7 @@ variable "node_pool_zone_id" {
 
 variable "node_pool_pids_limit" {
   type        = number
-  description = "Per-Pod PID budget for the default and user-supplied extra ACK node pools, shared by all sandboxes and runtime services."
+  description = "Per-Pod PID budget for the default and user-supplied extra ACK compute pools, excluding node-role=control; shared by all sandboxes and runtime services."
   default     = 1620780
   nullable    = false
 
@@ -310,6 +310,24 @@ variable "node_pool_max_user_namespaces" {
   type        = number
   description = "Value for sysctl user.max_user_namespaces on each node. Required by gVisor/runsc."
   default     = 65536
+}
+
+variable "control_node_pool" {
+  description = "Dedicated application-control pool for ADX Redis, Coordinator and Ingress/API. Disable only when supplying an existing control pool."
+  type = object({
+    enabled          = optional(bool, true)
+    name             = optional(string, "control")
+    size             = optional(number, 1)
+    instance_types   = optional(list(string))
+    system_disk_size = optional(number)
+  })
+  default  = {}
+  nullable = false
+
+  validation {
+    condition     = !var.control_node_pool.enabled || (var.control_node_pool.size >= 1 && floor(var.control_node_pool.size) == var.control_node_pool.size)
+    error_message = "An enabled control_node_pool requires a positive integer size."
+  }
 }
 
 variable "extra_node_pools" {
