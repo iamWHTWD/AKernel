@@ -215,15 +215,13 @@ distill-fs release's packaged manifest.
 
 ## Deploy
 
-New guided cloud profiles enable a dedicated ADX control pool. Old profiles
-and raw Helm defaults preserve legacy placement. Reuse existing control pools
-through `control_node_pool.node_selector` and their taint tolerations; never
-reconfigure their disks or host settings implicitly. The shared Helm
-`adx.controlPlane` selector drives Redis, Coordinator and Ingress/API plus
-akernel-node's exclusion, applied to every existing affinity OR term. Preserve
-empty required affinity, preferred/Pod affinity and saved profile choices.
-Generated control pools exclude compute disks and PID/bootstrap settings.
-Run `python deploy/terraform/test_control_placement.py -v` for this contract.
+Follow [control and compute placement](./deploy/README.md#control-and-compute-placement).
+Preserve legacy placement and saved control-pool choices; never implicitly
+reconfigure existing pools' disks or host settings. Keep shared control
+placement and worker exclusion consistent across every required affinity OR
+term, preserving empty required, preferred and Pod affinity. Generated control
+pools exclude compute disks and PID/bootstrap settings. Validate with
+`python deploy/terraform/test_control_placement.py -v`.
 
 Use [`deploy/README.md`](./deploy/README.md) as the deployment entry point. AKernel supports standalone, existing Kubernetes clusters via Helm, and Terraform-based cloud provisioning.
 

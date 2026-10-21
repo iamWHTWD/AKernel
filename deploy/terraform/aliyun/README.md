@@ -12,14 +12,8 @@ It installs:
 
 ## Control pool
 
-New guided profiles enable one dedicated application-control node, separate
-from `node_pool_size` compute nodes. Existing profiles keep legacy placement.
-Use `control_node_pool = { enabled = true }` to create a pool, or set
-`control_node_pool.node_selector` and `tolerations` to reuse an existing pool's
-labels and taints without creating nodes. Control placement and akernel-node's
-exclusion use this same selector.
 See [control and compute placement](../../README.md#control-and-compute-placement)
-for the complete configuration and existing-cluster migration requirements.
+for control-pool defaults, existing-pool reuse and migration requirements.
 
 ## Pod PID budget
 
