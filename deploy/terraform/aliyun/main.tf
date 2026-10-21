@@ -9,6 +9,10 @@ provider "alicloud" {
 resource "null_resource" "input_validation" {
   lifecycle {
     precondition {
+      condition     = !var.control_node_pool.enabled || var.create_cluster
+      error_message = "Control-pool creation requires create_cluster=true; use node_selector to reuse a pool in an existing cluster."
+    }
+    precondition {
       condition     = var.create_cluster || length(var.kubeconfig_path) > 0
       error_message = "kubeconfig_path must be set when create_cluster=false."
     }
@@ -135,6 +139,7 @@ locals {
   node_image_repo   = length(var.node_image_repository) > 0 ? var.node_image_repository : "${local.acr_registry}/all-in-one"
 
   core_values = templatefile("${path.module}/values-akernel.yaml.tmpl", {
+    control_placement           = local.control_placement
     adx_public_service_enabled  = var.adx_public_service_enabled
     adx_service_type            = var.adx_service_type
     adx_control_port            = var.adx_control_port
@@ -222,9 +227,14 @@ locals {
   })
 
   akernel_extra_node_pools = [for pool in var.extra_node_pools : merge(pool, {
-    use_akernel_data_disk = lookup(pool.labels, "node-role", "") != "control"
-    pod_pids_limit        = lookup(pool.labels, "node-role", "") != "control" ? var.node_pool_pids_limit : null
+    use_akernel_data_disk = true
+    pod_pids_limit        = var.node_pool_pids_limit
   })]
+
+  control_placement = {
+    nodeSelector = var.control_node_pool.enabled ? { "node-role" = "control" } : var.control_node_pool.node_selector
+    tolerations  = concat(var.control_node_pool.enabled ? [{ key = "node-role", operator = "Equal", value = "control", effect = "NoSchedule" }] : [], var.control_node_pool.tolerations)
+  }
 
   control_pool = var.control_node_pool.enabled ? [{
     name                  = var.control_node_pool.name

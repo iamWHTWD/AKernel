@@ -39,11 +39,11 @@ node_flavor_memory = 8
 
 node_pool_size     = 3
 
-# One separate application-control node is added by default; node_pool_size
-# counts compute nodes only. See deploy/README.md#control-and-compute-placement.
-# control_node_pool = { size = 1, flavor_id = "<control-node-flavor>" }
-# To reuse an existing pool labeled node-role=control:
-# control_node_pool = { enabled = false }
+# Fresh deployment: create a dedicated application-control pool.
+# Omit this input in old profiles to retain their existing placement.
+control_node_pool = { enabled = true }
+# Existing pool: replace the input above with its actual label and tolerations.
+# control_node_pool = { node_selector = { "node-role" = "master" } }
 node_pool_min_size = 1
 node_pool_max_size = 5
 

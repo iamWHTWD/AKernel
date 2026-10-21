@@ -29,17 +29,15 @@ image:
 adx:
   namespace: akernel
   schedulerShards: 1
+  # Empty preserves existing Helm installations. Cloud profiles set this once
+  # for all control roles and the corresponding worker exclusion.
+  controlPlane:
+    nodeSelector: {}
+    tolerations: []
   tls:
     existingSecret: akernel-adx-tls
   redis:
     mode: managed
-    nodeSelector:
-      node-role: control
-    tolerations:
-      - key: node-role
-        operator: Equal
-        value: control
-        effect: NoSchedule
     appendfsync: everysec
     external:
       existingSecret: ""
@@ -59,13 +57,6 @@ adx:
         memory: 1Gi
   coordinator:
     replicas: 1
-    nodeSelector:
-      node-role: control
-    tolerations:
-      - key: node-role
-        operator: Equal
-        value: control
-        effect: NoSchedule
     resources:
       requests:
         cpu: 250m
@@ -75,13 +66,6 @@ adx:
         memory: 1Gi
   ingressApi:
     replicas: 1
-    nodeSelector:
-      node-role: control
-    tolerations:
-      - key: node-role
-        operator: Equal
-        value: control
-        effect: NoSchedule
     portHostDomain: ""
     publicService:
       enabled: false
@@ -113,15 +97,6 @@ coordinator:
   schedulePlacementPolicy: spread
 
 node:
-  # Keep the runtime off application-control and Dragonfly infrastructure nodes.
-  affinity:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-          - matchExpressions:
-              - key: node-role
-                operator: NotIn
-                values: [control, dragonfly-seed, dragonfly-server]
   secret:
     create: true
     oss_auths: {}

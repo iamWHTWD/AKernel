@@ -9,6 +9,10 @@ provider "huaweicloud" {
 resource "null_resource" "input_validation" {
   lifecycle {
     precondition {
+      condition     = !var.control_node_pool.enabled || var.create_cluster
+      error_message = "Control-pool creation requires create_cluster=true; use node_selector to reuse a pool in an existing cluster."
+    }
+    precondition {
       condition     = var.create_cluster || length(var.kubeconfig_path) > 0
       error_message = "kubeconfig_path must be set when create_cluster=false."
     }
@@ -87,6 +91,7 @@ locals {
   ]) : local.node_pool_bootstrap_script
 
   core_values = templatefile("${path.module}/values-akernel.yaml.tmpl", {
+    control_placement           = local.control_placement
     adx_public_service_enabled  = var.adx_public_service_enabled
     adx_service_type            = var.adx_service_type
     adx_control_port            = var.adx_control_port
@@ -157,6 +162,11 @@ locals {
     tempo_ephemeral      = var.tempo_resources.ephemeral_storage
     tempo_pvc_size       = var.tempo_resources.pvc_size
   })
+
+  control_placement = {
+    nodeSelector = var.control_node_pool.enabled ? { "node-role" = "control" } : var.control_node_pool.node_selector
+    tolerations  = concat(var.control_node_pool.enabled ? [{ key = "node-role", operator = "Equal", value = "control", effect = "NoSchedule" }] : [], var.control_node_pool.tolerations)
+  }
 
   control_pool = var.control_node_pool.enabled ? [{
     name              = var.control_node_pool.name

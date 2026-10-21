@@ -8,13 +8,14 @@ Grafana, and local state under `.akernel/<env>/`.
 
 ## Control pool
 
-New clusters add one dedicated application-control node, separate from
-`node_pool_size` compute nodes. ADX Redis, Coordinator and Ingress/API select
-`node-role=control`; the AKernel node DaemonSet excludes that pool.
-Use `control_node_pool` to set its size, flavor or system disk.
-Set `enabled=false` only when reusing an existing labeled control pool.
+New guided profiles enable one dedicated application-control node, separate
+from `node_pool_size` compute nodes. Existing profiles keep legacy placement.
+Use `control_node_pool = { enabled = true }` to create a pool, or set
+`control_node_pool.node_selector` and `tolerations` to reuse an existing pool's
+labels and taints without creating nodes. Control placement and akernel-node's
+exclusion use this same selector.
 See [control and compute placement](../../README.md#control-and-compute-placement)
-for existing-cluster migration and Helm overrides.
+for the complete configuration and existing-cluster migration requirements.
 
 ## Pod PID budget
 

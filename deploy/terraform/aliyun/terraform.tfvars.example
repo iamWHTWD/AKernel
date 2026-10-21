@@ -52,11 +52,11 @@ node_pool_image_type           = "AliyunLinux3"
 # node_pool_zone_id            = "cn-hangzhou-i"
 node_pool_size                 = 3
 
-# One separate application-control node is added by default; node_pool_size
-# counts compute nodes only. See deploy/README.md#control-and-compute-placement.
-# control_node_pool = { size = 1, instance_types = ["ecs.c7.2xlarge"] }
-# To reuse an existing pool labeled node-role=control:
-# control_node_pool = { enabled = false }
+# Fresh deployment: create a dedicated application-control pool.
+# Omit this input in old profiles to retain their existing placement.
+control_node_pool = { enabled = true }
+# Existing pool: replace the input above with its actual label and tolerations.
+# control_node_pool = { node_selector = { "node-role" = "master" } }
 # Shared per-Pod budget; the per-sandbox pids_max remains 4096.
 node_pool_pids_limit            = 1620780
 node_pool_system_disk_category = "cloud_essd"
