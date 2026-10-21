@@ -15,6 +15,8 @@ import subprocess
 import tempfile
 import unittest
 
+import yaml
+
 
 ALIYUN = Path(__file__).resolve().parents[1]
 ROOT = ALIYUN.parents[2]
@@ -49,6 +51,7 @@ class TerraformRenderTest(unittest.TestCase):
                       master_image_repository='registry.cn-hangzhou.aliyuncs.com/akernel/all-in-one', master_image_tag='control',
                       node_image_repository='registry.cn-hangzhou.aliyuncs.com/akernel/all-in-one', node_image_tag='worker')
         template = json.dumps(str(ALIYUN / 'values-akernel.yaml.tmpl'))
+        control_placement = {}
         for auto in (False, True):
             with self.subTest(auto=auto):
                 values['node_image_pull_auto'] = auto
@@ -63,7 +66,23 @@ class TerraformRenderTest(unittest.TestCase):
                                             '--values', str(path)],
                                            text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                     self.assertEqual(chart.returncode, 0, chart.stderr)
-                    self.assertEqual(chart.stdout.count('akernel.io/image-pull-ready'), 4 if auto else 0)
+                    resources = [item for item in yaml.safe_load_all(chart.stdout) if item]
+                    for name in ('akernel-adx-redis', 'akernel-adx-coordinator', 'akernel-adx-ingress-api'):
+                        pod = next(item for item in resources
+                                   if item.get('kind') in ('Deployment', 'StatefulSet')
+                                   and item['metadata']['name'] == name)['spec']['template']['spec']
+                        self.assertNotIn('akernel.io/image-pull-ready', json.dumps(pod), name)
+                        placement = {key: pod.get(key) for key in ('nodeSelector', 'affinity', 'tolerations')}
+                        if not auto:
+                            control_placement[name] = placement
+                        else:
+                            self.assertEqual(placement, control_placement[name], name)
+                    worker = next(item for item in resources
+                                  if item.get('kind') == 'DaemonSet'
+                                  and item['metadata']['name'] == 'akernel-node')['spec']['template']['spec']
+                    expressions = worker['affinity']['nodeAffinity']['requiredDuringSchedulingIgnoredDuringExecution']['nodeSelectorTerms'][0]['matchExpressions']
+                    self.assertEqual([item for item in expressions if item['key'] == 'akernel.io/image-pull-ready'],
+                                     [dict(key='akernel.io/image-pull-ready', operator='In', values=['true'])] if auto else [])
                     self.assertNotIn('registry.example.com', chart.stdout)
                     images = re.findall(r'(?m)^\s+image: "([^"]+)"$', chart.stdout)
                     self.assertEqual(images.count(values['master_image_repository'] + ':control'), 3)

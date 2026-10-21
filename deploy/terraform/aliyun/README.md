@@ -230,10 +230,11 @@ manually, keep that host equal to `acr_registry_url` when using the generated
 
 The default compute pool and user-defined `extra_node_pools` receive the same
 image-pull bootstrap. Generated Dragonfly server and seed pools are excluded.
-In auto mode only successfully initialized nodes can run the AKernel node
-DaemonSet and ADX Redis, Coordinator and Ingress/API, which share the
-all-in-one image.
-This prevents control Pods from pre-pulling the image before the mirror exists.
+In auto mode the AKernel node DaemonSet waits for its own node's successful
+initialization. ADX Redis, Coordinator and Ingress/API retain their existing
+placement and do not depend on the worker image-pull readiness label.
+Control Pods sharing a compute node can pull the all-in-one image before the
+worker bootstrap; isolate control and compute pools for cold-pull validation.
 Additional compute pools must be created through this module.
 User-defined extra pools are compute pools, not alternate Dragonfly pools.
 

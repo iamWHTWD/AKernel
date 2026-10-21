@@ -30,10 +30,6 @@ adx:
     existingSecret: akernel-adx-tls
   redis:
     mode: managed
-%{ if node_image_pull_auto ~}
-    nodeSelector:
-      akernel.io/image-pull-ready: "true"
-%{ endif ~}
     appendfsync: everysec
     persistence:
       enabled: true
@@ -50,10 +46,6 @@ adx:
         memory: "${etcd_memory}"
   coordinator:
     replicas: 1
-%{ if node_image_pull_auto ~}
-    nodeSelector:
-      akernel.io/image-pull-ready: "true"
-%{ endif ~}
     resources:
       limits:
         cpu: "${master_cpu}"
@@ -63,10 +55,6 @@ adx:
         memory: "${master_memory}"
   ingressApi:
     replicas: 1
-%{ if node_image_pull_auto ~}
-    nodeSelector:
-      akernel.io/image-pull-ready: "true"
-%{ endif ~}
     publicService:
       enabled: ${adx_public_service_enabled}
       type: "${adx_service_type}"
