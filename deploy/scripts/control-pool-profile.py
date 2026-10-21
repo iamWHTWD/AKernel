@@ -15,7 +15,11 @@ import tempfile
 def saved_pool(directory):
     variables = directory / "terraform.tfvars"
     config = directory / "config.env"
-    if variables.is_file() and re.search(r"(?m)^\s*control_node_pool\s*=", variables.read_text()):
+    if variables.is_file():
+        # An omitted input uses Terraform's legacy default, even if config.env
+        # still contains metadata from a previously enabled control pool.
+        if not re.search(r"(?m)^\s*control_node_pool\s*=", variables.read_text()):
+            return {"enabled": False}
         # Terraform parses HCL; never source the profile or expose other inputs.
         with tempfile.TemporaryDirectory() as temporary:
             (Path(temporary) / "main.tf").write_text('variable "control_node_pool" {\n type=any\n default={}\n}\n')

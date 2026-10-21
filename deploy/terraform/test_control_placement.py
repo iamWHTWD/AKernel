@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 """Offline regression coverage for legacy, new and reused control placement."""
 
+import base64
 import json
 import os
 from pathlib import Path
@@ -211,6 +212,16 @@ class ControlPlacementTest(unittest.TestCase):
                 result = subprocess.check_output([sys.executable, str(ROOT / "deploy/scripts/control-pool-profile.py"),
                                                   temporary], env=env, text=True)
                 self.assertEqual(json.loads(result), {"enabled": False})
+
+    def test_tfvars_omission_overrides_stale_config_metadata(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            profile = Path(temporary)
+            (profile / "terraform.tfvars").write_text("create_cluster=true\n")
+            encoded = base64.b64encode(json.dumps({"enabled": True}).encode()).decode()
+            (profile / "config.env").write_text("CONTROL_NODE_POOL_B64=" + encoded + "\n")
+            result = subprocess.check_output([sys.executable, str(ROOT / "deploy/scripts/control-pool-profile.py"),
+                                              temporary], text=True)
+            self.assertEqual(json.loads(result), {"enabled": False})
 
     def test_monitoring_does_not_inherit_application_control_placement(self):
         values = {"core": {"adx": {"controlPlane": {"nodeSelector": {"node-role": "master"}}}}}
