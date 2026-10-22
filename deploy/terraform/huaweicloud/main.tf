@@ -77,10 +77,13 @@ locals {
   })
   node_pool_bootstrap_script = var.node_pool_extra_data_volume_enabled ? join("\n", [
     local.node_pool_bootstrap_base,
-    templatefile("${path.module}/../shared/data-disk-mount.sh.tftpl", {
-      mount_path = var.node_pool_extra_data_volume_mount_path
-      fs_type    = var.node_pool_extra_data_volume_fs_type
-    })
+    # A successful disk-step exit must not skip the PID setup appended later.
+    format("(\n%s\n)", templatefile("${path.module}/../shared/data-disk-mount.sh.tftpl", {
+      mount_path          = var.node_pool_extra_data_volume_mount_path
+      fs_type             = var.node_pool_extra_data_volume_fs_type
+      min_size_gb         = var.node_pool_extra_data_volume_size
+      storage_marker_path = "${var.node_pool_extra_data_volume_mount_path}/.akernel-storage-ready"
+    }))
   ]) : local.node_pool_bootstrap_base
 
   dragonfly_seed_postinstall = var.dragonfly_seed_node_pool.mount_local_nvme ? join("\n", [
@@ -168,12 +171,13 @@ locals {
     tolerations  = concat(var.control_node_pool.enabled ? [{ key = "node-role", operator = "Equal", value = "control", effect = "NoSchedule" }] : [], var.control_node_pool.tolerations)
   }
 
+  # CCE needs a base container-runtime disk; this is not the sandbox disk.
   control_pool = var.control_node_pool.enabled ? [{
     name              = var.control_node_pool.name
     size              = var.control_node_pool.size
     flavor_id         = var.control_node_pool.flavor_id
     system_disk_size  = var.control_node_pool.system_disk_size
-    data_disk_enabled = false
+    data_disk_enabled = true
     data_disk_size    = null
     labels            = { "node-role" = "control" }
     taints            = [{ key = "node-role", value = "control", effect = "NoSchedule" }]

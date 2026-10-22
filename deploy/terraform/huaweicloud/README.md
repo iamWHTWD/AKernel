@@ -11,6 +11,22 @@ Grafana, and local state under `.akernel/<env>/`.
 See [control and compute placement](../../README.md#control-and-compute-placement)
 for control-pool defaults, existing-pool reuse and migration requirements.
 
+CCE control nodes keep one base container-runtime data volume, using
+`node_pool_data_volume_type` and `node_pool_data_volume_size` (SSD / 300 GiB by
+default). They do not attach the sandbox-specific extra volume or run compute
+node bootstrap scripts.
+
+The module requires Huawei Cloud provider 1.83.0 or later for its data sources.
+With Terraform 1.13.4 (as used in CI), validate the full resource schema and run
+plans with all providers mocked. Initialization downloads provider binaries;
+these tests do not create cloud resources. CI checks providers 1.83.0 and 1.99.1:
+
+```bash
+terraform -chdir=deploy/terraform/huaweicloud init -backend=false
+terraform -chdir=deploy/terraform/huaweicloud validate
+terraform -chdir=deploy/terraform/huaweicloud test
+```
+
 ## Pod PID budget
 
 [CCE documents `pod-pids-limit=-1` by default](https://support.huaweicloud.com/intl/en-us/usermanual-cce/cce_10_0652.html),

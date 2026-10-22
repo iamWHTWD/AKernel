@@ -3,14 +3,15 @@ One pool selector drives all ADX control roles and the worker exclusion.
 Use a single stable pool label (including the provider's node-pool ID label).
 */}}
 {{- define "core.controlPlacement" -}}
-{{- if gt (len .Values.adx.controlPlane.nodeSelector) 1 -}}
+{{- $placement := .Values.adx.controlPlane | default dict -}}
+{{- if gt (len ($placement.nodeSelector | default dict)) 1 -}}
 {{- fail "adx.controlPlane.nodeSelector must contain at most one pool label" -}}
 {{- end -}}
-{{- with .Values.adx.controlPlane.nodeSelector }}
+{{- with $placement.nodeSelector }}
 nodeSelector:
   {{- toYaml . | nindent 2 }}
 {{- end }}
-{{- with .Values.adx.controlPlane.tolerations }}
+{{- with $placement.tolerations }}
 tolerations:
   {{- toYaml . | nindent 2 }}
 {{- end }}
@@ -18,7 +19,8 @@ tolerations:
 
 {{- define "core.workerPlacement" -}}
 {{- $affinity := deepCopy (.Values.node.affinity | default dict) -}}
-{{- with .Values.adx.controlPlane.nodeSelector -}}
+{{- $placement := .Values.adx.controlPlane | default dict -}}
+{{- with $placement.nodeSelector -}}
   {{- $node := get $affinity "nodeAffinity" | default dict -}}
   {{- $hasRequired := kindIs "map" (get $node "requiredDuringSchedulingIgnoredDuringExecution") -}}
   {{- $required := get $node "requiredDuringSchedulingIgnoredDuringExecution" | default dict -}}

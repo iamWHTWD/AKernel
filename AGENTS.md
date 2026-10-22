@@ -220,8 +220,12 @@ Preserve legacy placement and saved control-pool choices; never implicitly
 reconfigure existing pools' disks or host settings. Keep shared control
 placement and worker exclusion consistent across every required affinity OR
 term, preserving empty required, preferred and Pod affinity. Generated control
-pools exclude compute disks and PID/bootstrap settings. Validate with
-`python deploy/terraform/test_control_placement.py -v`.
+pools exclude sandbox-specific disks and PID/bootstrap settings, while CCE
+retains its base runtime data volume. Parse saved HCL with Terraform, including
+comments. Isolate optional disk-step exits so successful skips still reach PID
+initialization and errors propagate. Validate placement with
+`python deploy/terraform/test_control_placement.py -v` and the full CCE resource
+plans described in `deploy/terraform/huaweicloud/README.md`.
 
 Use [`deploy/README.md`](./deploy/README.md) as the deployment entry point. AKernel supports standalone, existing Kubernetes clusters via Helm, and Terraform-based cloud provisioning.
 

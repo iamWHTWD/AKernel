@@ -25,9 +25,9 @@ REUSE = {"node_selector": {"node-role": "existing-control"},
          "tolerations": [{"key": "dedicated", "operator": "Equal", "value": "master", "effect": "NoSchedule"}]}
 
 
-def render(values):
+def render(values, chart=CHART):
     result = subprocess.run(
-        ["helm", "template", "akernel", str(CHART), "-f", "-"],
+        ["helm", "template", "akernel", str(chart), "-f", "-"],
         input=yaml.safe_dump(values), text=True, capture_output=True, check=True,
     )
     return {item["metadata"]["name"]: item["spec"]["template"]["spec"]
@@ -94,6 +94,24 @@ class ControlPlacementTest(unittest.TestCase):
         self.assert_placement(pods, {"nodeSelector": {}, "tolerations": []})
         self.assertNotIn("affinity", pods["akernel-node"])
 
+    def test_reused_legacy_helm_defaults_preserve_original_placement(self):
+        affinity = {"nodeAffinity": {"requiredDuringSchedulingIgnoredDuringExecution": {
+            "nodeSelectorTerms": [{"matchExpressions": [dict(key="zone", operator="In", values=["a"])]}],
+        }}, "podAntiAffinity": {"preferredDuringSchedulingIgnoredDuringExecution": []}}
+        with tempfile.TemporaryDirectory() as temporary:
+            chart = Path(temporary) / "core"
+            shutil.copytree(CHART, chart)
+            defaults = yaml.safe_load((chart / "values.yaml").read_text())
+            # Helm --reuse-values replaces new chart defaults with those from the old release.
+            defaults["adx"].pop("controlPlane")
+            defaults["node"]["affinity"] = affinity
+            (chart / "values.yaml").write_text(yaml.safe_dump(defaults))
+            pods = render({}, chart)
+        for name in CONTROLS:
+            self.assertNotIn("nodeSelector", pods[name], name)
+            self.assertNotIn("tolerations", pods[name], name)
+        self.assertEqual(pods["akernel-node"]["affinity"], affinity)
+
     def test_cloud_legacy_does_not_add_nodes_or_change_placement(self):
         for vendor in ("aliyun", "huaweicloud"):
             with self.subTest(vendor=vendor):
@@ -121,10 +139,12 @@ class ControlPlacementTest(unittest.TestCase):
                     self.assertEqual(pool["size"], settings.get("size", 1))
                     self.assertEqual(pool[field], settings.get(field))
                     self.assertEqual(pool["labels"], {"node-role": "control"})
-                    self.assertFalse(pool["data_disk_enabled"])
                     if vendor == "aliyun":
+                        self.assertFalse(pool["data_disk_enabled"])
                         self.assertFalse(pool["use_akernel_data_disk"])
                         self.assertIsNone(pool["pod_pids_limit"])
+                    else:
+                        self.assertTrue(pool["data_disk_enabled"])
                     pods = self.cloud_pods(vendor, result["placement"])
                     self.assert_placement(pods, result["placement"])
                     worker = pods["akernel-node"]
@@ -178,6 +198,46 @@ class ControlPlacementTest(unittest.TestCase):
         self.assertTrue(actual["use_akernel_data_disk"])
         self.assertEqual(actual["pod_pids_limit"], 1620780)
 
+    def test_extra_disk_template_renders_valid_shell(self):
+        template = ROOT / "deploy/terraform/shared/data-disk-mount.sh.tftpl"
+        arguments = {"mount_path": "/home/akernel", "fs_type": "ext4", "min_size_gb": 400,
+                     "storage_marker_path": "/home/akernel/.akernel-storage-ready"}
+        expression = "templatefile(" + json.dumps(str(template)) + "," + json.dumps(arguments) + ")"
+        script = self.evaluate(expression)
+        subprocess.run(["bash", "-n"], input=script, text=True, capture_output=True, check=True)
+        self.assertNotIn("$$", script)
+
+    def test_extra_disk_skips_continue_to_pid_setup_and_errors_propagate(self):
+        module = ROOT / "deploy/terraform/huaweicloud"
+        source = (module / "main.tf").read_text()
+        expression = re.search(
+            r"(?ms)^  node_pool_bootstrap_script = (.*?^  \]\) : local.node_pool_bootstrap_base)", source,
+        )[1].replace("${path.module}/../shared/", str(ROOT / "deploy/terraform/shared") + "/")
+        variables = (module / "variables.tf").read_text()
+        names = ("node_pool_extra_data_volume_enabled", "node_pool_extra_data_volume_size",
+                 "node_pool_extra_data_volume_mount_path", "node_pool_extra_data_volume_fs_type")
+        config = "\n".join(re.search(r'(?ms)^variable "' + name + r'" \{.*?^\}', variables)[0]
+                           for name in names)
+        # Keep the production mount expression; replace host-wide setup with a harmless base.
+        config += '\nlocals {\n node_pool_bootstrap_base = "set -euo pipefail"\n'
+        config += " node_pool_bootstrap_script = " + expression + "\n}\n"
+        script = self.evaluate("local.node_pool_bootstrap_script", config,
+                               {"node_pool_extra_data_volume_enabled": True})
+        # Stubs prevent access to real disks; mkdir is a fail-closed guard before any writes.
+        guard = 'mkdir() { return 99; }\n[() { if [[ "$1" == "-b" ]]; then return 1; fi; builtin [ "$@"; }\n'
+        cases = (
+            ("already-mounted", "mountpoint() { return 0; }\n", 0),
+            ("no-available-disk", "mountpoint() { return 1; }\nfindmnt() { return 0; }\n", 0),
+            ("disk-probe-failure", "mountpoint() { return 1; }\nfindmnt() { return 7; }\n", 7),
+        )
+        for name, stubs, expected_status in cases:
+            with self.subTest(case=name):
+                result = subprocess.run(["bash"], input=guard + stubs + script +
+                                        '\nprintf "__PID_SETUP_REACHED__\\n"\n',
+                                        text=True, capture_output=True)
+                self.assertEqual(result.returncode, expected_status, result.stderr)
+                self.assertEqual("__PID_SETUP_REACHED__" in result.stdout, expected_status == 0)
+
     def test_profile_generation_and_regeneration_preserve_control_pool_choice(self):
         env = dict(os.environ, PATH=str(Path(TERRAFORM).resolve().parent) + os.pathsep + os.environ["PATH"])
         for vendor in ("aliyun", "huaweicloud"):
@@ -190,16 +250,39 @@ class ControlPlacementTest(unittest.TestCase):
                 try:
                     subprocess.run(command, env=env, check=True, capture_output=True, text=True)
                     self.assertTrue(json.loads(subprocess.check_output(reader, env=env, text=True))["enabled"])
-                    (profile / "terraform.tfvars").write_text("control_node_pool = " + json.dumps(REUSE))
-                    subprocess.run(command + ["--force"], env=env, check=True, capture_output=True, text=True)
-                    self.assertEqual(json.loads(subprocess.check_output(reader, env=env, text=True)), REUSE)
+                    cases = (
+                        ("string-true", "control_node_pool = ", {"enabled": "true"}, {"enabled": True}),
+                        ("string-one", "control_node_pool = ", {"enabled": "1"}, {"enabled": True}),
+                        ("omitted", "control_node_pool = ", REUSE, REUSE),
+                        ("comment", "control_node_pool /* reuse application control pool */ = ", REUSE, REUSE),
+                        ("string-false", "control_node_pool = ", dict(REUSE, enabled="false"),
+                         dict(REUSE, enabled=False)),
+                        ("string-zero", "control_node_pool = ", dict(REUSE, enabled="0"),
+                         dict(REUSE, enabled=False)),
+                        ("null", "control_node_pool = ", dict(REUSE, enabled=None), dict(REUSE, enabled=False)),
+                    )
+                    for name, assignment, settings, expected in cases:
+                        with self.subTest(case=name):
+                            (profile / "terraform.tfvars").write_text(assignment + json.dumps(settings))
+                            subprocess.run(command + ["--force"], env=env, check=True, capture_output=True, text=True)
+                            self.assertEqual(json.loads(subprocess.check_output(reader, env=env, text=True)), expected)
                     before = (profile / "terraform.tfvars").read_bytes()
                     refused = subprocess.run(command + ["--force", "--control-node-pool-enabled", "true"], env=env,
                                              capture_output=True, text=True)
                     self.assertNotEqual(refused.returncode, 0)
                     self.assertEqual((profile / "terraform.tfvars").read_bytes(), before)
+                    for enabled in ("true", "1", True, "invalid", 1, 0):
+                        with self.subTest(rejected_enabled=enabled):
+                            (profile / "terraform.tfvars").write_text(
+                                "control_node_pool = " + json.dumps(dict(REUSE, enabled=enabled)))
+                            before = (profile / "terraform.tfvars").read_bytes()
+                            refused = subprocess.run(command + ["--force"], env=env,
+                                                     capture_output=True, text=True)
+                            self.assertNotEqual(refused.returncode, 0)
+                            self.assertEqual((profile / "terraform.tfvars").read_bytes(), before)
                     (profile / "terraform.tfvars").unlink()
-                    self.assertEqual(json.loads(subprocess.check_output(reader, env=env, text=True)), REUSE)
+                    self.assertEqual(json.loads(subprocess.check_output(reader, env=env, text=True)),
+                                     dict(REUSE, enabled=False))
                 finally:
                     shutil.rmtree(profile, ignore_errors=True)
 
@@ -214,13 +297,14 @@ class ControlPlacementTest(unittest.TestCase):
                 self.assertEqual(json.loads(result), {"enabled": False})
 
     def test_tfvars_omission_overrides_stale_config_metadata(self):
+        env = dict(os.environ, PATH=str(Path(TERRAFORM).resolve().parent) + os.pathsep + os.environ["PATH"])
         with tempfile.TemporaryDirectory() as temporary:
             profile = Path(temporary)
             (profile / "terraform.tfvars").write_text("create_cluster=true\n")
             encoded = base64.b64encode(json.dumps({"enabled": True}).encode()).decode()
             (profile / "config.env").write_text("CONTROL_NODE_POOL_B64=" + encoded + "\n")
             result = subprocess.check_output([sys.executable, str(ROOT / "deploy/scripts/control-pool-profile.py"),
-                                              temporary], text=True)
+                                              temporary], env=env, text=True)
             self.assertEqual(json.loads(result), {"enabled": False})
 
     def test_monitoring_does_not_inherit_application_control_placement(self):

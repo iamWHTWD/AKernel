@@ -16,13 +16,12 @@ def saved_pool(directory):
     variables = directory / "terraform.tfvars"
     config = directory / "config.env"
     if variables.is_file():
-        # An omitted input uses Terraform's legacy default, even if config.env
-        # still contains metadata from a previously enabled control pool.
-        if not re.search(r"(?m)^\s*control_node_pool\s*=", variables.read_text()):
-            return {"enabled": False}
-        # Terraform parses HCL; never source the profile or expose other inputs.
+        # Terraform handles valid HCL syntax and the legacy default for an
+        # omitted input. Never source the profile or expose unrelated inputs.
         with tempfile.TemporaryDirectory() as temporary:
-            (Path(temporary) / "main.tf").write_text('variable "control_node_pool" {\n type=any\n default={}\n}\n')
+            (Path(temporary) / "main.tf").write_text(
+                'variable "control_node_pool" {\n type=any\n default={enabled=false}\n nullable=false\n}\n'
+            )
             result = subprocess.run(
                 ["terraform", "console", "-no-color", "-var-file=" + str(variables.resolve())],
                 cwd=temporary, input="jsonencode(var.control_node_pool)\n",
@@ -49,6 +48,14 @@ def main():
     value = saved_pool(directory)
     if not isinstance(value, dict):
         raise ValueError("control_node_pool must be an object")
+    if "enabled" in value:
+        enabled = value["enabled"]
+        if enabled is None:
+            value["enabled"] = False
+        elif isinstance(enabled, str) and enabled in ("true", "false", "0", "1"):
+            value["enabled"] = enabled in ("true", "1")
+        elif not isinstance(enabled, bool):
+            raise ValueError("control_node_pool.enabled must be a boolean")
     if len(sys.argv) > 2 and sys.argv[2]:
         value["enabled"] = sys.argv[2] == "true"
     if value.get("enabled") and value.get("node_selector"):

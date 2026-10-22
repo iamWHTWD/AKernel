@@ -153,6 +153,27 @@ jobs:
           python deploy/terraform/test_adx_contract.py -v
           python deploy/terraform/test_control_placement.py -v
 
+      - name: Verify CCE control-pool resources with supported provider schemas
+        run: |
+          for version in 1.83.0 1.99.1; do
+            fixture="$(mktemp -d)"
+            cp -R deploy "$fixture/deploy"
+            module="$fixture/deploy/terraform/huaweicloud"
+            cat > "$module/provider_version_override.tf" <<EOF
+          terraform {
+            required_providers {
+              huaweicloud = {
+                source  = "huaweicloud/huaweicloud"
+                version = "= $version"
+              }
+            }
+          }
+          EOF
+            terraform -chdir="$module" init -backend=false -input=false -no-color
+            terraform -chdir="$module" validate -no-color
+            terraform -chdir="$module" test -no-color
+          done
+
   standalone-e2e:
     name: Standalone E2E
     needs:
