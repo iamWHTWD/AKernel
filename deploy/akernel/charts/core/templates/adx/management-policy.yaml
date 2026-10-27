@@ -1,0 +1,27 @@
+{{- if .Values.adx.management.enabled }}
+# Other Coordinator ports retain their existing reachability. Management has no
+# bearer authentication and is limited to operator Pods in this namespace.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: akernel-adx-management
+  namespace: {{ .Release.Namespace }}
+spec:
+  podSelector:
+    matchLabels:
+      app: akernel-adx-coordinator
+  policyTypes: [Ingress]
+  ingress:
+    - ports:
+        - {protocol: TCP, port: 19000}
+        - {protocol: TCP, port: 19090}
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: akernel-node-upgrade
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: scaling-controller
+      ports:
+        - {protocol: TCP, port: 19092}
+{{- end }}

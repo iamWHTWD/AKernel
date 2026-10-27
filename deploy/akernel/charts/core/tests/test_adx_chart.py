@@ -13,7 +13,7 @@ import yaml
 CHART = Path(__file__).resolve().parents[1]
 
 
-def render() -> tuple[list[dict], str]:
+def render(*settings: str) -> tuple[list[dict], str]:
     result = subprocess.run(
         [
             "helm",
@@ -24,6 +24,7 @@ def render() -> tuple[list[dict], str]:
             "akernel-system",
             "--set",
             "adx.tls.existingSecret=adx-test-tls",
+            *settings,
         ],
         check=True,
         capture_output=True,
@@ -42,6 +43,28 @@ class AdxChartTest(unittest.TestCase):
             if resource.get("kind") == kind and resource["metadata"]["name"] == name:
                 return resource
         self.fail(f"missing {kind}/{name}")
+
+    def test_on_delete_rollout_has_no_rolling_update_parameters(self) -> None:
+        result = subprocess.run(
+            ["helm", "template", "akernel", str(CHART), "--set", "node.updateStrategy=OnDelete"],
+            check=True, capture_output=True, text=True,
+        )
+        node = next(item for item in yaml.safe_load_all(result.stdout)
+                    if item and item.get("kind") == "DaemonSet" and item["metadata"]["name"] == "akernel-node")
+        self.assertEqual(node["spec"]["updateStrategy"], {"type": "OnDelete"})
+
+    def test_management_listener_is_opt_in_and_restricted_to_operator_pods(self) -> None:
+        self.assertNotIn("autoscaling_listen:", self.rendered)
+        resources, _ = render("--set", "adx.management.enabled=true")
+        config = next(r for r in resources if r["kind"] == "ConfigMap" and r["metadata"]["name"] == "akernel-adx-config")
+        coordinator = yaml.safe_load(config["data"]["coordinator.yaml"])["services"][0]["config"]
+        self.assertEqual(coordinator["autoscaling_listen"], "0.0.0.0:19092")
+        service = next(r for r in resources if r["kind"] == "Service" and r["metadata"]["name"] == "akernel-adx-coordinator")
+        self.assertIn(19092, [p["port"] for p in service["spec"]["ports"]])
+        policy = next(r for r in resources if r["kind"] == "NetworkPolicy" and r["metadata"]["name"] == "akernel-adx-management")
+        rule = next(r for r in policy["spec"]["ingress"] if r["ports"] == [{"protocol": "TCP", "port": 19092}])
+        self.assertEqual({p["podSelector"]["matchLabels"]["app.kubernetes.io/name"] for p in rule["from"]},
+                         {"akernel-node-upgrade", "scaling-controller"})
 
     def test_direct_ingress_has_no_external_proxy_resources(self) -> None:
         names = {item["metadata"]["name"] for item in self.resources}

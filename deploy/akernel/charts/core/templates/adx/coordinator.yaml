@@ -13,6 +13,11 @@ spec:
     - name: coordinator
       port: 19000
       targetPort: coordinator
+    {{- if .Values.adx.management.enabled }}
+    - name: management
+      port: 19092
+      targetPort: management
+    {{- end }}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -72,6 +77,10 @@ spec:
               containerPort: 19000
             - name: metrics
               containerPort: 19090
+            {{- if .Values.adx.management.enabled }}
+            - name: management
+              containerPort: 19092
+            {{- end }}
           readinessProbe:
             exec:
               command: [/bin/bash, -ec, 'exec 3<>/dev/tcp/127.0.0.1/19000']

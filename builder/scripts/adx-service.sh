@@ -13,7 +13,7 @@ load_container_environment() {
   # Keep explicit service overrides and import only the ADX deployment contract.
   while IFS= read -r -d '' entry; do
     case "${entry}" in
-      AKERNEL_ADX_CONFIG=*|AKERNEL_ADX_MANAGED_CREDENTIALS=*|AKERNEL_ADX_STATE_DIR=*|ADX_REDIS_URL=*|NODE_NAME=*|INSTANCE_IP=*|AWS_ACCESS_KEY_ID=*|AWS_SECRET_ACCESS_KEY=*|AWS_SESSION_TOKEN=*|AWS_EC2_METADATA_DISABLED=*)
+      AKERNEL_ADX_CONFIG=*|AKERNEL_ADX_MANAGED_CREDENTIALS=*|AKERNEL_ADX_STATE_DIR=*|ADX_REDIS_URL=*|ADX_NODE_UPGRADE_ISOLATED=*|NODE_NAME=*|INSTANCE_IP=*|AWS_ACCESS_KEY_ID=*|AWS_SECRET_ACCESS_KEY=*|AWS_SESSION_TOKEN=*|AWS_EC2_METADATA_DISABLED=*)
         name="${entry%%=*}"
         if ! declare -p "${name}" >/dev/null 2>&1; then
           export "${entry}"

@@ -5,7 +5,7 @@ Wants=network-online.target sandboxd.service
 
 [Service]
 Type=simple
-PassEnvironment=AKERNEL_ADX_CONFIG AKERNEL_ADX_MANAGED_CREDENTIALS AKERNEL_ADX_STATE_DIR
+PassEnvironment=AKERNEL_ADX_CONFIG AKERNEL_ADX_MANAGED_CREDENTIALS AKERNEL_ADX_STATE_DIR ADX_NODE_UPGRADE_ISOLATED
 PassEnvironment=ADX_REDIS_URL NODE_NAME INSTANCE_IP
 ExecStart=/usr/local/bin/adx-service run
 ExecStop=/usr/local/bin/adx-service stop

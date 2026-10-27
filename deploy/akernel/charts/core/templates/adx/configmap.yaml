@@ -61,6 +61,9 @@ data:
         role: coordinator
         config:
           listen: 0.0.0.0:19000
+          {{- if .Values.adx.management.enabled }}
+          autoscaling_listen: 0.0.0.0:19092
+          {{- end }}
           advertised_address: http://akernel-adx-coordinator.{{ .Release.Namespace }}.svc.cluster.local:19000
           scheduler_shards: {{ .Values.adx.schedulerShards }}
           placement: {{ eq (.Values.coordinator.schedulePlacementPolicy | default "spread") "binpack" | ternary "pack" "spread" | quote }}

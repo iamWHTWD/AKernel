@@ -14,6 +14,7 @@ class AdxServiceTest(unittest.TestCase):
                 b"AKERNEL_ADX_CONFIG=/etc/akernel/adx-node.yaml\0"
                 b"AKERNEL_ADX_MANAGED_CREDENTIALS=external\0"
                 b"ADX_REDIS_URL=redis://example/\0"
+                b"ADX_NODE_UPGRADE_ISOLATED=true\0"
                 b"NODE_NAME=node-from-pod\0INSTANCE_IP=192.0.2.10\0"
                 b"AWS_ACCESS_KEY_ID=test-access\0AWS_SECRET_ACCESS_KEY=test-secret\0"
                 b"AWS_SESSION_TOKEN=test-session\0AWS_EC2_METADATA_DISABLED=true\0"
@@ -34,6 +35,7 @@ class AdxServiceTest(unittest.TestCase):
             self.assertEqual(inherited["AKERNEL_ADX_CONFIG"], "/etc/akernel/adx-node.yaml")
             self.assertEqual(inherited["AKERNEL_ADX_MANAGED_CREDENTIALS"], "external")
             self.assertEqual(inherited["ADX_REDIS_URL"], "redis://example/")
+            self.assertEqual(inherited["ADX_NODE_UPGRADE_ISOLATED"], "true")
             self.assertEqual(inherited["NODE_NAME"], "explicit-node")
             self.assertEqual(inherited["INSTANCE_IP"], "192.0.2.10")
             self.assertEqual(inherited["AWS_ACCESS_KEY_ID"], "test-access")

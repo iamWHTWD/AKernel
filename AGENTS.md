@@ -52,6 +52,7 @@ tunnels. The project overview and deployment quick start are in
 - `builder/` - Dockerfiles, service configs, runtime rootfs build, and image
   entrypoint scripts for the public all-in-one image.
 - `deploy/` - Helm charts, standalone scripts, Terraform modules, and deployment helper scripts.
+- `deploy/upgrade/` - cluster-local node-image upgrade executor; see `deploy/docs/node-upgrade.md`.
 - `deploy/standalone/manage.py` - source-build standalone lifecycle shared by Linux and Apple Silicon Mac with OrbStack.
 - `assets/` - static images used by the root README.
 - `src/agent-dx/` - Agent DX source reference maintained as a Git submodule.
@@ -783,3 +784,13 @@ The node Collector runs inside the existing node container; control-role
 collectors read shared local logs. Keep `builder/config/` and Helm Collector
 configuration synchronized. Preserve the ADX dashboards' UIDs and query
 contracts. Verify real SDK traffic reaches the backends after collection changes.
+
+### Node upgrade executor
+
+Keep `deploy/upgrade` read-only by default. Mutations require an explicit
+`--execute`; never treat management errors, incomplete pagination or unknown
+operations as an empty node. Keep Pod UID/RV preconditions, task-scoped SDK C/R
+verification, persisted recovery progress and the scaling-controller handoff in
+sync with the ADX management contract. The executor does not upgrade release pins
+or deploy itself. Run its local tests and core chart/launcher checks when changing
+this path; report actual cluster qualification separately.

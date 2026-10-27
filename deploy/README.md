@@ -539,3 +539,13 @@ Resizing an existing cache is unsupported. Same-Pod service restarts retain it; 
 Internal network mode requires an ADX package containing the optional internal
 transport implementation. Validate control and sandbox traffic with the selected
 package before deploying these templates.
+
+## akernel-node rolling upgrade
+
+The cluster-local upgrade Job evacuates Sandboxes through shared C/R before
+replacing each empty node Pod. See [the operator guide](docs/node-upgrade.md)
+for prerequisites, read-only planning, execution and recovery. Enable the
+internal management listener with `core.adx.management.enabled=true` only on a
+network-policy-enforcing cluster. This capability requires compatible ADX
+management binaries on both the original and replacement nodes; changing the
+node image alone does not bootstrap that protocol.

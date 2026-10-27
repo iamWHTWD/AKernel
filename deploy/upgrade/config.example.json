@@ -1,0 +1,24 @@
+{
+  "upgrade": {
+    "namespace": "akernel",
+    "daemonset": "akernel-node",
+    "image": "registry.example/akernel-node@sha256:REPLACE_WITH_64_HEX_DIGEST",
+    "task_id": "upgrade-20261026",
+    "executor_id": "upgrade-20261026-attempt-1",
+    "checkpoint_storage_alias": "shared",
+    "pool_id": "compute"
+  },
+  "adx": {
+    "management_url": "http://akernel-adx-coordinator:19092",
+    "resources_url": "https://akernel.example",
+    "token_path": "/run/akernel-upgrade/token",
+    "ca_file": "/run/akernel-upgrade/ca.crt"
+  },
+  "scaler": {
+    "name": "akernel-scaling-controller-operations-upgrade",
+    "cluster_id": "REPLACE_WITH_CLUSTER_ID",
+    "pool_id": "compute",
+    "count": 1
+  },
+  "sdk_server_address": "akernel.example"
+}

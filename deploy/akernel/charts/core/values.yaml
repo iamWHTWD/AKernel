@@ -27,6 +27,9 @@ image:
 # existing Secret containing the public HTTPS certificate and initial API key;
 # see deploy/README.md for the exact key contract.
 adx:
+  # Internal HTTP operations; requires CNI-enforced NetworkPolicy.
+  management:
+    enabled: false
   namespace: akernel
   schedulerShards: 1
   # Execd pushes checkpoint requests and runtime status directly to adxlet.
@@ -108,6 +111,8 @@ coordinator:
   schedulePlacementPolicy: spread
 
 node:
+  # The upgrade Job requires OnDelete so it can evacuate and verify each Pod.
+  updateStrategy: RollingUpdate
   secret:
     create: true
     oss_auths: {}
