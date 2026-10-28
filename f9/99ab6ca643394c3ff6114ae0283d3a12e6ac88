@@ -1,0 +1,26 @@
+deploy/docs/node-upgrade.md
+  h_e96096da8bf6f9 27-28,91-92
+deploy/upgrade/akernel_upgrade/clients.py
+  h_e96096da8bf6f9 5-6,8,10,14,26-28,65-66,74,82,87-137
+deploy/upgrade/akernel_upgrade/engine.py
+  h_e96096da8bf6f9 38,47-48,163-164,237,377,386,392,405-407,468-500
+deploy/upgrade/akernel_upgrade/protocol.py
+  h_e96096da8bf6f9 255-264,267-268,280-281,293-295
+deploy/upgrade/config.example.json
+  h_e96096da8bf6f9 9-10
+deploy/upgrade/tests/test_http_retry.py
+  h_e96096da8bf6f9 1-199
+deploy/upgrade/tests/test_upgrade.py
+  h_e96096da8bf6f9 4,96-125,501-564,1369-1568
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "f999ab6ca643394c3ff6114ae0283d3a12e6ac88",
+  "prompts": {},
+  "humans": {
+    "h_e96096da8bf6f9": {
+      "author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}
