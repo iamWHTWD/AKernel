@@ -24,6 +24,8 @@ python3 deploy/upgrade/manage.py status --config /protected/path/upgrade.json --
 
 先填写示例中的实际 namespace、DaemonSet、镜像 digest、管理/公开地址、共享存储 alias、scaler cluster/pool 与凭据路径。`capacity_requests.count` 来自配置中的 `scaler.count`，由运维按源节点负载及池模板设置。执行器不直接调用云 API。
 
+需要先预留备用容量时，设置 `upgrade.prewarm_capacity=true`（默认关闭）。Job 发布隔离的新镜像模板后，按 `scaler.count` 申请一次扩容，完成新增节点的 C/R 测试并取得该请求的 Completed 回执后，才迁出首个源节点。中断续做复用同一请求，不重复购买；池上限须包含备用容量，例如 5 台基线加 1 台备用时设为 6。
+
 `apply` 在 ConfigMap 保存唯一 DaemonSet 任务进度，持久化每个迁移和删除意图。它先确认 OnDelete，再增加新进程的默认隔离环境，最后更新 node 镜像。任务内每轮重新读取全部资源及实例分页；实例分页 epoch/revision 漂移不视为空载。
 
 取得 scaler Ready 后，首次 begin/发布前重新核对并持久固定 Pod 基线，纳入交接期间已完成扩容的旧镜像节点；已有原 Pod UID/session 不会被刷新覆盖，续做也不会重新采集基线。其后出现的节点必须有 scaler 精确扩容归属，并重新读取 Kubernetes Node 核对 UID、池与实例身份。晚到的旧镜像 Pod 加入同一源节点队列，逐一迁出和升级；新镜像 Pod 才走隔离验收。收尾期间发现旧源会回到队列，不能提前结束任务；无归属节点继续阻塞。
@@ -85,6 +87,8 @@ Job 默认执行 `plan`，`restartPolicy: Never`、`backoffLimit: 0`。Role 仅�
 测试实例使用保留的 `upgrade-canary-` 名称。清理统一等待 ADX `revoke-canary` 撤销创建/执行授权并确认实际清理；SDK 删除返回成功或 404 均不能代替这份确认。创建回复丢失、回滚或 Pod UID 变化时，同样先处理旧测试身份。
 
 ## 停止、续做和回退
+
+只读管理和资源查询对瞬态故障最多尝试 4 次，退避共用原读取预算，并遵守预算内的 `Retry-After`；写操作不自动重放。持续失败仍保留任务状态并退出，不将查询失败视为空载。
 
 Job 收到 SIGTERM 后退出；安装期间同时终止并回收 pip，不会继续启动升级执行器。临时依赖目录随失败清理，每次新 Pod 重新安装。**安装失败不会解除已存在任务的隔离或缩容保护。**
 

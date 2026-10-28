@@ -6,7 +6,8 @@
     "task_id": "upgrade-20261026",
     "executor_id": "upgrade-20261026-attempt-1",
     "checkpoint_storage_alias": "shared",
-    "pool_id": "compute"
+    "pool_id": "compute",
+    "prewarm_capacity": false
   },
   "adx": {
     "management_url": "http://akernel-adx-coordinator:19092",

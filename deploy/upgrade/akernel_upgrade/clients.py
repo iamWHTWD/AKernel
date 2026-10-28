@@ -2,11 +2,16 @@
 
 from __future__ import annotations
 
+import errno
+import http.client
 import json
+import socket
 import ssl
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
+from email.utils import parsedate_to_datetime
 from pathlib import Path
 
 from .errors import Blocked, Conflict, UnknownOutcome, UpgradeError
@@ -18,6 +23,9 @@ class _NoRedirect(urllib.request.HTTPRedirectHandler):
 
 
 class HTTP:
+    _READ_ATTEMPTS = 4
+    _RETRY_STATUS = frozenset((408, 429, 502, 503, 504))
+
     def __init__(self, management_url: str, resources_url: str,
                  token_path: str, ca_file: str | None = None, timeout: int = 30,
                  operation_timeout: int = 660):
@@ -54,9 +62,8 @@ class HTTP:
             headers["Content-Type"] = "application/json"
         request = urllib.request.Request(base + path, body, headers, method=method)
         try:
-            with self.opener.open(request, timeout=self.timeout if method == "GET"
-                                  else self.operation_timeout) as response:
-                content = response.read(8 * 1024 * 1024 + 1)
+            content = (self._read(request) if method == "GET" else
+                       self._read_once(request, self.operation_timeout))
             if len(content) > 8 * 1024 * 1024:
                 raise ValueError("response too large")
             value = json.loads(content)
@@ -64,6 +71,7 @@ class HTTP:
                 raise ValueError("object response required")
             return value
         except urllib.error.HTTPError as error:
+            error.close()
             if error.code == 409:
                 raise Conflict("HTTP version/identity conflict") from error
             if error.code in (400, 401, 403, 404, 405, 422):
@@ -71,10 +79,61 @@ class HTTP:
             if method != "GET":
                 raise UnknownOutcome(f"HTTP mutation result unknown ({error.code})") from error
             raise UpgradeError(f"HTTP read failed ({error.code})") from error
-        except (OSError, ValueError, urllib.error.URLError) as error:
+        except (OSError, ValueError, urllib.error.URLError, http.client.HTTPException) as error:
             if method != "GET":
                 raise UnknownOutcome("HTTP mutation response unavailable or invalid") from error
             raise UpgradeError("HTTP read unavailable or invalid") from error
+
+    def _read_once(self, request, timeout):
+        with self.opener.open(request, timeout=timeout) as response:
+            return response.read(8 * 1024 * 1024 + 1)
+
+    def _read(self, request):
+        # A transient read must not multiply the original timeout. Successful
+        # bodies are validated by request(); malformed JSON is not retried.
+        deadline = time.monotonic() + self.timeout
+        timeout = self.timeout
+        for attempt in range(self._READ_ATTEMPTS):
+            try:
+                return self._read_once(request, timeout)
+            except (OSError, urllib.error.URLError, http.client.HTTPException) as error:
+                retry_after = None
+                if isinstance(error, urllib.error.HTTPError):
+                    retryable = error.code in self._RETRY_STATUS
+                    retry_after = error.headers.get("Retry-After") if error.headers else None
+                    error.close()
+                else:
+                    reason = error.reason if isinstance(error, urllib.error.URLError) else error
+                    retryable = (not isinstance(reason, ssl.SSLError) and (
+                        isinstance(reason, (TimeoutError, ConnectionError, http.client.IncompleteRead))
+                        or isinstance(reason, OSError) and reason.errno in (
+                            errno.ECONNREFUSED, errno.EHOSTUNREACH, errno.ENETUNREACH,
+                            errno.ETIMEDOUT, errno.ECONNRESET, errno.EPIPE, socket.EAI_AGAIN)))
+                delay = max(0.5 * 2 ** attempt, self._retry_after(retry_after))
+                if (not retryable or attempt + 1 == self._READ_ATTEMPTS
+                        or delay >= deadline - time.monotonic()):
+                    raise
+                time.sleep(delay)
+                timeout = deadline - time.monotonic()
+                if timeout <= 0:
+                    raise
+
+    @staticmethod
+    def _retry_after(value):
+        if not value:
+            return 0
+        try:
+            value = value.strip()
+            if value.isascii() and value.isdecimal():
+                # Huge valid delays become infinity and exceed the budget;
+                # they must not fall back to an earlier retry.
+                return float(value)
+            date = parsedate_to_datetime(value)
+            if date.tzinfo is not None:
+                return max(0, date.timestamp() - time.time())
+        except (ValueError, TypeError, OverflowError):
+            pass
+        return 0
 
 
 class Inventory:

@@ -1,6 +1,7 @@
 """Failure-oriented tests; no Kubernetes/cloud/ADX mutation is performed."""
 
 import copy
+from dataclasses import replace
 import json
 from pathlib import Path
 import sys
@@ -90,6 +91,36 @@ class FakeKube:
         self.events.append(("delete", obj["metadata"]["uid"]))
         self.pods = [p for p in self.pods if p["metadata"]["uid"] != obj["metadata"]["uid"]]
         self.pods.append(self.pod(obj["spec"]["nodeName"], obj["metadata"]["uid"] + "-new"))
+
+
+class ControllerObservedKube(FakeKube):
+    """The controller observes spec changes in a separate status/RV write."""
+
+    def __init__(self):
+        super().__init__()
+        self.observation_reads = 0
+        self.before_observation = None
+
+    def patch(self, kind, obj, operations):
+        observed = self.ds["status"]["observedGeneration"]
+        result = super().patch(kind, obj, operations)
+        if kind == "daemonsets":
+            self.ds["status"]["observedGeneration"] = observed
+            result["status"]["observedGeneration"] = observed
+            self.observation_reads = 2
+        return result
+
+    def get(self, kind, name):
+        if kind == "daemonsets" and self.observation_reads:
+            self.observation_reads -= 1
+            if not self.observation_reads:
+                if self.before_observation:
+                    self.before_observation(self.ds)
+                self.ds["status"]["observedGeneration"] = self.ds["metadata"]["generation"]
+                self.ds["metadata"]["resourceVersion"] = str(
+                    int(self.ds["metadata"]["resourceVersion"]) + 1)
+                self.events.append(("observed", self.ds["metadata"]["generation"]))
+        return super().get(kind, name)
 
 
 class FakeInventory:
@@ -465,6 +496,70 @@ class EngineTests(unittest.TestCase):
                  "permit_id": "p", "phase": "Quiescing", "revision": 1}
         with self.assertRaises(Blocked):
             self.engine.validate_empty(proof, "current")
+
+
+class PublishObservationTests(unittest.TestCase):
+    def fixture(self, strategy="OnDelete"):
+        case = EngineTests()
+        case.setUp()
+        case.kube = ControllerObservedKube()
+        case.kube.ds["spec"]["updateStrategy"] = {"type": strategy}
+        case.engine.kube = case.manager.kube = case.kube
+        return case
+
+    def assert_publish_after_controller_observation(self, strategy):
+        case = self.fixture(strategy)
+        self.assertEqual(case.engine.apply()["phase"], "Completed")
+        events = case.kube.events
+        marker = next(i for i, event in enumerate(events) if event[0] == "daemonsets"
+                      and event[1].endswith("/env"))
+        images = [i for i, event in enumerate(events) if event[0] == "daemonsets"
+                  and event[1].endswith("/image")]
+        self.assertEqual(len(images), 1)
+        marker_generation = 2 if strategy == "OnDelete" else 3
+        self.assertLess(marker, events.index(("observed", marker_generation)))
+        self.assertLess(events.index(("observed", marker_generation)), images[0])
+        self.assertFalse(any(event[0] == "delete" for event in events[:images[0]]))
+        if strategy == "RollingUpdate":
+            self.assertLess(events.index(("observed", 2)), marker)
+
+    def test_on_delete_image_patch_uses_observed_marker_resource_version(self):
+        self.assert_publish_after_controller_observation("OnDelete")
+
+    def test_rolling_update_marker_patch_uses_observed_strategy_resource_version(self):
+        self.assert_publish_after_controller_observation("RollingUpdate")
+
+    def test_controller_observation_still_rejects_identity_and_configuration_drift(self):
+        for change in ("uid", "generation", "template"):
+            with self.subTest(change=change):
+                case = self.fixture()
+                def drift(ds):
+                    if change == "uid":
+                        ds["metadata"]["uid"] = "replacement"
+                    elif change == "generation":
+                        ds["metadata"]["generation"] += 1
+                    else:
+                        ds["spec"]["template"]["spec"]["hostNetwork"] = True
+                case.kube.before_observation = drift
+                with self.assertRaises(Conflict):
+                    case.engine.apply()
+                self.assertEqual(case.engine.state["phase"], "NeedsAttention")
+                self.assertEqual(case.kube.ds["spec"]["template"]["spec"]["containers"][0]["image"], OLD)
+                self.assertFalse(any(event[0] == "delete" for event in case.kube.events))
+
+    def test_status_write_after_observation_still_conflicts_without_retry(self):
+        case = self.fixture()
+        save = case.engine.save
+        def status_write():
+            save()
+            if case.engine.state.get("template_intent") == NEW:
+                case.kube.ds["metadata"]["resourceVersion"] = str(
+                    int(case.kube.ds["metadata"]["resourceVersion"]) + 1)
+        case.engine.save = status_write
+        with self.assertRaises(Conflict):
+            case.engine.apply()
+        self.assertEqual(case.kube.ds["spec"]["template"]["spec"]["containers"][0]["image"], OLD)
+        self.assertFalse(any(event[0] == "delete" for event in case.kube.events))
 
 
 class TransportTests(unittest.TestCase):
@@ -1269,6 +1364,206 @@ class LateSourceTests(unittest.TestCase):
         request = json.loads(case.kube.get("configmaps", "guard")["data"]["request.json"])
         self.assertEqual(request["phase"], "Active")
         self.assertEqual(case.now, case.settings.node_timeout_seconds)
+
+
+class PrewarmCapacityTests(unittest.TestCase):
+    def fixture(self):
+        case = LateSourceTests().fixture()
+        case.settings = replace(case.settings, prewarm_capacity=True, node_timeout_seconds=60)
+        case.engine.cfg = case.settings
+        observe = LateSourceTests.use_bridge(case)
+        prepare = case.manager.prepare
+        def guarded_prepare(state, node):
+            self.assertIn("d", case.engine.state["validated_capacity_nodes"])
+            request, status = self.channel(case)
+            self.assertEqual(len(request["capacity_requests"]), 1)
+            self.assertEqual(status["capacity_requests"][0]["phase"], "Completed")
+            return prepare(state, node)
+        case.manager.prepare = guarded_prepare
+        def tick(seconds):
+            case.now += seconds
+            request, _ = self.channel(case)
+            if request["capacity_requests"] and not any(p["spec"]["nodeName"] == "d" for p in case.kube.pods):
+                self.assertEqual(case.kube.ds["spec"]["template"]["spec"]["containers"][0]["image"], NEW)
+                self.assertFalse(any(e.startswith("prepare-") for e in case.manager.events))
+                case.kube.pods.append(case.kube.pod("d", "d-new"))
+            added = any(p["spec"]["nodeName"] == "d" for p in case.kube.pods)
+            accepted = "d" in case.manager.verified
+            nodes = [{**LateSourceTests.observation(), "accepting": accepted}] if added else []
+            receipts = [{**entry, "phase": "Completed" if accepted else "ReadyForValidation",
+                         "nodes": nodes} for entry in request["capacity_requests"]]
+            observe(observed_nodes=nodes, capacity_requests=receipts, unsettled_up=added and not accepted)
+        case.engine.sleep = tick
+        return case, observe
+
+    @staticmethod
+    def channel(case):
+        data = case.kube.get("configmaps", "guard")["data"]
+        return json.loads(data.get("request.json", "null")), json.loads(data["status.json"])
+
+    def test_explicit_prewarm_delivers_and_validates_before_first_source_is_touched(self):
+        case, _ = self.fixture()
+        self.assertEqual(case.engine.apply()["phase"], "Completed")
+        self.assertEqual(case.probe.runs, 3)
+        self.assertEqual(len(self.channel(case)[0]["capacity_requests"]), 1)
+        self.assertTrue(case.engine.state["configuration"]["prewarm_capacity"])
+        self.assertTrue(case.engine.state["capacity_requested"])
+
+    def test_resume_after_completed_prewarm_reuses_the_same_request(self):
+        case, _ = self.fixture()
+        prepare = case.manager.prepare
+        case.manager.prepare = lambda *args: (_ for _ in ()).throw(UnknownOutcome("Job interrupted"))
+        with self.assertRaises(UnknownOutcome):
+            case.engine.apply()
+        before = copy.deepcopy(self.channel(case)[0]["capacity_requests"])
+        self.assertEqual(self.channel(case)[1]["capacity_requests"][0]["phase"], "Completed")
+        case.manager.prepare = prepare
+        case.engine.load()
+        self.assertEqual(case.engine.run()["phase"], "Completed")
+        self.assertEqual(self.channel(case)[0]["capacity_requests"], before)
+        self.assertEqual(case.probe.runs, 3)
+
+    def test_lost_prewarm_request_reply_never_touches_a_source_or_buys_twice(self):
+        case, _ = self.fixture()
+        prewarm = case.scaling.prewarm_capacity
+        def lost(state):
+            prewarm(state)
+            raise UnknownOutcome("request write response lost")
+        case.scaling.prewarm_capacity = lost
+        with self.assertRaises(UnknownOutcome):
+            case.engine.apply()
+        self.assertFalse(any(e.startswith("prepare-") for e in case.manager.events))
+        self.assertFalse(any(e[0] == "delete" for e in case.kube.events))
+        before = copy.deepcopy(self.channel(case)[0]["capacity_requests"])
+        case.scaling.prewarm_capacity = prewarm
+        self.assertEqual(case.engine.run()["phase"], "Completed")
+        self.assertEqual(self.channel(case)[0]["capacity_requests"], before)
+
+    def test_resume_after_scaler_finalizing_keeps_completed_prewarm_receipt(self):
+        case, _ = self.fixture()
+        tick = case.engine.sleep
+        interrupted = False
+        def stop_after_finalizing(seconds):
+            nonlocal interrupted
+            request, _ = self.channel(case)
+            if request["phase"] == "Finalizing" and not interrupted:
+                interrupted = True
+                raise UnknownOutcome("Job interrupted while finalizing")
+            tick(seconds)
+        case.engine.sleep = stop_after_finalizing
+        with self.assertRaises(UnknownOutcome):
+            case.engine.apply()
+        self.assertEqual(self.channel(case)[0]["phase"], "Finalizing")
+        self.assertTrue(all(n["phase"] == "Done" for n in case.engine.state["nodes"]))
+        before = copy.deepcopy(self.channel(case)[0]["capacity_requests"])
+        case.engine.load()
+        self.assertEqual(case.engine.run()["phase"], "Completed")
+        self.assertEqual(self.channel(case)[0]["capacity_requests"], before)
+
+    def test_undelivered_capacity_times_out_with_old_pods_and_protection_retained(self):
+        for phase in ("Pending", "Blocked", "Unknown"):
+            with self.subTest(phase=phase):
+                case, observe = self.fixture()
+                def tick(seconds):
+                    case.now += seconds
+                    request, _ = self.channel(case)
+                    observe(capacity_requests=[{**entry, "phase": phase, "nodes": []}
+                                              for entry in request["capacity_requests"]])
+                case.engine.sleep = tick
+                with self.assertRaisesRegex(Blocked, "prewarm capacity is not delivered"):
+                    case.engine.apply()
+                self.assertEqual(case.now, 60)
+                self.assertEqual(case.engine.state["phase"], "NeedsAttention")
+                self.assertEqual([p["metadata"]["uid"] for p in case.kube.pods], ["a-old", "b-old"])
+                self.assertFalse(any(e.startswith("prepare-") for e in case.manager.events))
+                request, _ = self.channel(case)
+                self.assertEqual(request["phase"], "Active")
+                self.assertEqual(len(request["capacity_requests"]), 1)
+
+    def test_failed_prewarm_canary_never_touches_sources(self):
+        case, _ = self.fixture()
+        case.probe.error = UnknownOutcome("canary unavailable")
+        with self.assertRaises(UnknownOutcome):
+            case.engine.apply()
+        self.assertFalse(any(e.startswith("prepare-") for e in case.manager.events))
+        self.assertFalse(any(e[0] == "delete" for e in case.kube.events))
+        self.assertEqual(self.channel(case)[0]["phase"], "Active")
+
+    def test_completed_receipt_without_delivered_nodes_never_touches_sources(self):
+        case, observe = self.fixture()
+        def tick(seconds):
+            case.now += seconds
+            request, _ = self.channel(case)
+            observe(capacity_requests=[{**entry, "phase": "Completed", "nodes": []}
+                                      for entry in request["capacity_requests"]])
+        case.engine.sleep = tick
+        with self.assertRaisesRegex(UnknownOutcome, "unique delivered nodes"):
+            case.engine.apply()
+        self.assertFalse(any(e.startswith("prepare-") for e in case.manager.events))
+        self.assertFalse(any(e[0] == "delete" for e in case.kube.events))
+
+    def test_false_default_preserves_legacy_configuration_and_cannot_be_enabled_on_resume(self):
+        case = EngineTests()
+        case.setUp()
+        case.manager.migration_outcome = "unknown"
+        with self.assertRaises(UnknownOutcome):
+            case.engine.apply()
+        configuration = case.engine.state["configuration"]
+        self.assertNotIn("prewarm_capacity", configuration)
+        case.engine.load()
+        self.assertEqual(case.engine.task_configuration(), configuration)
+        case.engine.cfg = replace(case.settings, prewarm_capacity=True)
+        with self.assertRaises(Conflict):
+            case.engine.load()
+
+    def test_prewarm_configuration_rejects_non_boolean_values(self):
+        for value in (1, "true", None):
+            with self.subTest(value=value), self.assertRaises(Blocked):
+                replace(Settings("test", "node", NEW, "task", "executor",
+                                 checkpoint_storage_alias="shared"), prewarm_capacity=value).validate()
+
+    def test_once_request_keeps_completed_receipt_while_reactive_requests_can_advance(self):
+        case, observe = self.fixture()
+        state = {"task_id": "task", "epoch": 1}
+        case.scaling.protect(state)
+        self.assertIsNone(case.scaling.prewarm_capacity(state))
+        request, _ = self.channel(case)
+        receipt = {**request["capacity_requests"][0], "phase": "Completed", "nodes": []}
+        observe(capacity_requests=[receipt])
+        self.assertEqual(case.scaling.prewarm_capacity(state), receipt)
+        self.assertEqual(case.scaling.prewarm_capacity(state), receipt)
+        self.assertEqual(len(self.channel(case)[0]["capacity_requests"]), 1)
+        case.scaling.request_capacity(state, {"node_id": "a"}, {}, {})
+        request, _ = self.channel(case)
+        reactive = {**request["capacity_requests"][-1], "phase": "Completed", "nodes": []}
+        observe(capacity_requests=[receipt, reactive])
+        case.scaling.request_capacity(state, {"node_id": "a"}, {}, {})
+        self.assertEqual(len(self.channel(case)[0]["capacity_requests"]), 3)
+
+    def test_completed_prewarm_is_reusable_after_finalizing_without_new_purchases(self):
+        case, observe = self.fixture()
+        state = {"task_id": "task", "epoch": 1}
+        case.scaling.protect(state)
+        case.scaling.prewarm_capacity(state)
+        request, _ = self.channel(case)
+        receipt = {**request["capacity_requests"][0], "phase": "Completed", "nodes": []}
+        observe(capacity_requests=[receipt])
+        with self.assertRaises(Blocked):
+            case.scaling.finalize(state)
+        self.assertEqual(case.scaling.prewarm_capacity(state), receipt)
+        self.assertEqual(len(self.channel(case)[0]["capacity_requests"]), 1)
+        with self.assertRaises(Blocked):
+            case.scaling.request_capacity(state, {"node_id": "a"}, {}, {})
+
+    def test_finalizing_cannot_create_a_missing_prewarm_request(self):
+        case, observe = self.fixture()
+        state = {"task_id": "task", "epoch": 1}
+        case.scaling.protect(state)
+        with self.assertRaises(Blocked):
+            case.scaling.finalize(state)
+        with self.assertRaisesRegex(Blocked, "cannot be extended"):
+            case.scaling.prewarm_capacity(state)
+        self.assertEqual(self.channel(case)[0]["capacity_requests"], [])
 
 
 class CanaryTests(unittest.TestCase):

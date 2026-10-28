@@ -35,6 +35,7 @@ class Settings:
     canary_cpu: int = 1000
     canary_memory: int = 1024
     checkpoint_storage_alias: str = ""
+    prewarm_capacity: bool = False
 
     def validate(self):
         if not re.fullmatch(r"[^\s]+@sha256:[a-f0-9]{64}", self.image):
@@ -43,6 +44,8 @@ class Settings:
             raise Blocked("namespace, daemonset, task_id and executor_id are required")
         if not self.checkpoint_storage_alias or self.checkpoint_storage_alias == "local":
             raise Blocked("an explicit shared checkpoint storage alias is required")
+        if type(self.prewarm_capacity) is not bool:
+            raise Blocked("prewarm_capacity must be a boolean")
         if (self.poll_seconds <= 0 or self.capacity_wait_seconds < 60
                 or self.node_timeout_seconds < self.capacity_wait_seconds):
             raise Blocked("invalid polling/deadline settings; capacity request delay must be >=60s")
@@ -157,6 +160,8 @@ class Executor:
                   "checkpoint_storage_alias", "canary_cpu", "canary_memory")
         configuration = {**{key: getattr(self.cfg, key) for key in fields},
                          "scaler": self.scaling.configuration()}
+        if self.cfg.prewarm_capacity:
+            configuration["prewarm_capacity"] = True
         if self.execution_identity is not None:
             configuration["execution_identity"] = copy.deepcopy(self.execution_identity)
         return configuration
@@ -229,6 +234,7 @@ class Executor:
             self.publish(self.cfg.image)
             self.state["phase"] = "Running"
             self.save()
+            self.prewarm_capacity()
             while True:
                 while self.state["index"] < len(self.state["nodes"]):
                     node = self.state["nodes"][self.state["index"]]
@@ -368,7 +374,7 @@ class Executor:
             ds, current, index = self.checked_ds()
             if ds["spec"].get("updateStrategy", {}).get("type") != "OnDelete":
                 raise UnknownOutcome("OnDelete change is not confirmed")
-        self.wait_observed(ds)
+        ds = self.wait_observed(ds)
         env = ds["spec"]["template"]["spec"]["containers"][index].get("env", [])
         marker = next((e for e in env if e.get("name") == "ADX_NODE_UPGRADE_ISOLATED"), None)
         if marker != {"name": "ADX_NODE_UPGRADE_ISOLATED", "value": "true"}:
@@ -377,13 +383,13 @@ class Executor:
             ds = self.kube.patch("daemonsets", ds, [{"op": "add",
                 "path": f"/spec/template/spec/containers/{index}/env",
                 "value": env + [{"name": "ADX_NODE_UPGRADE_ISOLATED", "value": "true"}]}])
-            self.wait_observed(ds)
+            ds = self.wait_observed(ds)
         if current != image:
             self.state["template_intent"] = image
             self.save()
             ds = self.kube.patch("daemonsets", ds, [{"op": "replace",
                 "path": f"/spec/template/spec/containers/{index}/image", "value": image}])
-        self.wait_observed(ds)
+        ds = self.wait_observed(ds)
         self.state["template_generation"] = ds["metadata"]["generation"]
         self.state["template_intent"] = None
         self.save()
@@ -396,7 +402,9 @@ class Executor:
             if fresh["metadata"]["generation"] != generation:
                 raise Conflict("DaemonSet generation changed during controller confirmation")
             if fresh.get("status", {}).get("observedGeneration", 0) >= generation:
-                return
+                # Controller status writes also advance resourceVersion. The
+                # next mutation must use this validated, observed snapshot.
+                return fresh
             if self.clock() >= deadline:
                 raise Blocked("DaemonSet generation has not been observed")
             self.sleep(self.cfg.poll_seconds)
@@ -455,6 +463,39 @@ class Executor:
                     self.state["capacity_requested"] = True
                     self.save()
                 next_request = self.clock() + self.cfg.capacity_wait_seconds
+            self.sleep(self.cfg.poll_seconds)
+
+    def prewarm_capacity(self):
+        if not self.cfg.prewarm_capacity:
+            return
+        deadline = self.clock() + self.cfg.node_timeout_seconds
+        while True:
+            receipt = self.scaling.prewarm_capacity(self.state)
+            if not self.state["capacity_requested"]:
+                self.state["capacity_requested"] = True
+                self.save()
+            completed = receipt is not None and receipt.get("phase") == "Completed"
+            if completed:
+                nodes = receipt.get("nodes")
+                if (not isinstance(nodes, list) or len(nodes) != receipt["count"]
+                        or any(not isinstance(n, dict) or not n.get("name") for n in nodes)
+                        or len({n["name"] for n in nodes}) != len(nodes)):
+                    raise UnknownOutcome("prewarm receipt has no unique delivered nodes")
+            # Isolated additions cannot become Completed until this Job probes
+            # and verifies them. Never wait for admission before running canary.
+            self.validate_capacity_nodes()
+            if completed:
+                validated = self.state.get("validated_capacity_nodes", {})
+                for node in nodes:
+                    record = validated.get(node.get("name"), {})
+                    if (node.get("ready_for_validation") is not True or node.get("accepting") is not True
+                            or node.get("pool_id") != receipt["pool_id"]
+                            or not node.get("uid") or record.get("node_uid") != node["uid"]
+                            or not record.get("pod_uid")):
+                        raise Blocked("prewarm capacity has not passed this task's node validation")
+                return
+            if self.clock() >= deadline:
+                raise Blocked("prewarm capacity is not delivered; source nodes remain untouched")
             self.sleep(self.cfg.poll_seconds)
 
     def check_node_identity(self, name, uid, pool, instance):

@@ -252,13 +252,23 @@ class Scaling:
             raise Blocked("waiting for Finalizing acknowledgment and attributed expansions")
 
     def request_capacity(self, state, node, need, free):
+        return self._capacity_request(state, [state["task_id"], state["epoch"], node["node_id"]],
+                                      repeat=True)
+
+    def prewarm_capacity(self, state):
+        # This one task-level request is reused even after Completed, including
+        # when the Job exits before saving any subsequent local progress.
+        return self._capacity_request(state,
+            [state["task_id"], state["epoch"], "prewarm", self.pool_id], repeat=False)
+
+    def _capacity_request(self, state, basis, *, repeat):
         obj, previous, status = self._read()
         request = self._request(state, previous, status)
-        if request["phase"] != "Active" or not self._observed(status, state, "Ready"):
+        if (request["phase"] != "Active" and (repeat or request["phase"] != "Finalizing")
+                or not self._observed(status, state, "Ready")):
             raise Blocked("capacity requires this task's active scaler handoff")
         requests = {item["request_id"]: item for item in request["capacity_requests"]}
         receipts = {item["request_id"]: item for item in status.get("capacity_requests", [])}
-        basis = [state["task_id"], state["epoch"], node["node_id"]]
         round_number = 0
         while True:
             # Keep round zero compatible with existing persisted requests. Later
@@ -267,6 +277,8 @@ class Scaling:
             entry = {"request_id": identity, "pool_id": self.pool_id, "count": self.count}
             old = requests.get(identity)
             if old is None:
+                if request["phase"] != "Active":
+                    raise Blocked("finalizing scaler capacity requests cannot be extended")
                 request["capacity_requests"].append(entry)
                 self._write(obj, request)
                 return
@@ -278,7 +290,9 @@ class Scaling:
             if any(receipt.get(key) != value for key, value in entry.items()):
                 raise Conflict("capacity receipt identity differs from its request")
             if receipt.get("phase") != "Completed":
-                return  # Pending, blocked or unknown capacity is never bought twice.
+                return receipt  # Pending, blocked or unknown capacity is never bought twice.
+            if not repeat:
+                return receipt
             round_number += 1
 
     def release(self, state):
