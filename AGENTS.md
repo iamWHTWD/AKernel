@@ -146,11 +146,16 @@ override on `make build` does not update the profile consumed by `make push`.
 The build creates only the selected image reference; it does not add a second
 `akernel-all-in-one` alias. `make push` pushes that selected reference directly.
 
-The build helper performs two Docker builds. `builder/runtime.Dockerfile`
+The build helper normally performs two Docker builds. `builder/runtime.Dockerfile`
 creates the EXECD-only `akernel-runtime-rootfs.img` from the pinned ADX release.
+For checkpoint-compatible node upgrades, set `AKERNEL_RUNTIME_SOURCE_IMAGE` to
+the previous all-in-one image's immutable digest and `AKERNEL_RUNTIME_ROOTFS_SHA256`
+to its rootfs file hash. `builder/reuse-runtime.Dockerfile` copies and verifies
+that rootfs without recreating it; the guest Execd stays at its original version.
 `builder/node.Dockerfile` then compiles the node components and produces the
-AKernel all-in-one image using that runtime image. The actor-based Python
-runtime is not a build input.
+AKernel all-in-one image using the generated or reused runtime image. Preserve
+checksum and embedded ELF validation, and never fall back to rebuilding when
+reuse fails. The actor-based Python runtime is not a build input.
 
 Initialize sandboxd with `git submodule update --init src/sandboxd` before
 building. The all-in-one image builds the sandboxd binaries, including

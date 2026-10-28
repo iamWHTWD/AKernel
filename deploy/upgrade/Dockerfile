@@ -1,4 +1,5 @@
-# Optional preinstalled executor; the default Job reuses the node image.
+# Optional preinstalled read-only inspector. New upgrades use the target node image
+# Job, whose actual rootfs is required for the compatibility preflight.
 # Build from the repository root; install the published SDK, including RCs.
 FROM python:3.12-slim
 WORKDIR /opt/akernel

@@ -14,6 +14,8 @@ repository=""
 tag=""
 env_name=""
 runtime_image=""
+runtime_source_image="${AKERNEL_RUNTIME_SOURCE_IMAGE:-}"
+runtime_rootfs_sha256="${AKERNEL_RUNTIME_ROOTFS_SHA256:-}"
 firecracker_kernel_profile="${FIRECRACKER_KERNEL_PROFILE:-kvm}"
 runtime_versions_file="${ROOT}/src/sandboxd/third_party/runtime-versions.env"
 distill_fs_versions_file="${ROOT}/builder/distill-fs-versions.env"
@@ -68,7 +70,7 @@ component_version() {
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --env|--repository|--tag|--runtime-image|--adx-release-url|--adx-release-sha256|--adx-execd-url|--adx-execd-sha256|--otelcol-contrib-url|--otelcol-contrib-sha256)
+    --env|--repository|--tag|--runtime-image|--runtime-source-image|--runtime-rootfs-sha256|--adx-release-url|--adx-release-sha256|--adx-execd-url|--adx-execd-sha256|--otelcol-contrib-url|--otelcol-contrib-sha256)
       [[ $# -ge 2 ]] || die "$1 requires a value"
       ;;
   esac
@@ -87,6 +89,16 @@ while [[ $# -gt 0 ]]; do
       ;;
     --runtime-image)
       runtime_image="$2"
+      shift 2
+      ;;
+    --runtime-source-image)
+      [[ -n "$2" ]] || die "$1 requires a nonempty value"
+      runtime_source_image="$2"
+      shift 2
+      ;;
+    --runtime-rootfs-sha256)
+      [[ -n "$2" ]] || die "$1 requires a nonempty value"
+      runtime_rootfs_sha256="$2"
       shift 2
       ;;
     --adx-release-url)
@@ -312,7 +324,16 @@ validate_override() {
 }
 validate_override ADX_RELEASE "${adx_release_url}" "${adx_release_sha256}"
 validate_override ADX_EXECD "${adx_execd_url}" "${adx_execd_sha256}"
-if [[ "${target_arch}" == arm64 && ( -z "${adx_release_url}" || -z "${adx_execd_url}" ) ]]; then
+if [[ -n "${runtime_source_image}" || -n "${runtime_rootfs_sha256}" ]]; then
+  [[ "${runtime_source_image}" =~ ^[^[:space:]@]+@sha256:[0-9a-f]{64}$ ]] ||
+    die "AKERNEL_RUNTIME_SOURCE_IMAGE must be an immutable image reference ending in @sha256:<64 lowercase hex characters>"
+  [[ "${runtime_rootfs_sha256}" =~ ^[0-9a-f]{64}$ ]] ||
+    die "AKERNEL_RUNTIME_ROOTFS_SHA256 must be the 64-character lowercase SHA-256 of the source rootfs"
+  [[ -z "${adx_execd_url}" && -z "${adx_execd_sha256}" ]] ||
+    die "cannot combine runtime reuse with ADX_EXECD overrides; reuse retains the original guest Execd"
+fi
+if [[ "${target_arch}" == arm64 && ( -z "${adx_release_url}" ||
+      ( -z "${runtime_source_image}" && -z "${adx_execd_url}" ) ) ]]; then
   die "linux/arm64 requires architecture-matched ADX_RELEASE and ADX_EXECD URL/checksum pairs"
 fi
 validate_override OTELCOL_CONTRIB "${otelcol_contrib_url}" "${otelcol_contrib_sha256}"
@@ -352,9 +373,13 @@ fi
 
 require_cmd docker
 
+runtime_dockerfile=builder/runtime.Dockerfile
+if [[ -n "${runtime_source_image}" ]]; then
+  runtime_dockerfile=builder/reuse-runtime.Dockerfile
+fi
 runtime_build_args=(
   --platform "linux/${target_arch}"
-  -f builder/runtime.Dockerfile
+  -f "${runtime_dockerfile}"
   --target runtime-execd
 )
 if [[ ${#mirror_build_args[@]} -gt 0 ]]; then
@@ -384,7 +409,17 @@ if [[ "${firecracker_kernel_profile}" = pvm && "${AKERNEL_ENABLE_FIRECRACKER}" =
   python3 "${ROOT}/src/sandboxd/third_party/prepare-firecracker-pvm.py" "${candidate_args[@]}"
 fi
 
-info "building ${runtime_image} with the EXECD runtime profile"
+if [[ -n "${runtime_source_image}" ]]; then
+  # Replace only the rootfs-producing stage. COPY preserves the EROFS bytes;
+  # verification failure must never fall back to regenerating them with mkfs.
+  runtime_build_args+=(
+    --build-arg "AKERNEL_RUNTIME_SOURCE_IMAGE=${runtime_source_image}"
+    --build-arg "AKERNEL_RUNTIME_ROOTFS_SHA256=${runtime_rootfs_sha256}"
+  )
+  info "reusing verified EXECD rootfs from ${runtime_source_image}"
+else
+  info "building ${runtime_image} with the EXECD runtime profile"
+fi
 docker build \
   "${runtime_build_args[@]}" \
   -t "${runtime_image}" \
@@ -412,6 +447,9 @@ node_build_args=(
   --build-arg "FIRECRACKER_AMD64_SHA256=${firecracker_amd64_sha256}"
   --build-arg "FIRECRACKER_KERNEL_PROFILE=${firecracker_kernel_profile}"
 )
+if [[ -n "${runtime_source_image}" ]]; then
+  node_build_args+=(--build-arg "AKERNEL_RUNTIME_ROOTFS_SHA256=${runtime_rootfs_sha256}")
+fi
 if [[ ${#mirror_build_args[@]} -gt 0 ]]; then
   node_build_args+=("${mirror_build_args[@]}")
 fi

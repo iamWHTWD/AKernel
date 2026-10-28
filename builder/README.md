@@ -1,6 +1,24 @@
 # Image build downloads
 
-The shared `deploy/scripts/build-image.sh` helper builds the runtime rootfs and all-in-one node image for `make build` and `make standalone`. Downloads use official repositories and pinned upstream releases by default.
+The shared `deploy/scripts/build-image.sh` helper builds the runtime rootfs and all-in-one node image for `make build` and `make standalone`. Downloads use official repositories and pinned upstream releases by default. For checkpoint-compatible node upgrades, explicitly reuse the previous image's rootfs as described below.
+
+## Preserve the runtime rootfs during node upgrades
+
+Rebuilding the same rootfs sources can change the EROFS UUID, build time and checksum. A checkpoint may then fail to restore with a superblock mismatch even when the runsc and sandboxd binaries are unchanged. Preserve the original rootfs bytes when updating the node's control/runtime services:
+
+```bash
+AKERNEL_RUNTIME_SOURCE_IMAGE='registry.example.com/akernel/all-in-one@sha256:<old-image-digest>' \
+AKERNEL_RUNTIME_ROOTFS_SHA256='<sha256-of-the-old-rootfs-file>' \
+make build
+```
+
+The source must be a digest-pinned all-in-one image containing `/opt/akernel/runtime/akernel-runtime-rootfs.img`. Record that file's SHA-256 from the qualified old image or running node; the file hash differs from the OCI image digest. The equivalent helper options are `--runtime-source-image` and `--runtime-rootfs-sha256`. Both are required together; CLI values take precedence over environment values. The existing `--runtime-image` still names the intermediate output image.
+
+Reuse copies the rootfs unchanged, verifies its SHA-256 and EROFS integrity, and checks the embedded Execd ELF architecture against the target platform. It does not start the old image or run `mkfs.erofs`. A missing source, wrong checksum, corrupt filesystem or wrong architecture fails the build without a fresh-build fallback. Build cache is an optimization, not the compatibility contract: the digest and rootfs hash remain required even when a cached layer exists.
+
+The guest Execd stays at its original version while `ADX_RELEASE_URL` / `ADX_RELEASE_SHA256` select the new node/control services. Do not supply `ADX_EXECD_*` overrides with reuse; the helper rejects them because they cannot update the retained guest. ARM64 reuse still requires the architecture-matched platform archive pair. Qualify old-guest/new-control compatibility with cross-node C/R and the upgrade canary; identical rootfs bytes alone do not prove compatibility of every runtime component or custom sandbox image. To change the guest rootfs itself, use a separately qualified migration path or drain its existing workloads first.
+
+Without reuse inputs, builds continue to generate a fresh rootfs using the matching platform and Execd release pins.
 
 ## Package repositories
 

@@ -4,23 +4,24 @@
 
 ## 前置条件
 
-- 原节点、目标节点及 Coordinator 已部署支持 `/v1/node-upgrades/` 的管理协议，包含 `canary_cleanup` 能力；首次能力上线从空载节点引导。Helm 使用 `core.adx.management.enabled=true` 启用集群内 `19092` 管理端口及 NetworkPolicy，要求 CNI 执行策略；同 namespace 的升级 Job 和 scaling-controller 标签获得访问，不能公开转发该端口。
+- 原节点、目标节点及 Coordinator 已部署支持 `/v1/node-upgrades/` 的管理协议，包含 `canary_cleanup`、`runtime_rootfs_identity` 能力；首次能力上线从空载节点引导。Helm 使用 `core.adx.management.enabled=true` 启用集群内 `19092` 管理端口及 NetworkPolicy，要求 CNI 执行策略；同 namespace 的升级 Job 和 scaling-controller 标签获得访问，不能公开转发该端口。
 - 原生 `apps/v1` DaemonSet、至少两个节点、共享 checkpoint alias、兼容且固定的 runtime/rootfs。新旧 node 镜像均用 `@sha256:` 固定，配置变更或未知资源会停止任务。
 - scaling-controller 已启用升级交接协议，预先提供 `<stateConfigMap>-upgrade` ConfigMap；控制器必须先确认本任务/epoch 的 `handoff=Ready`。Active 期间禁止缩容、保留扩容；Finalizing 收尾阶段短暂禁止新扩容调用，既有扩容继续对账和验收，Released 后恢复原策略。
 - 一次任务只处理一个 DaemonSet。普通业务扩容与容量请求的新增节点都须由 scaler up journal 证明归属，并执行同一套测试；外部 DaemonSet 或无操作归属的新节点保持阻塞，不能由本任务自动放行。
 - Job 复用的 node 镜像包含 `python3`、`python3-pip`（当前构建已包含），且 Job 可访问所用 PyPI 索引及下载源；SDK 支持 ADX 后端和 `Sandbox(node_id=...)`。执行器直接使用 SDK，不另实现命令或文件协议。
 - 公网资源查询使用 HTTPS 与现有 token/CA 文件；内部 management 请求不携带公网 bearer。不要把 Secret 值写入配置、命令行或日志。
 
-## 本地运行
+## 配置与只读检查
 
 ```bash
 python3 -m pip install -r deploy/upgrade/requirements.txt
 python3 -m pip install --upgrade --pre akernel-sdk
 cp deploy/upgrade/config.example.json /protected/path/upgrade.json
 python3 deploy/upgrade/manage.py plan --config /protected/path/upgrade.json --kubeconfig /protected/path/kubeconfig
-python3 deploy/upgrade/manage.py apply --execute --config /protected/path/upgrade.json --kubeconfig /protected/path/kubeconfig
 python3 deploy/upgrade/manage.py status --config /protected/path/upgrade.json --kubeconfig /protected/path/kubeconfig
 ```
+
+新任务通过下文 Job 执行；本地 `plan` 会列出缺少目标镜像实测 rootfs 的阻塞项，`status` 可正常只读查询。
 
 先填写示例中的实际 namespace、DaemonSet、镜像 digest、管理/公开地址、共享存储 alias、scaler cluster/pool 与凭据路径。`capacity_requests.count` 来自配置中的 `scaler.count`，由运维按源节点负载及池模板设置。执行器不直接调用云 API。
 
@@ -38,14 +39,14 @@ python3 deploy/upgrade/manage.py status --config /protected/path/upgrade.json --
 
 ## Job
 
-默认复用已有的 akernel-node 镜像，无须单独构建 Job 镜像。Job 覆盖镜像启动命令，只运行升级脚本，不启动 node 服务。启动流程：
+Job 使用配置中待升级的目标 akernel-node 镜像及相同 digest，无须单独构建 Job 镜像。Job 覆盖镜像启动命令，只运行升级脚本，不启动 node 服务。启动流程：
 
 ```mermaid
 flowchart LR
     A["① 挂载脚本 ConfigMap"] --> B["② 解包到 /tmp"]
     B --> C["③ 检查命令和 SDK 版本"]
     C --> D["④ 安装依赖到 /tmp"]
-    D --> E["⑤ 核对执行 Pod 与任务环境"]
+    D --> E["⑤ 核对镜像、SDK 与 rootfs"]
     E --> F["⑥ 运行 plan / apply / resume / abort"]
 ```
 
@@ -62,7 +63,7 @@ python3 -c 'import json; print(json.load(open("/tmp/akernel-node-upgrade-scripts
 
 | 项目 | 设置 |
 | --- | --- |
-| `image` | 已有、验证过的 node 镜像 `@sha256:...`；它是执行器的运行环境，与配置中待升级的目标镜像分别指定 |
+| `image` | 与 `upgrade.image` 相同的目标 node 镜像 `@sha256:...`；Job 实测镜像内 rootfs，不能用另一镜像代替 |
 | 私有镜像凭据 | 在 Job 的 `imagePullSecrets` 或其 ServiceAccount 配置现有拉取 Secret；不会继承 node DaemonSet 的设置 |
 | `volumes.scripts.configMap.name` | 上一步打印的脚本 ConfigMap 名称；部署时先创建该 ConfigMap，再创建 Job |
 | 配置 / 凭据 | 现有配置 ConfigMap、凭据 Secret 及其文件路径；示例不创建或修改 Secret |
@@ -70,7 +71,7 @@ python3 -c 'import json; print(json.load(open("/tmp/akernel-node-upgrade-scripts
 
 例如正式执行时设置 `args: [apply, --execute, --config, /etc/akernel-upgrade/config.json]`。`resume`、`abort` 使用相同格式，并换用新的 Job 名称；先确认旧执行 Pod/进程已退出，不能只看 Job 已标记失败或 Pod 正在 Terminating。
 
-首次 `apply` 将实际脚本内容摘要、实际安装的 SDK 版本和执行 Pod 的镜像 digest 保存到任务 ConfigMap。镜像通过 Downward API 的 Pod name/UID 和现有 `pods/get` 权限读取，不依赖手填镜像环境变量。`resume/abort` 在任何写入前比对这些身份；SDK、脚本内容、执行镜像变化或缺失都会停止，包括同名脚本 ConfigMap 被删除后换内容重建。新 Job 的名称和 Pod UID 可以变化，task/executor ID、脚本、SDK、镜像及任务配置须保持原值；已有任务继续用原脚本，不用新脚本接管。
+首次 `apply` 将实际脚本内容摘要、实际安装的 SDK 版本、执行 Pod 的镜像 digest 和 rootfs SHA-256 保存到任务 ConfigMap。镜像通过 Downward API 的 Pod name/UID 和现有 `pods/get` 权限读取，并检查实际 imageID；rootfs 读取镜像内固定文件，禁止挂载覆盖该文件或其父目录。`resume/abort` 在任何写入前比对这些身份；SDK、脚本内容、执行镜像变化或缺失都会停止，包括同名脚本 ConfigMap 被删除后换内容重建。新 Job 的名称和 Pod UID 可以变化，task/executor ID、脚本、SDK、镜像及任务配置须保持原值；已有任务继续用原脚本，不用新脚本接管。
 
 未填 SDK 版本、依赖安装失败或当前执行 Pod 已进入删除时，在调用升级接口前退出；仍会检查 SDK 的 ADX / `node_id` 能力。本地直接运行 `manage.py` 时由操作者固定依赖环境；缺少 Job 环境身份的本地进程不能续做已记录该身份的 Job 任务，`status` 仍可只读查询。
 
@@ -78,13 +79,28 @@ python3 -c 'import json; print(json.load(open("/tmp/akernel-node-upgrade-scripts
 
 `deploy/upgrade/job.yaml` 提供 ServiceAccount、namespace Role/RoleBinding、只读 Node 的 ClusterRole/ClusterRoleBinding。更换 namespace 时同步修改全部资源、绑定的 ServiceAccount namespace 及 ClusterRoleBinding 名称。管理监听的 NetworkPolicy 由 ADX 部署维护。
 
-独立 `deploy/upgrade/Dockerfile` 保留为可选构建入口；本文 Job 模板及环境身份检查采用上述复用方案。该 Dockerfile 构建时从 PyPI 安装 SDK（含 RC）；`pip --no-cache-dir` 不会禁用 Docker 层缓存，需要重新查询最新版时使用 `docker build --no-cache -f deploy/upgrade/Dockerfile -t <executor-image> .`。
+独立 `deploy/upgrade/Dockerfile` 保留用于只读查询；它不包含目标 node 的 rootfs，不能启动新的升级任务。本文 Job 模板及环境身份检查采用上述复用方案。该 Dockerfile 构建时从 PyPI 安装 SDK（含 RC）；`pip --no-cache-dir` 不会禁用 Docker 层缓存，需要重新查询最新版时使用 `docker build --no-cache -f deploy/upgrade/Dockerfile -t <executor-image> .`。
 
 Helm 的 `core.node.updateStrategy=OnDelete` 可用于保留执行器设置，后续 Helm 更新须避免恢复自动滚动。
 
 Job 默认执行 `plan`，`restartPolicy: Never`、`backoffLimit: 0`。Role 仅提供目标 DaemonSet 的 get/patch，以及本 namespace 的 Pod 和任务 ConfigMap 权限；ClusterRole 仅提供 Node get，不提供节点写入或云权限。
 
 测试实例使用保留的 `upgrade-canary-` 名称。清理统一等待 ADX `revoke-canary` 撤销创建/执行授权并确认实际清理；SDK 删除返回成功或 404 均不能代替这份确认。创建回复丢失、回滚或 Pod UID 变化时，同样先处理旧测试身份。
+
+## rootfs 兼容性预检
+
+只更换 node/ADX 时，通过 [构建说明](../../builder/README.md) 的 `AKERNEL_RUNTIME_SOURCE_IMAGE` 和 `AKERNEL_RUNTIME_ROOTFS_SHA256` 复用原 rootfs。重新执行 `mkfs.erofs` 即使软件版本相同，也可能改变 UUID、时间戳或内容，从而使 runsc 拒绝恢复。
+
+```mermaid
+flowchart LR
+    A["① Job 实测目标镜像 rootfs"] --> B["② 与各源节点 Inspect 摘要、路径比较"]
+    B -->|相同| C["③ 迁空 → 替换 Pod"]
+    B -->|缺失或不同| X["停止，保留原 Pod"]
+    C --> D["④ 新节点再次核对 → C/R 测试"]
+    D -->|通过| E["⑤ 恢复接单"]
+```
+
+预检在创建任务前、交接/续做、迁出/删除前和新节点验收时执行；ADX 也在迁移及 canary 授权时核对源、目标，避免新增节点绕过检查。目前仅覆盖固定路径 `/opt/akernel/runtime/akernel-runtime-rootfs.img` 的默认本地 EROFS profile；自定义 image/rootfs 不在本升级流程范围内。摘要相同只是必要条件，不能替代 runtime、CPU/内核兼容性和真实 C/R 测试。
 
 ## 停止、续做和回退
 
@@ -104,7 +120,7 @@ Job 收到 SIGTERM 后退出；安装期间同时终止并回收 pip，不会继
 | unknown / 权限错误 / 版本冲突 | 停止推进，保留任务及缩容保护，不将错误当作空载。未确认的迁移必须由管理端收敛后才能续做。 |
 | 旧 DELETE 结果不明 | 先查询 UID；若同 UID 仍存在，必须未进入 Terminating，CAS 推进 Pod RV 后携原意图 RV 通知管理端撤销旧许可；撤销应答丢失可重放，旧撤销不能清除新许可。 |
 
-当前管理端不提供免 Inspect 回滚凭证。无法 Inspect 时保持隔离和缩容保护，等待恢复管理能力或人工处置；执行器不会自行合成空载证明。已迁出的业务留在目标节点，不随镜像回退恢复旧数据。
+当前管理端不提供免 Inspect 回滚凭证。无法 Inspect 时保持隔离和缩容保护，等待恢复管理能力或人工处置；执行器不会自行合成空载证明。rootfs 预检不改变 sandboxd 的 Start/清理协议，也不会自动解除历史 Start 结果不明的状态。已迁出的业务留在目标节点，不随镜像回退恢复旧数据。
 
 迁移意图落盘而服务端尚未接受时，续做先核对同一 task、原 Pod/session 和源实例 generation/revision，再以同一 operation ID 和源版本条件补发；已接受的 Prepared/Assigned 只对账该操作。`abort` 先取得持久 Aborting 确认，阻止迟到的正向请求，再将服务端确认未接受或安全取消的意图记为 Cancelled，不能伪造 Completed；正向升级仍拒绝 Cancelled。身份匹配的服务端 Completed 是已完成迁移的历史事实，用户后续 pause/delete 不会触发重搬；迁移时 Running/Paused 语义以服务端接受记录为准。回退期间新增的旧镜像源只登记并恢复原有调度，不迁移其业务或作为空节点测试。
 

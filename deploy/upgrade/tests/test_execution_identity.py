@@ -10,11 +10,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from test_scaler_handshake import make_engine
 from akernel_upgrade.engine import Executor
-from akernel_upgrade.errors import Conflict, UnknownOutcome
+from akernel_upgrade.errors import Blocked, Conflict, UnknownOutcome
 
 
 IDENTITY = {"sdk_version": "0.2.0rc3", "scripts_sha256": "1" * 64,
-            "image": "repo/node@sha256:" + "2" * 64}
+            "image": "repo/node@sha256:" + "2" * 64, "runtime_rootfs_sha256": "a" * 64}
 
 
 def restarted(engine, identity):
@@ -55,7 +55,8 @@ class ExecutionIdentityTests(unittest.TestCase):
 
     def test_changed_or_missing_environment_blocks_resume_and_abort_before_writes(self):
         changes = ({"sdk_version": "0.2.0rc4"}, {"scripts_sha256": "3" * 64},
-                   {"image": "repo/node@sha256:" + "4" * 64})
+                   {"image": "repo/node@sha256:" + "4" * 64},
+                   {"runtime_rootfs_sha256": "b" * 64})
         identities = [{**copy.deepcopy(IDENTITY), **change} for change in changes]
         identities.extend((None, {}))
         for operation in ("run", "abort"):
@@ -80,10 +81,11 @@ class ExecutionIdentityTests(unittest.TestCase):
         self.assertTrue(resumed.state["nodes"][0]["migrations"]["work"]["completed"])
         self.assertEqual(engine.management.events.count("migrate"), 1)
 
-    def test_legacy_local_task_can_continue_without_an_execution_identity(self):
-        engine = self.interrupted(identity=None)
-        self.assertNotIn("execution_identity", engine.state["configuration"])
-        self.assertEqual(restarted(engine, None).run()["phase"], "Completed")
+    def test_local_executor_without_target_artifact_proof_cannot_start_upgrade(self):
+        engine = restarted(make_engine(), None)
+        with self.assertRaises(Blocked):
+            engine.apply()
+        self.assertEqual(engine.kube.events, [])
 
     def test_read_only_status_can_inspect_a_task_from_a_different_environment(self):
         engine = self.interrupted()

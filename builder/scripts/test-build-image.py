@@ -3,10 +3,12 @@
 # SPDX-License-Identifier: Apache-2.0
 """Check build-platform and release-pin propagation without Docker builds."""
 
+import hashlib
 import json
 import os
 from pathlib import Path
 import shutil
+import struct
 import subprocess
 import sys
 import tempfile
@@ -109,6 +111,8 @@ class BuildImageTests(unittest.TestCase):
             "with open(os.environ['BUILD_TEST_PROXY_ENVIRONMENTS'], 'a') as output:\n"
             "    output.write(json.dumps({name: os.environ.get(name) "
             "for name in proxy_names}) + '\\n')\n"
+            "if os.environ.get('BUILD_TEST_FAIL_RUNTIME') and 'builder/reuse-runtime.Dockerfile' in sys.argv:\n"
+            "    sys.exit(42)\n"
         )
         docker.chmod(0o755)
         git = bin_dir / "git"
@@ -213,6 +217,74 @@ class BuildImageTests(unittest.TestCase):
         self.assertEqual(len(fixture.docker_calls()), 2)
         self.assertNotIn("private-override.invalid", result.stdout)
         self.assertNotIn("private-proxy.invalid", result.stdout)
+
+    def test_reuse_copies_pinned_rootfs_without_rebuilding_it(self):
+        source = "example.test/akernel@sha256:" + "a" * 64
+        digest = "b" * 64
+        result = self.run_helper(
+            "--runtime-source-image", source, "--runtime-rootfs-sha256", digest,
+            "--runtime-image", "local/runtime:reuse",
+            ADX_EXECD_URL=None, ADX_EXECD_SHA256=None,
+        )
+        self.assertEqual(result.returncode, 0, result.stdout)
+        runtime, node = self.docker_calls()
+        self.assertEqual(runtime[runtime.index("-f") + 1], "builder/reuse-runtime.Dockerfile")
+        self.assertNotIn("builder/runtime.Dockerfile", runtime)
+        self.assertEqual(runtime[runtime.index("--platform") + 1], "linux/arm64")
+        self.assertEqual(runtime[runtime.index("-t") + 1], "local/runtime:reuse")
+        self.assertEqual(self.build_arguments(runtime)["AKERNEL_RUNTIME_SOURCE_IMAGE"], source)
+        self.assertEqual(self.build_arguments(runtime)["AKERNEL_RUNTIME_ROOTFS_SHA256"], digest)
+        self.assertEqual(self.build_arguments(node)["AKERNEL_RUNTIME_IMAGE"], "local/runtime:reuse")
+        self.assertEqual(self.build_arguments(node)["AKERNEL_RUNTIME_ROOTFS_SHA256"], digest)
+
+    def test_reuse_environment_is_supported_and_cli_takes_precedence(self):
+        source = "example.test/akernel@sha256:" + "a" * 64
+        result = self.run_helper(
+            "--runtime-rootfs-sha256", "c" * 64,
+            AKERNEL_RUNTIME_SOURCE_IMAGE=source, AKERNEL_RUNTIME_ROOTFS_SHA256="b" * 64,
+            ADX_EXECD_URL=None, ADX_EXECD_SHA256=None,
+        )
+        self.assertEqual(result.returncode, 0, result.stdout)
+        self.assertEqual(self.build_arguments(self.docker_calls()[0])["AKERNEL_RUNTIME_ROOTFS_SHA256"], "c" * 64)
+
+    def test_invalid_reuse_inputs_fail_before_build(self):
+        source = "example.test/akernel@sha256:" + "a" * 64
+        for image, digest in ((source, ""), ("", "b" * 64),
+                              ("example.test/akernel:old", "b" * 64),
+                              (source, "b" * 63), (source, "z" * 64)):
+            with self.subTest(image=image, digest=digest):
+                result = self.run_helper(
+                    AKERNEL_RUNTIME_SOURCE_IMAGE=image, AKERNEL_RUNTIME_ROOTFS_SHA256=digest,
+                    ADX_EXECD_URL=None, ADX_EXECD_SHA256=None,
+                )
+                self.assertNotEqual(result.returncode, 0)
+                self.assertEqual(self.docker_calls(), [])
+
+    def test_empty_reuse_cli_values_do_not_silently_select_fresh_build(self):
+        for option in ("--runtime-source-image", "--runtime-rootfs-sha256"):
+            with self.subTest(option=option):
+                result = self.run_helper(option, "")
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn("requires a nonempty value", result.stdout)
+                self.assertEqual(self.docker_calls(), [])
+
+    def test_reuse_rejects_ignored_execd_override(self):
+        result = self.run_helper(
+            AKERNEL_RUNTIME_SOURCE_IMAGE="example.test/akernel@sha256:" + "a" * 64,
+            AKERNEL_RUNTIME_ROOTFS_SHA256="b" * 64,
+        )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("cannot combine runtime reuse with ADX_EXECD", result.stdout)
+        self.assertEqual(self.docker_calls(), [])
+
+    def test_reuse_verification_failure_never_falls_back_to_mkfs_or_node_build(self):
+        result = self.run_helper(
+            AKERNEL_RUNTIME_SOURCE_IMAGE="example.test/akernel@sha256:" + "a" * 64,
+            AKERNEL_RUNTIME_ROOTFS_SHA256="b" * 64,
+            ADX_EXECD_URL=None, ADX_EXECD_SHA256=None, BUILD_TEST_FAIL_RUNTIME="1",
+        )
+        self.assertEqual(result.returncode, 42, result.stdout)
+        self.assertEqual(len(self.docker_calls()), 1)
 
     def test_arm64_runc_uses_matching_pins_and_platforms(self):
         result = self.run_helper()
@@ -652,6 +724,7 @@ class BuildImageTests(unittest.TestCase):
     def test_missing_cli_values_fail_before_build(self):
         for option in (
             "--env", "--repository", "--tag", "--runtime-image",
+            "--runtime-source-image", "--runtime-rootfs-sha256",
             "--adx-release-url", "--adx-release-sha256",
             "--adx-execd-url", "--adx-execd-sha256",
             "--otelcol-contrib-url", "--otelcol-contrib-sha256",
@@ -808,6 +881,87 @@ class BuildImageTests(unittest.TestCase):
                 self.assertNotEqual(result.returncode, 0)
                 self.assertIn("unsupported image architecture", result.stdout)
                 self.assertEqual(self.docker_calls(), [])
+
+
+
+class RuntimeRootfsVerificationTests(unittest.TestCase):
+    def setUp(self):
+        temporary = tempfile.TemporaryDirectory(prefix="akernel-rootfs-test-")
+        self.addCleanup(temporary.cleanup)
+        self.root = Path(temporary.name)
+        self.rootfs = self.root / "rootfs image"
+        self.rootfs.write_bytes(b"immutable rootfs test fixture")
+        self.digest = hashlib.sha256(self.rootfs.read_bytes()).hexdigest()
+        self.marker = self.root / "extraction-path"
+        header = bytearray(64)
+        header[:7] = b"\x7fELF\x02\x01\x01"
+        struct.pack_into("<HHI", header, 16, 2, 62, 1)
+        struct.pack_into("<H", header, 52, 64)
+        self.elf = self.root / "execd"
+        self.elf.write_bytes(header)
+        # Keep these tests usable on macOS without EROFS utilities. The fake
+        # fsck only provides extraction; checksum and ELF validation run for real.
+        programs = {
+            "sha256sum": "import hashlib, sys\nprint(hashlib.sha256(sys.stdin.buffer.read()).hexdigest() + '  -')\n",
+            "fsck.erofs": "import os, pathlib, shutil, sys\n"
+                "destination = pathlib.Path(sys.argv[1].removeprefix('--extract='))\n"
+                "pathlib.Path(os.environ['EXTRACTION_MARKER']).write_text(str(destination))\n"
+                "if os.environ.get('INVALID_EROFS'): sys.exit(1)\n"
+                "binary = destination / 'usr/local/bin/adx-execd'\n"
+                "binary.parent.mkdir(parents=True)\n"
+                "shutil.copyfile(os.environ['EXECD_FIXTURE'], binary)\n",
+        }
+        for name, body in programs.items():
+            path = self.root / name
+            path.write_text(f"#!{sys.executable}\n{body}")
+            path.chmod(0o755)
+
+    def verify(self, *, digest=None, architecture="amd64", **environment):
+        return subprocess.run(
+            ["sh", str(ROOT / "builder/scripts/verify-runtime-rootfs.sh"),
+             str(self.rootfs), self.digest if digest is None else digest, architecture],
+            env={**os.environ, "PATH": f"{self.root}:{os.environ['PATH']}",
+                 "EXECD_FIXTURE": str(self.elf), "EXTRACTION_MARKER": str(self.marker),
+                 **environment}, capture_output=True, text=True, timeout=10,
+        )
+
+    def test_verified_payload_is_unchanged_and_extraction_is_cleaned(self):
+        result = self.verify()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(hashlib.sha256(self.rootfs.read_bytes()).hexdigest(), self.digest)
+        self.assertFalse(Path(self.marker.read_text()).parent.exists())
+
+    def test_bad_checksum_fails_before_extraction(self):
+        for digest in ("a" * 64, "", "a" * 63, "z" * 64):
+            with self.subTest(digest=digest):
+                result = self.verify(digest=digest)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertFalse(self.marker.exists())
+
+    def test_wrong_embedded_architecture_fails_and_cleans_extraction(self):
+        result = self.verify(architecture="arm64")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("ELF machine mismatch", result.stderr)
+        self.assertFalse(Path(self.marker.read_text()).parent.exists())
+
+    def test_corrupt_erofs_fails_and_cleans_extraction(self):
+        result = self.verify(INVALID_EROFS="1")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertFalse(Path(self.marker.read_text()).parent.exists())
+
+    def test_reuse_dockerfile_verifies_old_image_rootfs(self):
+        dockerfile = (ROOT / "builder/reuse-runtime.Dockerfile").read_text()
+        self.assertIn("FROM ${AKERNEL_RUNTIME_SOURCE_IMAGE} AS runtime-source", dockerfile)
+        self.assertIn("COPY --from=runtime-source /opt/akernel/runtime/akernel-runtime-rootfs.img", dockerfile)
+        self.assertIn('"${AKERNEL_RUNTIME_ROOTFS_SHA256}" "${TARGETARCH}"', dockerfile)
+        self.assertIn("COPY --from=runtime-verified /akernel-runtime-rootfs.img", dockerfile)
+        self.assertNotIn("mkfs.erofs", dockerfile)
+
+        node = (ROOT / "builder/node.Dockerfile").read_text()
+        copied = node.index("COPY --from=runtime-image /akernel-runtime-rootfs.img")
+        checked = node.index('"${AKERNEL_RUNTIME_ROOTFS_SHA256}" /opt/akernel/runtime/akernel-runtime-rootfs.img')
+        self.assertGreater(checked, copied)
+        self.assertIn("sha256sum -c -", node[checked:checked + 150])
 
 
 if __name__ == "__main__":

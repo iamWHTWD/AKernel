@@ -13,12 +13,14 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from akernel_upgrade.clients import HTTP, Inventory, Kubernetes
 from akernel_upgrade.canary import SDKCanary
-from akernel_upgrade.engine import Executor, Settings
+from akernel_upgrade.engine import Executor, Settings, ROOTFS_PATH
 from akernel_upgrade.errors import Blocked, Conflict, UnknownOutcome, UpgradeError
 from akernel_upgrade.protocol import Management, Scaling
 
 OLD = "repo/node@sha256:" + "1" * 64
 NEW = "repo/node@sha256:" + "2" * 64
+JOB_IDENTITY = {"image": NEW, "scripts_sha256": "1" * 64,
+                "sdk_version": "0.2.0rc3", "runtime_rootfs_sha256": "a" * 64}
 
 
 class FakeKube:
@@ -154,7 +156,8 @@ class FakeManagement:
         return {"version": 1, **{name: True for name in Executor.REQUIRED}}
 
     def inspect(self, node):
-        return self.verified.get(node, {"node_session_id": "session-" + node})
+        return {"runtime_rootfs_sha256": "a" * 64, "runtime_rootfs_path": ROOTFS_PATH,
+                **self.verified.get(node, {"node_session_id": "session-" + node})}
 
     def begin(self, state):
         self.events.append("begin")
@@ -281,7 +284,8 @@ class EngineTests(unittest.TestCase):
         self.settings = Settings("test", "node", NEW, "task", "executor",
                                  checkpoint_storage_alias="shared")
         self.engine = Executor(self.settings, self.kube, self.inventory, self.manager,
-                               self.probe, self.scaling, clock=lambda: self.now, sleep=self.tick)
+                               self.probe, self.scaling, execution_identity=JOB_IDENTITY,
+                               clock=lambda: self.now, sleep=self.tick)
 
     def tick(self, value):
         self.now += value
@@ -762,7 +766,8 @@ class PhaseRecoveryTests(unittest.TestCase):
     @staticmethod
     def resumed(case):
         return Executor(case.settings, case.kube, case.inventory, case.manager,
-                        case.probe, case.scaling, clock=lambda: case.now, sleep=case.tick)
+                        case.probe, case.scaling, execution_identity=case.engine.execution_identity,
+                        clock=lambda: case.now, sleep=case.tick)
 
     def test_completed_response_loss_never_republishes_bootstrap(self):
         case = self.fixture()
@@ -1141,7 +1146,7 @@ class LateSourceTests(unittest.TestCase):
                     case.kube.pods[0]["metadata"]["uid"] = "changed-pod"
                 else:
                     inspect = case.manager.inspect
-                    case.manager.inspect = lambda name: ({"node_session_id": "changed-session"}
+                    case.manager.inspect = lambda name: ({**inspect(name), "node_session_id": "changed-session"}
                                                           if name == "a" else inspect(name))
             case.scaling.protect = changed
             with self.subTest(change=change), self.assertRaises(Conflict):

@@ -4,16 +4,18 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
 import signal
+import stat
 import sys
 from pathlib import Path
 
 from akernel_upgrade.canary import SDKCanary
 from akernel_upgrade.clients import HTTP, Inventory, Kubernetes
-from akernel_upgrade.engine import Executor, Settings
+from akernel_upgrade.engine import Executor, Settings, ROOTFS_PATH
 from akernel_upgrade.errors import UpgradeError
 from akernel_upgrade.protocol import Management, Scaling
 
@@ -47,6 +49,23 @@ def status_report(runner, management, kube, scaler_name, task_id):
                 kube.get("configmaps", scaler_name)["data"]["status.json"]))}
 
 
+def rootfs_hash():
+    # The fixed file comes from the immutable node image, never a config claim.
+    descriptor = os.open(ROOTFS_PATH, os.O_RDONLY | os.O_NOFOLLOW)
+    with os.fdopen(descriptor, "rb") as stream:
+        before = os.fstat(stream.fileno())
+        if not stat.S_ISREG(before.st_mode):
+            raise UpgradeError("executor rootfs must be a regular image file")
+        digest = hashlib.sha256()
+        while block := stream.read(1024 * 1024):
+            digest.update(block)
+        after = os.fstat(stream.fileno())
+        if (before.st_size, before.st_mtime_ns, before.st_ctime_ns) != (
+                after.st_size, after.st_mtime_ns, after.st_ctime_ns):
+            raise UpgradeError("executor rootfs changed during inspection")
+        return digest.hexdigest()
+
+
 def execution_identity(kube):
     """Bind a Job attempt to its actual script bundle, SDK and Pod image."""
     raw = os.environ.get("AKERNEL_UPGRADE_JOB_CONTEXT")
@@ -71,7 +90,17 @@ def execution_identity(kube):
     if (len(containers) != 1 or not re.fullmatch(r"[^\s]+@sha256:[a-f0-9]{64}",
                                                containers[0]["image"])):
         raise UpgradeError("executor Pod image must use an immutable @sha256 digest")
-    return {**context, "image": containers[0]["image"]}
+    container = containers[0]
+    statuses = [s for s in pod.get("status", {}).get("containerStatuses", [])
+                if s.get("name") == "executor"]
+    if (len(statuses) != 1 or not statuses[0].get("imageID", "").endswith(
+            container["image"].split("@", 1)[1])):
+        raise UpgradeError("executor actual imageID must match its pinned image")
+    for mount in container.get("volumeMounts", []):
+        path = Path(mount["mountPath"])
+        if path == Path(ROOTFS_PATH) or path in Path(ROOTFS_PATH).parents:
+            raise UpgradeError("executor volume must not shadow the image rootfs")
+    return {**context, "image": container["image"], "runtime_rootfs_sha256": rootfs_hash()}
 
 
 def main(argv=None):

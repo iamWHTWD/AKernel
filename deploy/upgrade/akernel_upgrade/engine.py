@@ -11,6 +11,8 @@ from dataclasses import dataclass
 
 from .errors import Blocked, Conflict, UnknownOutcome, UpgradeError
 
+ROOTFS_PATH = "/opt/akernel/runtime/akernel-runtime-rootfs.img"
+
 
 def digest(value) -> str:
     return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
@@ -54,7 +56,7 @@ class Settings:
 class Executor:
     """Drivers are injected, so protocol and failure behavior can be tested independently."""
     REQUIRED = ("planned_migration", "paused_transfer", "quiesce", "session_isolation", "canary",
-                "canary_cleanup")
+                "canary_cleanup", "runtime_rootfs_identity")
 
     def __init__(self, settings, kube, inventory, management, canary, scaling,
                  *, execution_identity=None, clock=time.monotonic, sleep=time.sleep):
@@ -112,7 +114,9 @@ class Executor:
         resource = resources.get(name)
         if resource is None:
             raise Blocked("node missing from authoritative resource inventory")
-        session = self.management.inspect(name).get("node_session_id")
+        inspection = self.management.inspect(name)
+        self.check_rootfs(name, inspection)
+        session = inspection.get("node_session_id")
         if not session:
             raise Blocked("source node must expose its upgrade-aware process identity")
         return {"node_id": name, "old_uid": pod["metadata"]["uid"], "node_session_id": session,
@@ -145,12 +149,33 @@ class Executor:
         missing = [name for name in self.REQUIRED if capabilities.get(name) is not True]
         if capabilities.get("version") != 1:
             missing.append("management protocol version 1")
+        try:
+            self.target_rootfs()
+            for node in sorted(pods):
+                self.check_rootfs(node)
+        except Blocked as error:
+            missing.append(str(error))
         return {"read_only": True, "daemonset_uid": ds["metadata"]["uid"],
                 "template_hash": fingerprint, "old_image": old_image, "image": self.cfg.image,
                 "nodes": [{"node_id": node, "pod_uid": pod["metadata"]["uid"],
                            "instances": sum(i["node_id"] == node for i in instances),
                            "in_resources": node in resources} for node, pod in sorted(pods.items())],
                 "blockers": missing + self.canary.preflight()}
+
+    def target_rootfs(self):
+        identity = self.execution_identity or {}
+        fingerprint = identity.get("runtime_rootfs_sha256", "")
+        if (identity.get("image") != self.cfg.image or not isinstance(fingerprint, str)
+                or not re.fullmatch(r"[a-f0-9]{64}", fingerprint)):
+            raise Blocked("rootfs preflight requires a Job running the target image with its actual rootfs hash")
+        return fingerprint
+
+    def check_rootfs(self, node, inspection=None):
+        expected = self.target_rootfs()
+        observed = self.management.inspect(node) if inspection is None else inspection
+        if (observed.get("runtime_rootfs_sha256") != expected
+                or observed.get("runtime_rootfs_path") != ROOTFS_PATH):
+            raise Blocked(f"node {node} rootfs is unavailable or incompatible with the target image")
 
     def save(self):
         self.saved = self.kube.save_state(self.saved, self.state)
@@ -554,6 +579,7 @@ class Executor:
         return pending_old
 
     def validate_node(self, identity, uid):
+        self.check_rootfs(identity)
         validations = self.state.setdefault("validations", {})
         record = validations.get(identity)
         if record is None or record["pod_uid"] != uid:
@@ -624,6 +650,7 @@ class Executor:
         if not sources:
             raise Blocked("no healthy peer available for shared C/R canary")
         source = sources[0]
+        self.check_rootfs(source["spec"]["nodeName"])
         grant = self.management.canary(self.state, identity, uid,
             source["spec"]["nodeName"], source["metadata"]["uid"], self.cfg.checkpoint_storage_alias,
             self.canary.namespace(), record["attempt"])
@@ -764,6 +791,8 @@ class Executor:
         identity = node["node_id"]
         if node["phase"] == "Done":
             return
+        if node["phase"] in ("Pending", "Migrating", "Quiescing"):
+            self.check_rootfs(identity)
         if node["phase"] == "Pending":
             self.capacity(node)
             if node.get("register_source"):
@@ -819,6 +848,7 @@ class Executor:
             if old is not None:
                 if old["metadata"].get("deletionTimestamp"):
                     raise UnknownOutcome("old Pod is already terminating; inspect without another delete")
+                self.check_rootfs(identity)
                 self.checked_ds()
                 node["delete_intent"] = {"uid": old["metadata"]["uid"],
                                          "resourceVersion": old["metadata"]["resourceVersion"]}

@@ -9,7 +9,7 @@ import unittest
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from test_upgrade import (FakeCanary, FakeInventory, FakeKube, FakeManagement,
-                          FakeScaling, NEW)
+                          FakeScaling, NEW, JOB_IDENTITY)
 from akernel_upgrade.engine import Executor, Settings
 from akernel_upgrade.errors import Blocked, UnknownOutcome
 from akernel_upgrade.protocol import Management, Scaling
@@ -198,7 +198,7 @@ def make_engine(kube=None, scaling=None):
                 "pod_uid": pod["metadata"]["uid"], "node_session_id": node["node_session_id"]}
     management.restore_original = restore_original
     return Executor(settings, kube, inventory, management, FakeCanary(), scaling or FakeScaling(),
-                    clock=lambda: now[0], sleep=sleep)
+                    execution_identity=JOB_IDENTITY, clock=lambda: now[0], sleep=sleep)
 
 
 class EngineHandshakeTests(unittest.TestCase):

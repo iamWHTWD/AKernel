@@ -1,4 +1,5 @@
-# Replace namespace, node image digest, scripts ConfigMap and configuration names.
+# Replace namespace, target node image digest, scripts ConfigMap and configuration names.
+# The executor image must equal upgrade.image; its rootfs is measured before upgrade.
 # apply/resume/abort require --execute and the exact SDK version reported by plan.
 apiVersion: v1
 kind: ServiceAccount

@@ -419,6 +419,12 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
 
 COPY ./builder/scripts/verify-elf-arch.sh /usr/local/libexec/verify-elf-arch.sh
 COPY --from=runtime-image /akernel-runtime-rootfs.img /opt/akernel/runtime/akernel-runtime-rootfs.img
+ARG AKERNEL_RUNTIME_ROOTFS_SHA256=
+# Recheck the final copy: the intermediate runtime output tag can be replaced
+# by a concurrent local build after the source verification stage.
+RUN if [ -n "${AKERNEL_RUNTIME_ROOTFS_SHA256}" ]; then \
+      printf '%s  %s\n' "${AKERNEL_RUNTIME_ROOTFS_SHA256}" /opt/akernel/runtime/akernel-runtime-rootfs.img | sha256sum -c -; \
+    fi
 
 # ADX provides the control and data plane processes. AKernel keeps building
 # sandboxd and its runtime rootfs from pinned sources and installs only EXECD

@@ -1,15 +1,17 @@
 """Bind the running Job to real Pod metadata without granting new permissions."""
 
 import copy
+import hashlib
 import json
 import os
 from pathlib import Path
 import sys
+import tempfile
 import unittest
 from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from manage import execution_identity
+from manage import execution_identity, rootfs_hash
 from akernel_upgrade.errors import UpgradeError
 
 
@@ -19,7 +21,15 @@ class JobIdentityTests(unittest.TestCase):
         self.image = "repo/node@sha256:" + "1" * 64
         self.pod = {"metadata": {"name": "upgrade-attempt", "uid": "attempt-uid",
                                  "namespace": "akernel"},
-                    "spec": {"containers": [{"name": "executor", "image": self.image}]}}
+                    "spec": {"containers": [{"name": "executor", "image": self.image}]},
+                    "status": {"containerStatuses": [{"name": "executor", "imageID": self.image}]}}
+        self.rootfs = tempfile.TemporaryDirectory()
+        self.addCleanup(self.rootfs.cleanup)
+        self.path = Path(self.rootfs.name) / "rootfs.img"
+        self.path.write_bytes(b"image bytes")
+        self.path_patch = patch("manage.ROOTFS_PATH", str(self.path))
+        self.path_patch.start()
+        self.addCleanup(self.path_patch.stop)
         environment = {"AKERNEL_UPGRADE_JOB_CONTEXT": json.dumps(self.context),
                        "AKERNEL_UPGRADE_POD_NAME": "upgrade-attempt",
                        "AKERNEL_UPGRADE_POD_UID": "attempt-uid"}
@@ -37,7 +47,8 @@ class JobIdentityTests(unittest.TestCase):
 
     def test_image_is_read_from_current_pod_and_pod_uid_is_not_part_of_shared_identity(self):
         identity = execution_identity(self.kube)
-        self.assertEqual(identity, {**self.context, "image": self.image})
+        self.assertEqual(identity, {**self.context, "image": self.image,
+                                   "runtime_rootfs_sha256": hashlib.sha256(b"image bytes").hexdigest()})
         self.assertEqual(self.calls, [("pods", "upgrade-attempt")])
         self.pod["metadata"].update(name="resume-attempt", uid="new-uid")
         os.environ.update(AKERNEL_UPGRADE_POD_NAME="resume-attempt", AKERNEL_UPGRADE_POD_UID="new-uid")
@@ -74,6 +85,29 @@ class JobIdentityTests(unittest.TestCase):
             with self.subTest(value=value), self.assertRaises(UpgradeError):
                 execution_identity(self.kube)
         self.assertFalse(self.calls)
+
+    def test_rootfs_hash_comes_from_actual_bytes_and_missing_or_symlink_fails(self):
+        first = execution_identity(self.kube)["runtime_rootfs_sha256"]
+        self.path.write_bytes(b"changed")
+        self.assertNotEqual(execution_identity(self.kube)["runtime_rootfs_sha256"], first)
+        self.path.unlink()
+        with self.assertRaises(OSError):
+            rootfs_hash()
+        self.path.symlink_to("missing")
+        with self.assertRaises(OSError):
+            rootfs_hash()
+
+    def test_unobserved_or_wrong_actual_image_is_rejected(self):
+        for status in ({}, {"containerStatuses": [{"name": "executor", "imageID": "wrong"}]}):
+            self.pod["status"] = status
+            with self.subTest(status=status), self.assertRaises(UpgradeError):
+                execution_identity(self.kube)
+
+    def test_volume_cannot_replace_rootfs_or_parent_directory(self):
+        for path in (str(self.path), str(self.path.parent), "/"):
+            self.pod["spec"]["containers"][0]["volumeMounts"] = [{"mountPath": path}]
+            with self.subTest(path=path), self.assertRaises(UpgradeError):
+                execution_identity(self.kube)
 
     def test_plain_local_invocation_has_no_job_identity(self):
         with patch.dict(os.environ, {}, clear=True):
