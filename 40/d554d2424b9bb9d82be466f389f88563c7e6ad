@@ -1,0 +1,46 @@
+AGENTS.md
+  h_e96096da8bf6f9 149,151-154,156-158
+builder/README.md
+  h_e96096da8bf6f9 3-21
+builder/node.Dockerfile
+  h_e96096da8bf6f9 422-427
+builder/reuse-runtime.Dockerfile
+  h_e96096da8bf6f9 1-28
+builder/scripts/test-build-image.py
+  h_e96096da8bf6f9 6,11,114-115,221-288,727,886-966
+builder/scripts/verify-runtime-rootfs.sh
+  h_e96096da8bf6f9 1-32
+deploy/docs/node-upgrade.md
+  h_e96096da8bf6f9 7,14,24-25,42,49,66,74,82,90-104,123
+deploy/scripts/build-image.sh
+  h_e96096da8bf6f9 17-18,73,94-103,327-336,376-379,382,412-422,450-452
+deploy/upgrade/Dockerfile
+  h_e96096da8bf6f9 1-2
+deploy/upgrade/akernel_upgrade/engine.py
+  h_e96096da8bf6f9 14-15,59,117-119,152-157,165-179,582,653,794-795,851
+deploy/upgrade/job.yaml
+  h_e96096da8bf6f9 1-2
+deploy/upgrade/manage.py
+  h_e96096da8bf6f9 7,12,18,52-68,93-103
+deploy/upgrade/tests/test_execution_identity.py
+  h_e96096da8bf6f9 13,17,58-59,84-88
+deploy/upgrade/tests/test_job_identity.py
+  h_e96096da8bf6f9 4,9,14,24-32,50-51,89-111
+deploy/upgrade/tests/test_rootfs_preflight.py
+  h_e96096da8bf6f9 1-110
+deploy/upgrade/tests/test_scaler_handshake.py
+  h_e96096da8bf6f9 12,201
+deploy/upgrade/tests/test_upgrade.py
+  h_e96096da8bf6f9 16,22-23,159-160,287-288,769-770,1149
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "40d554d2424b9bb9d82be466f389f88563c7e6ad",
+  "prompts": {},
+  "humans": {
+    "h_e96096da8bf6f9": {
+      "author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}
