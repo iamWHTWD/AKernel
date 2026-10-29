@@ -70,10 +70,7 @@ Toolkit, with `AKERNEL_ENABLE_GPU=true`.
 Native ARM64 and Apple Silicon OrbStack builds require architecture-matched
 `ADX_RELEASE_URL` / `ADX_RELEASE_SHA256` and `ADX_EXECD_URL` /
 `ADX_EXECD_SHA256`; the default archive pins are AMD64. VM and GPU payloads
-remain disabled on ARM64. The launcher verifies image architecture and probes
-the bundled EROFS root through a read-only loop mount on Linux and OrbStack
-before writing runtime configuration or credentials. OrbStack also probes TUN/TAP,
-cgroups, iptables, FUSE and loop-backed ext4 before creating credentials.
+remain disabled on ARM64. Before writing configuration or credentials, the launcher verifies image architecture and the [bundled runtime root](#storage-and-recovery). OrbStack also probes TUN/TAP, cgroups, iptables, FUSE and loop-backed ext4.
 See [build downloads](../../builder/README.md) for mirror and archive options.
 
 ### DNS resolver sources

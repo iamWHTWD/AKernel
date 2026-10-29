@@ -456,7 +456,7 @@ ownership, retention, and validation contract in
 [`deploy/docs/node-local-directories.md`](./deploy/docs/node-local-directories.md).
 Keep helper lifecycle and core/umbrella rendering tests synchronized.
 
-New runsc and standard Firecracker sandboxes use a private writable `/etc/hosts` ordinary file when the effective root is writable. Existing commands/filesystem methods need no hosts option. Reload preserves captured contents, empty files and deletion without refreshing saved IP entries. Explicit covering mounts, finally read-only roots, old-layout snapshots, runc, Kata and Firecracker PVM retain their existing behavior. Keep the SDK guide and runtime-selectable integration coverage aligned; this feature adds no checkpoint API or Execd protocol dependency.
+The [SDK hosts contract](sdk/python/README.md#writable-sandbox-hosts) owns writable `/etc/hosts` behavior and restore compatibility. Keep runtime-selectable integration coverage aligned; preserve existing commands/filesystem APIs without adding a hosts option, checkpoint API or Execd protocol dependency.
 
 Same-node failover and explicit rollback retain the logical sandbox identity:
 
