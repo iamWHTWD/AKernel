@@ -1,0 +1,25 @@
+AGENTS.md
+  s_e1a56ca56f52e9::t_09ca181543c308 459
+deploy/README.md
+  s_e1a56ca56f52e9::t_62fdb5d9efd689 20
+deploy/standalone/README.md
+  s_e1a56ca56f52e9::t_52bed6fad6aeca 73
+src/sandboxd
+  s_e1a56ca56f52e9::t_d96627438de090 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "2f712f97f77f0324ef3e18366aa62ffea2a736b4",
+  "prompts": {},
+  "sessions": {
+    "s_e1a56ca56f52e9": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a18148-2b0a-7fe3-9d6b-ba2f9ecd9fdb",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}
