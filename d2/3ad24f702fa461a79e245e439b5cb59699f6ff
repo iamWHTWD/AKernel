@@ -1,0 +1,81 @@
+.github/workflows/ci.yml
+  s_e1a56ca56f52e9::t_b205f2acaba73e 155,164,247
+AGENTS.md
+  s_e1a56ca56f52e9::t_4d362151af3383 186,260-264,790-793,866-870
+builder/config/otel-collector-standalone.yaml
+  s_e1a56ca56f52e9::t_8614d664327b22 22-28
+builder/node.Dockerfile
+  s_e1a56ca56f52e9::t_d1a9882bb7f1d9 41-42,96-97
+builder/runtime.Dockerfile
+  s_e1a56ca56f52e9::t_e0ca6c6dfa7fee 7-8
+deploy/README.md
+  s_e1a56ca56f52e9::t_13e3ea69e4de70 97-101,104-118
+deploy/akernel/charts/core/files/otel-collector/config.yaml
+  s_e1a56ca56f52e9::t_59427faa65c2ef 159-165
+deploy/akernel/charts/core/files/otel-collector/control.yaml
+  s_e1a56ca56f52e9::t_bf04abb57ff7f1 20-26
+deploy/akernel/charts/core/templates/adx/coordinator.yaml
+  s_e1a56ca56f52e9::t_caf3dcb7a09204 37,54-59,117-121
+deploy/akernel/charts/core/templates/adx/ingress-api.yaml
+  s_e1a56ca56f52e9::t_8cdc4088f2c7f6 41-42,53-56,115-118
+deploy/akernel/charts/core/templates/node/daemonset.yaml
+  s_e1a56ca56f52e9::t_b63e74cae8379e 49-50,109-111
+deploy/akernel/charts/core/tests/test_adx_chart.py
+  s_e1a56ca56f52e9::t_a0b6f7d92bc26b 59-72,83,91-106
+deploy/akernel/charts/core/tests/test_adx_observability.py
+  s_e1a56ca56f52e9::t_b1994ca379d3d0 268-269
+deploy/akernel/charts/monitor/dashboards/adx-data-plane.json
+  s_e1a56ca56f52e9::t_98c77b6e32aac9 58-59,122-123,184-185,225,227-229,236,238-240,247,249-251,254-256,298-300,303-305,347-349,352-354,437-438,443,478-482,485-487,548-549,621-622,664-666,675-677,680-682,732-733,794-795,856-857,860
+deploy/akernel/charts/monitor/dashboards/adx-environment-logs.json
+  s_e1a56ca56f52e9::t_2ce105c5b321af 50,54,117,122,247
+deploy/akernel/charts/monitor/dashboards/adx-environments.json
+  s_e1a56ca56f52e9::t_94f1a42f073dd4 13,42,66-67,69,71-72,106-107,135-136,164,167-168,171-173,201,204-205,208-210
+deploy/akernel/charts/monitor/dashboards/adx-process-resources.json
+  s_e1a56ca56f52e9::t_1432dfa89ee105 14,300-301,305-307,367-368,372-374,434-435,439-441,501-502,506-508,839-840
+deploy/akernel/charts/monitor/dashboards/adx-sandbox-lifecycle.json
+  s_e1a56ca56f52e9::t_f9fff65b62acb2 8,47-48,59-61,90-91,102-104,133-134,145-147,228-229,258-259,270-272,301-302,313-315,344-345,356-358,387-388,399-401,430-431,442-444,473-474,485-487,516-517,528-530,559-560,571-573,602-603,613-616,645-646,656-659,688-689,700-702,731-732,743-745,774-775,785-788,817-818,828-831
+deploy/akernel/charts/monitor/dashboards/adx-schedule.json
+  s_e1a56ca56f52e9::t_7a332f7d082e71 50,54,119,145-146,151-152,187,212-214,219-220,240-242,251-253,258-259,279-281,290-292,297-298,364-366,371-372,475-477,486-488,493-495,561-563,568-569,672-674,683-685,690-692,758-760,765-766,869-871,880-882,887-889,978-980,985-987,1089-1090,1133,1157-1159,1164-1165,1208,1232-1234,1239-1240,1812,1869-1870,1904-1906,1915-1917,1922-1924,1964,1984-1986,1989-1990,2021-2022,2029-2030,2032-2033,2064-2065,2072-2073,2075-2076,2080,2082,2112-2115,2117-2119,2155,2157-2158,2160-2162,2193-2194,2200-2202,2204-2205,2241,2243-2244,2248-2251,2253-2255,2291,2293-2294,2296-2298,2336-2337,2339-2341,2379-2380,2385-2387,2389-2391,2520-2521,2523-2525,2561,2563-2565,2569,2571-2573,2577,2579-2581,2585,2587-2589,2593,2595-2597,2601,2603-2605,2607-2609,2687
+deploy/akernel/charts/monitor/dashboards/sandbox-lifecycle-dashboard.json
+  s_e1a56ca56f52e9::t_628ce86e8288e0 13,42,66-67,69,71-72,106-107,135-136,164,167-168,171-173,201,204-205,208-210
+deploy/akernel/charts/monitor/templates/prometheus/configmap.yaml
+  s_e1a56ca56f52e9::t_7efb171de73a5c 24
+deploy/akernel/charts/monitor/values.yaml
+  s_e1a56ca56f52e9::t_468da9aadb4227 18-19,198
+deploy/tests/kubernetes/node_lifecycle.py
+  s_e1a56ca56f52e9::t_37ba0b66debc81 1-368
+deploy/tests/kubernetes/test_node_lifecycle.py
+  s_e1a56ca56f52e9::t_ec42d859cc2e2c 1-101
+deploy/tests/native_restore/run.py
+  s_e1a56ca56f52e9::t_0dd298c601e92f 1-47
+deploy/tests/native_restore/unknown_restore.rs
+  s_e1a56ca56f52e9::t_235392bb09dc88 1-389
+deploy/tests/observability/dashboard_presentation_contract.py
+  s_e1a56ca56f52e9::t_747e72895e47e9 32-38
+deploy/tests/observability/dashboard_query_contract.py
+  s_e1a56ca56f52e9::t_44ecd9095edcb0 11,46-47,71-85,103-144,195-233,235,241
+deploy/tests/observability/metrics_collection_contract.py
+  s_e1a56ca56f52e9::t_4442496c57f5dd 1-156
+sdk/python/README.md
+  s_e1a56ca56f52e9::t_8cd852caf11846 660-664
+sdk/python/pyproject.toml
+  s_e1a56ca56f52e9::t_4d763b8d9fd465 7
+src/sandboxd
+  s_e1a56ca56f52e9::t_f8ca69cee140cc 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "d23ad24f702fa461a79e245e439b5cb59699f6ff",
+  "prompts": {},
+  "sessions": {
+    "s_e1a56ca56f52e9": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a18148-2b0a-7fe3-9d6b-ba2f9ecd9fdb",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}
