@@ -229,7 +229,7 @@ class StartScriptTest(unittest.TestCase):
                 "AKERNEL_ENDPOINT_HOST=127.0.0.1; "
                 "AKERNEL_CONTROL_PORT=18443; AKERNEL_DATA_PORT=18080; "
                 "for name in check_prerequisites cleanup_existing ensure_image "
-                "validate_host_platform validate_image_capabilities prepare_data "
+                "validate_host_platform validate_image_capabilities validate_runtime_rootfs prepare_data "
                 "configure_container_proxy configure_gpu configure_network "
                 "prepare_host_network_modules configure_auth start_node_container "
                 "show_status log_info; do eval \"$name() { :; }\"; done; "

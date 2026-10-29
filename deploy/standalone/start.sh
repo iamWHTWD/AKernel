@@ -488,6 +488,13 @@ validate_image_capabilities() {
     fi
 }
 
+validate_runtime_rootfs() {
+    "${DOCKER_PREFIX[@]}" ${DOCKER_CMD} run "${CONTAINER_PLATFORM_ARGS[@]}" --rm --privileged --net none \
+        -v "${SCRIPT_DIR}/runtime-rootfs-preflight.sh:/runtime-rootfs-preflight.sh:ro" \
+        --entrypoint /usr/bin/timeout "${IMAGE}" \
+        --signal=TERM --kill-after=5s 30s /bin/bash /runtime-rootfs-preflight.sh
+}
+
 prepare_host_network_modules() {
     if [[ "${#CONTAINER_PLATFORM_ARGS[@]}" -gt 0 ]]; then
         "${DOCKER_PREFIX[@]}" docker run "${CONTAINER_PLATFORM_ARGS[@]}" --rm --privileged --net bridge \
@@ -741,6 +748,7 @@ main() {
     configure_afs
     ensure_image "${IMAGE}"
     validate_image_capabilities
+    validate_runtime_rootfs
     prepare_data
     prepare_host_network_modules
     configure_auth

@@ -234,6 +234,8 @@ Use [`deploy/README.md`](./deploy/README.md) as the deployment entry point. AKer
 
 The [standalone guide](./deploy/standalone/README.md) owns source startup, supported platforms, runtime selection, and SDK setup. Preserve the source launcher's native-daemon architecture selection, clean sandboxd gitlink check, occupied-name preflight, profile locking, unique source image, and node/gateway health checks. Status and stop must verify recorded container identities, images, and data mounts; stop also requires an empty sandbox inventory. Source management is independent of cloud profiles and must preserve unrelated containers.
 
+The bundled runsc EROFS root requires host EROFS and loop-device support for private writable `/etc/hosts` initialization. Keep the standalone read-only runtime-rootfs mount probe before credential/configuration writes; directory-backed runsc roots do not require host EROFS.
+
 The all-in-one image and node launchers declare lowercase `container=oci`
 for PID 1 systemd. Preserve this in the final image, Helm node environment,
 and standalone launcher: without container detection, privileged systemd
@@ -453,6 +455,8 @@ For operator-owned node directories, use the supported Helm overlay and
 ownership, retention, and validation contract in
 [`deploy/docs/node-local-directories.md`](./deploy/docs/node-local-directories.md).
 Keep helper lifecycle and core/umbrella rendering tests synchronized.
+
+New runsc and standard Firecracker sandboxes use a private writable `/etc/hosts` ordinary file when the effective root is writable. Existing commands/filesystem methods need no hosts option. Reload preserves captured contents, empty files and deletion without refreshing saved IP entries. Explicit covering mounts, finally read-only roots, old-layout snapshots, runc, Kata and Firecracker PVM retain their existing behavior. Keep the SDK guide and runtime-selectable integration coverage aligned; this feature adds no checkpoint API or Execd protocol dependency.
 
 Same-node failover and explicit rollback retain the logical sandbox identity:
 

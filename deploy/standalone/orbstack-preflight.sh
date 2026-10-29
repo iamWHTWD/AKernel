@@ -105,9 +105,9 @@ if [[ "${AKERNEL_ENABLE_RUNC:-false}" == true ]]; then
     done
     /usr/local/bin/runc --version >/dev/null
     test -x /usr/local/bin/runc-shim
-    mount -t erofs -o loop,ro /home/yuanrong/yr-runtime-rootfs.img "${probe_dir}/lower"
+    mount -t erofs -o loop,ro /opt/akernel/runtime/akernel-runtime-rootfs.img "${probe_dir}/lower"
     lower_mounted=true
-    test -x "${probe_dir}/lower/usr/local/bin/rrt-runtime"
+    test -x "${probe_dir}/lower/usr/local/bin/adx-execd"
     mkdir "${probe_dir}/ext4/upper" "${probe_dir}/ext4/work"
     mount -t overlay overlay \
         -o "lowerdir=${probe_dir}/lower,upperdir=${probe_dir}/ext4/upper,workdir=${probe_dir}/ext4/work" \
@@ -115,7 +115,7 @@ if [[ "${AKERNEL_ENABLE_RUNC:-false}" == true ]]; then
     overlay_mounted=true
     printf '%s\n' overlay-ok > "${probe_dir}/overlay/akernel-preflight"
     test "$(cat "${probe_dir}/overlay/akernel-preflight")" = overlay-ok
-    test -x "${probe_dir}/overlay/usr/local/bin/rrt-runtime"
+    test -x "${probe_dir}/overlay/usr/local/bin/adx-execd"
 fi
 
 echo "OrbStack standalone host capability probes passed (FUSE device presence only)"

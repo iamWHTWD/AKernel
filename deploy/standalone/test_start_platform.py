@@ -62,6 +62,7 @@ class StartPlatformTest(unittest.TestCase):
             MOCK_TRAEFIK_IMAGE="linux/arm64",
             MOCK_KATA="false", MOCK_FIRECRACKER="false", MOCK_RUNC="true",
             MOCK_LOCAL_IMAGE="true", MOCK_PROBE_STATUS="0",
+            MOCK_ROOTFS_PROBE_STATUS="0",
             MOCK_CALLS=str(self.calls),
         )
 
@@ -119,6 +120,7 @@ docker() {
             done
             if [[ "$MOCK_HOST" == Darwin && "$platform" != linux/arm64 ]]; then return 87; fi
             if [[ "$1" == run && "$*" == *'/orbstack-preflight.sh' ]]; then return "$MOCK_PROBE_STATUS"; fi
+            if [[ "$1" == run && "$*" == *'/runtime-rootfs-preflight.sh' ]]; then return "$MOCK_ROOTFS_PROBE_STATUS"; fi
             ;;
         *) return 2 ;;
     esac
@@ -135,7 +137,7 @@ GPU_RUN_ARGS=()
             "cleanup_existing", "ensure_image",
             "validate_container_proxy", "configure_container_proxy",
             "validate_host_platform", "validate_image_platform",
-            "validate_image_capabilities", "prepare_host_network_modules",
+            "validate_image_capabilities", "validate_runtime_rootfs", "prepare_host_network_modules",
             "configure_afs", "start_node_container",
         )
         functions = "\n".join(
@@ -225,9 +227,11 @@ show_status() { record stage show_status; }
         self.assertEqual(result.returncode, 0, result.stderr)
         calls = self.recorded_calls()
         probe = next(i for i, call in enumerate(calls) if "/orbstack-preflight.sh" in call)
+        rootfs = next(i for i, call in enumerate(calls) if "/runtime-rootfs-preflight.sh" in call)
         auth = calls.index(["stage", "configure_auth"])
         network = calls.index(["stage", "configure_network"])
         node = next(i for i, call in enumerate(calls) if "akernel-node" in call and "run" in call)
+        self.assertLess(rootfs, probe)
         self.assertLess(probe, auth)
         self.assertLess(auth, network)
         self.assertLess(network, node)
@@ -237,13 +241,30 @@ show_status() { record stage show_status; }
         result = self.run_main(MOCK_PROBE_STATUS="45")
         self.assertEqual(result.returncode, 45, result.stderr)
         self.assertFalse(any(call[0] == "stage" for call in self.recorded_calls()))
-        self.assertEqual(sum(call[:2] == ["docker", "run"] for call in self.recorded_calls()), 1)
+        self.assertEqual(sum(call[:2] == ["docker", "run"] for call in self.recorded_calls()), 2)
+
+    def test_rootfs_probe_failure_leaves_profile_untouched_on_linux_and_orbstack(self):
+        for host in ("Linux", "Darwin"):
+            with self.subTest(host=host):
+                self.calls.unlink(missing_ok=True)
+                result = self.run_main(MOCK_HOST=host, MOCK_ROOTFS_PROBE_STATUS="46")
+                self.assertEqual(result.returncode, 46, result.stderr)
+                self.assertFalse((self.directory / "data").exists())
+                calls = self.recorded_calls()
+                self.assertFalse(any(call[0] in ("stage", "modprobe") for call in calls))
+                probes = [call for call in calls if call[:2] == ["docker", "run"]]
+                self.assertEqual(len(probes), 1)
+                self.assertIn("/runtime-rootfs-preflight.sh", probes[0])
+                self.assertIn("none", probes[0])
+                self.assertIn("30s", probes[0])
+                self.assertIn("--kill-after=5s", probes[0])
+                self.assertNotIn(f"{self.directory}/data:/home/akernel", probes[0])
 
     def test_conflicting_docker_default_is_overridden_for_pull_probe_node_and_gateway(self):
         result = self.run_main(DOCKER_DEFAULT_PLATFORM="linux/amd64", MOCK_LOCAL_IMAGE="false")
         self.assertEqual(result.returncode, 0, result.stderr)
         commands = [call for call in self.recorded_calls() if call[1] in ("pull", "run")]
-        self.assertEqual(len(commands), 3)
+        self.assertEqual(len(commands), 4)
         for command in commands:
             self.assertEqual(command[command.index("--platform") + 1], "linux/arm64")
 

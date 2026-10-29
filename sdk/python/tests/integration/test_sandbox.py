@@ -126,6 +126,45 @@ class SandboxIntegrationTest(unittest.TestCase):
         )
         self.assertTrue(self.sandbox.files.exists("/tmp/akernel-integration.txt"))
 
+    @unittest.skipUnless(
+        _RUNTIME in {"runsc", "firecracker"},
+        "writable managed hosts are supported by runsc and standard Firecracker",
+    )
+    def test_hosts_writes_are_private(self):
+        peer_hosts = self.sandbox.files.read("/etc/hosts")
+        with Sandbox(
+            cpu=1000, memory=2048, runtime=_RUNTIME, image=_IMAGE
+        ) as sandbox:
+            mode = sandbox.commands.run("stat -c %a /etc/hosts")
+            self.assertEqual(mode.exit_code, 0, mode.stderr)
+            self.assertEqual(mode.stdout.strip(), "644")
+            appended = sandbox.commands.run(
+                "printf '\\n192.0.2.10 appended.example\\n' >> /etc/hosts"
+            )
+            self.assertEqual(appended.exit_code, 0, appended.stderr)
+            self.assertIn("appended.example", sandbox.files.read("/etc/hosts"))
+
+            sandbox.files.write("/etc/hosts", "192.0.2.11 overwritten.example\n")
+            replaced = sandbox.commands.run(
+                "sed -i s/overwritten/replaced/ /etc/hosts"
+            )
+            self.assertEqual(replaced.exit_code, 0, replaced.stderr)
+            self.assertEqual(
+                sandbox.files.read("/etc/hosts"), "192.0.2.11 replaced.example\n"
+            )
+            sandbox.files.write("/etc/hosts.next", "192.0.2.12 renamed.example\n")
+            sandbox.files.rename("/etc/hosts.next", "/etc/hosts")
+            self.assertEqual(
+                sandbox.files.read("/etc/hosts"), "192.0.2.12 renamed.example\n"
+            )
+            self.assertEqual(self.sandbox.files.read("/etc/hosts"), peer_hosts)
+
+            sandbox.files.write("/etc/hosts", "")
+            self.assertEqual(sandbox.files.read("/etc/hosts"), "")
+            sandbox.files.remove("/etc/hosts")
+            self.assertFalse(sandbox.files.exists("/etc/hosts"))
+            self.assertEqual(self.sandbox.files.read("/etc/hosts"), peer_hosts)
+
     @unittest.skipUnless(_IMAGE, "set AKERNEL_TEST_IMAGE to test an OCI/Nydus root")
     def test_image_writes_are_private(self):
         original = self.sandbox.files.read("/etc/os-release")
@@ -208,6 +247,53 @@ class SandboxIntegrationTest(unittest.TestCase):
     "set AKERNEL_RUN_INTEGRATION=1 and the AKernel SDK environment",
 )
 class SandboxReloadIntegrationTest(unittest.TestCase):
+    @unittest.skipUnless(
+        _RUNTIME in {"runsc", "firecracker"},
+        "writable managed hosts are supported by runsc and standard Firecracker",
+    )
+    def test_hosts_reload_preserves_modified_empty_and_deleted(self):
+        with Sandbox(
+            cpu=1000,
+            memory=int(os.environ.get("AKERNEL_TEST_CHECKPOINT_MEMORY_MIB", "2048")),
+            storage_mb=256,
+            runtime=_RUNTIME,
+            image=_IMAGE,
+            failover=True,
+        ) as sandbox:
+            install = sandbox.commands.run(_INSTALL_CURL_COMMAND, timeout=300)
+            self.assertEqual(install.exit_code, 0, install.stderr)
+            sandbox_id = sandbox.id
+            commands, files, pty = sandbox.commands, sandbox.files, sandbox.pty
+
+            for state, content in (
+                ("modified", "192.0.2.20 checkpoint.example\n"),
+                ("empty", ""),
+                ("deleted", None),
+            ):
+                with self.subTest(state=state):
+                    if content is None:
+                        files.remove("/etc/hosts")
+                    else:
+                        files.write("/etc/hosts", content)
+
+                    # This is the existing internal integration trigger, not
+                    # a new or stable public SDK checkpoint interface.
+                    checkpoint = commands.run(_CHECKPOINT_COMMAND, timeout=300)
+                    self.assertEqual(checkpoint.exit_code, 0, checkpoint.stderr)
+                    self.assertIn('"status":"completed"', checkpoint.stdout)
+                    files.write("/etc/hosts", "192.0.2.21 after-checkpoint.example\n")
+
+                    self.assertTrue(sandbox.reload())
+                    self.assertEqual(sandbox.id, sandbox_id)
+                    self.assertIs(sandbox.commands, commands)
+                    self.assertIs(sandbox.files, files)
+                    self.assertIs(sandbox.pty, pty)
+                    if content is None:
+                        self.assertFalse(files.exists("/etc/hosts"))
+                    else:
+                        self.assertTrue(files.exists("/etc/hosts"))
+                        self.assertEqual(files.read("/etc/hosts"), content)
+
     def _wait_for_reverse_tunnel(self, sandbox, *, timeout=60):
         deadline = time.monotonic() + timeout
         last_result = None

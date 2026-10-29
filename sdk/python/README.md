@@ -15,6 +15,7 @@ PTYs, port forwarding, and reverse tunnels.
   - [Sandbox runtimes](#sandbox-runtimes)
   - [Commands](#commands)
   - [Filesystem](#filesystem)
+    - [Writable sandbox hosts](#writable-sandbox-hosts)
   - [Interactive PTYs](#interactive-ptys)
   - [Port forwarding](#port-forwarding)
   - [Lifecycle compatibility](#lifecycle-compatibility)
@@ -509,6 +510,25 @@ Copy local files or directories through the frontend exec WebSocket:
 sandbox.files.copy_from_local("./project", "/workspace/project")
 sandbox.files.copy_to_local("/workspace/result.json", "./result.json")
 ```
+
+### Writable sandbox hosts
+
+With the bundled sandboxd that supports this layout, new `runsc` and standard `firecracker` sandboxes initialize `/etc/hosts` as an ordinary file in their private writable root before the workload starts. No additional SDK option is needed. Root can append, overwrite, use `sed -i`, rename a replacement, truncate, or delete it through the existing commands and filesystem interfaces:
+
+```python
+from akernel_sdk import Sandbox
+
+with Sandbox(runtime="runsc", failover=True) as sandbox:
+    sandbox.commands.run(
+        "printf '\\n192.0.2.10 internal.example\\n' >> /etc/hosts",
+        check=True,
+    )
+    print(sandbox.files.read("/etc/hosts"))
+```
+
+Use `runtime="firecracker"` when the node advertises that runtime. Changes affect only that sandbox. The initial file mode is `0644`; ordinary ownership and permissions still apply to non-root users. An explicit mount covering `/etc/hosts` or its parent keeps its existing behavior, and an effectively read-only root retains read-only hosts injection. Runc, Kata, and `firecracker-pvm` retain their previous layouts. `/etc/hostname` and `/etc/resolv.conf` are unchanged.
+
+After a workload creates a recovery point using the existing internal integration, `sandbox.reload()` restores the captured hosts contents and existence state. A file saved empty remains empty; a file saved deleted stays absent. Reload does not update saved IP/hostname entries to a newly assigned IP, and checkpoints from the previous read-only-mount layout keep that layout. Creating a sandbox with `failover=True` does not create a recovery point by itself; see [local failover and reload](#local-failover-and-reload) for that lifecycle and the internal test trigger.
 
 ## Interactive PTYs
 

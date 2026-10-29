@@ -71,7 +71,9 @@ Native ARM64 and Apple Silicon OrbStack builds require architecture-matched
 `ADX_RELEASE_URL` / `ADX_RELEASE_SHA256` and `ADX_EXECD_URL` /
 `ADX_EXECD_SHA256`; the default archive pins are AMD64. VM and GPU payloads
 remain disabled on ARM64. The launcher verifies image architecture and probes
-TUN/TAP, cgroups, iptables, FUSE and loop-backed ext4 before creating credentials.
+the bundled EROFS root through a read-only loop mount on Linux and OrbStack
+before writing runtime configuration or credentials. OrbStack also probes TUN/TAP,
+cgroups, iptables, FUSE and loop-backed ext4 before creating credentials.
 See [build downloads](../../builder/README.md) for mirror and archive options.
 
 ### DNS resolver sources
@@ -100,6 +102,15 @@ ADX receives the IPv4 address of the default-route interface so creation of `san
 Release all sandboxes and stop the old node before upgrading a data directory to an ACL-enabled image. Sandboxd refuses ACL initialization while pre-ACL sandbox records remain. See the [deployment network requirements](../README.md#network-acls) for the full capability contract.
 
 ### Storage and recovery
+
+The bundled runsc EROFS root requires host EROFS filesystem support and loop
+devices, including `/dev/loop-control`, to initialize private writable
+`/etc/hosts`. Ensure those capabilities are available before starting the node;
+on modular Linux kernels an operator can load the distribution's `erofs` and
+`loop` modules. Startup verifies an actual read-only mount of the packaged
+runtime root in a disposable container. The probe does not install or replace
+host modules. This is a requirement of the bundled EROFS root; external
+directory-backed runsc roots do not gain an EROFS requirement.
 
 Explicit `storage_mb` quotas for runsc and Firecracker use the bounded ext4 filestore at `/home/akernel/filestore`. The selected host data directory is bind-mounted at `/home/akernel`; sandboxd creates a loop-backed filesystem image there when needed. Without an explicit quota, runsc retains its configured memory-backed overlay while Firecracker uses its configured sparse ext4 default. For shared image-cache capacity, see [ChunkDB configuration](../README.md#shared-chunkdb-capacity).
 
