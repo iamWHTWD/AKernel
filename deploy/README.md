@@ -17,6 +17,8 @@ and nodes. The filesystem clients, PostgreSQL and Ceph remain deployment-owned.
 
 The image installs the complete gVisor bundle pinned by sandboxd's runtime manifest: runsc, the containerd shim, and adjacent `gvisor-bin/` helpers. Its SHA-512 verifies the archive, not a standalone runsc binary. Keep these executables together when building custom images; replacing only runsc can leave mismatched checkpoint/restore helpers.
 
+Before rollout, verify the bundled runsc root's [EROFS and loop-device requirements](standalone/README.md#storage-and-recovery) on every node for writable `/etc/hosts` initialization. Directory-backed runsc roots do not need host EROFS support.
+
 For a fresh cloud deployment, prefer the repository-level Makefile. It keeps
 local deployment state under `.akernel/<env>/`, builds the all-in-one image,
 plans/applies Terraform, creates the HTTPS and API key Secret, and reads the

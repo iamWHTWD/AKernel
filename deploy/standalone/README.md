@@ -101,6 +101,8 @@ Release all sandboxes and stop the old node before upgrading a data directory to
 
 ### Storage and recovery
 
+The bundled runsc EROFS root requires host EROFS filesystem support and loop devices, including `/dev/loop-control`, to initialize private writable `/etc/hosts`. Operators must ensure these capabilities are available before starting the node; on modular Linux kernels, load the distribution's `erofs` and `loop` modules as needed. This requirement applies to the bundled EROFS root; directory-backed runsc roots do not require host EROFS support.
+
 Explicit `storage_mb` quotas for runsc and Firecracker use the bounded ext4 filestore at `/home/akernel/filestore`. The selected host data directory is bind-mounted at `/home/akernel`; sandboxd creates a loop-backed filesystem image there when needed. Without an explicit quota, runsc retains its configured memory-backed overlay while Firecracker uses its configured sparse ext4 default. For shared image-cache capacity, see [ChunkDB configuration](../README.md#shared-chunkdb-capacity).
 
 Runsc and Firecracker checkpoints use ADX local-only snapshots under `/home/akernel/adx/checkpoints`. Workloads trigger anonymous recovery points through `POST /checkpoint` on `/run/akernel/execd.sock`, and the SDK can reload the same logical sandbox from its latest usable point. Recovery points follow the sandbox lifecycle and are not reusable SDK objects.

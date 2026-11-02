@@ -234,6 +234,8 @@ Use [`deploy/README.md`](./deploy/README.md) as the deployment entry point. AKer
 
 The [standalone guide](./deploy/standalone/README.md) owns source startup, supported platforms, runtime selection, and SDK setup. Preserve the source launcher's native-daemon architecture selection, clean sandboxd gitlink check, occupied-name preflight, profile locking, unique source image, and node/gateway health checks. Status and stop must verify recorded container identities, images, and data mounts; stop also requires an empty sandbox inventory. Source management is independent of cloud profiles and must preserve unrelated containers.
 
+The bundled runsc EROFS root requires host EROFS and loop-device support for private writable `/etc/hosts` initialization; see the [storage prerequisites](deploy/standalone/README.md#storage-and-recovery). Directory-backed runsc roots do not require host EROFS.
+
 The all-in-one image and node launchers declare lowercase `container=oci`
 for PID 1 systemd. Preserve this in the final image, Helm node environment,
 and standalone launcher: without container detection, privileged systemd
@@ -458,6 +460,8 @@ For operator-owned node directories, use the supported Helm overlay and
 ownership, retention, and validation contract in
 [`deploy/docs/node-local-directories.md`](./deploy/docs/node-local-directories.md).
 Keep helper lifecycle and core/umbrella rendering tests synchronized.
+
+The [SDK hosts contract](sdk/python/README.md#writable-sandbox-hosts) owns runsc writable `/etc/hosts` behavior and restore compatibility. Keep integration coverage aligned without adding a hosts option or an Execd protocol dependency; preserve other runtimes' existing behavior.
 
 Same-node failover and explicit rollback retain the logical sandbox identity:
 
