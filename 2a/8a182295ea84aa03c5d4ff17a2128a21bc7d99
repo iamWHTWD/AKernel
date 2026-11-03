@@ -1,0 +1,96 @@
+src/control-plane/scaling-controller/internal/executor/parent_memory_metrics.go
+  s_585bd4c17d2dca::t_5b5d1561d37a8e 123-126,171
+src/control-plane/scaling-controller/internal/config/types_test.go
+  s_585bd4c17d2dca::t_059a8cf6c905e1 4,70
+  s_585bd4c17d2dca::t_665f227ecbb2ef 44-55
+  s_585bd4c17d2dca::t_ebeb2f2ce68cdf 71-73
+src/control-plane/scaling-controller/internal/config/loader_test.go
+  s_585bd4c17d2dca::t_059a8cf6c905e1 24,87-88
+  s_585bd4c17d2dca::t_421a46fe72941d 89
+src/control-plane/scaling-controller/internal/decider/types.go
+  s_585bd4c17d2dca::t_f00656a95d92dc 54-56,58,92
+  s_585bd4c17d2dca::t_5b5d1561d37a8e 57,59-65
+src/control-plane/scaling-controller/internal/decider/scaleup.go
+  s_585bd4c17d2dca::t_64d60fbe49c01a 85
+  s_585bd4c17d2dca::t_314358b895cddf 29-31,86,145-147
+  s_585bd4c17d2dca::t_5b5d1561d37a8e 32,36-38,41-53,75-84,87-88,148
+  s_585bd4c17d2dca::t_31b592bd1ddcd2 16-17,99
+  s_585bd4c17d2dca::t_f00656a95d92dc 39-40
+  s_72f7e15cf1af9f::t_922ecc3bae5aab 89-90
+src/control-plane/scaling-controller/internal/decider/scaleup_test.go
+  s_585bd4c17d2dca::t_0698d6a39db357 13-14
+  s_585bd4c17d2dca::t_a1c5819e6f8e0d 4,11-12,15-46
+  s_585bd4c17d2dca::t_9ea7c665ca3c94 47
+src/control-plane/scaling-controller/internal/executor/metricsource.go
+  s_585bd4c17d2dca::t_f00656a95d92dc 83-84
+  s_585bd4c17d2dca::t_5b5d1561d37a8e 85-90
+deploy/akernel/charts/core/templates/scaling-controller/configmap.yaml
+  s_585bd4c17d2dca::t_ebeb2f2ce68cdf 31
+src/control-plane/scaling-controller/internal/executor/utilization_capacity_test.go
+  s_585bd4c17d2dca::t_81b7a49048ab23 24,31-32,40-42
+  s_585bd4c17d2dca::t_64d60fbe49c01a 135-136
+  s_585bd4c17d2dca::t_52afdeb7d96fbf 128,139-140,154
+  s_585bd4c17d2dca::t_665f227ecbb2ef 176-177
+  s_585bd4c17d2dca::t_a4a8c9c4569bc3 9,155-165,170-171
+  s_585bd4c17d2dca::t_31b592bd1ddcd2 88-89,143-144,146
+  s_585bd4c17d2dca::t_a1c5819e6f8e0d 1-8,10-23,25-30,33-34,44-56,61-87,90-127,129-132,152-153,172-175,178-188
+  s_585bd4c17d2dca::t_0698d6a39db357 35-39,43,57-60,133-134,137-138,141-142,147-151,166-169
+  s_585bd4c17d2dca::t_132672c556195f 145
+deploy/akernel/charts/core/values.yaml
+  s_585bd4c17d2dca::t_ebeb2f2ce68cdf 613
+src/control-plane/scaling-controller/internal/config/types.go
+  s_585bd4c17d2dca::t_f00656a95d92dc 82
+  s_585bd4c17d2dca::t_31b592bd1ddcd2 11,205
+  s_585bd4c17d2dca::t_5b5d1561d37a8e 208-211,215-221
+  s_585bd4c17d2dca::t_314358b895cddf 212-214
+src/control-plane/scaling-controller/internal/executor/utilization_capacity.go
+  s_585bd4c17d2dca::t_81b7a49048ab23 8,51,65,77-78,88-91
+  s_585bd4c17d2dca::t_ebeb2f2ce68cdf 127,164,168
+  s_585bd4c17d2dca::t_314358b895cddf 6,27-28,39,82,86,100,102-104,112,126
+  s_585bd4c17d2dca::t_132672c556195f 46-47,50
+  s_585bd4c17d2dca::t_a4a8c9c4569bc3 14,169-173,175-177,192-194
+  s_585bd4c17d2dca::t_52afdeb7d96fbf 5,174,178-191
+  s_585bd4c17d2dca::t_55e6861834f3a8 101,195
+  s_585bd4c17d2dca::t_004952ffabd72b 139,142-144,154,157
+  s_585bd4c17d2dca::t_b2b5fe7b7544ef 1-4,7,9-13,15-26,29-38,40-45,48-49,52-64,66-76,79-81,83-85,87,92-99,105-111,113-125,128-138,140-141,145-153,155-156,158-163,165-167,196
+src/control-plane/scaling-controller/internal/executor/reconciler.go
+  s_585bd4c17d2dca::t_64d60fbe49c01a 1089-1091,1107
+  s_585bd4c17d2dca::t_a4a8c9c4569bc3 1110-1118
+  s_585bd4c17d2dca::t_314358b895cddf 314,604,840,885,933,938,981-983,1001
+  s_585bd4c17d2dca::t_6deb2915e156f2 695,704,841-842,853-855,877-884,886-888,904,907,979-980,1061-1067,1081-1083,1102-1106
+  s_585bd4c17d2dca::t_55e6861834f3a8 890-894
+  s_585bd4c17d2dca::t_ebeb2f2ce68cdf 895
+  s_585bd4c17d2dca::t_132672c556195f 1085,1092
+src/control-plane/scaling-controller/hack/config.yaml
+  s_585bd4c17d2dca::t_ebeb2f2ce68cdf 17
+src/control-plane/scaling-controller/README.md
+  s_585bd4c17d2dca::t_ebeb2f2ce68cdf 62,72-81
+  s_585bd4c17d2dca::t_a4a8c9c4569bc3 82
+  s_72f7e15cf1af9f::t_174346d40d04ba 83
+src/control-plane/scaling-controller/internal/executor/parent_memory_metrics_test.go
+  s_585bd4c17d2dca::t_ebeb2f2ce68cdf 118-119
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "2a8a182295ea84aa03c5d4ff17a2128a21bc7d99",
+  "prompts": {},
+  "sessions": {
+    "s_585bd4c17d2dca": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a0a8-ff2c-7cd1-b60f-42a093a659f6",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    },
+    "s_72f7e15cf1af9f": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a19c6f-b052-7543-ac5b-988b6625ed5b",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}
