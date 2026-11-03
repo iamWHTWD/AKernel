@@ -1,0 +1,54 @@
+deploy/internal/aci.py
+  s_23f6b6d8992f0b::t_565a4ce494d770 21,30-33,39,341,343-354,356-359,365,370,380-383,395,400,430,444-455,508,630
+  s_23f6b6d8992f0b::t_de0300075198c3 355
+deploy/internal/test_source_snapshot.py
+  s_23f6b6d8992f0b::t_cd0919c5922181 57-58,65,146-160
+  s_23f6b6d8992f0b::t_96653154554396 161
+deploy/internal/test_build_routing.py
+  s_23f6b6d8992f0b::t_2ceab6432b14a7 407,416-419,422,426,429,433,436,441,450
+deploy/internal/test_aci.py
+  s_23f6b6d8992f0b::t_2ceab6432b14a7 476,481-484
+  s_23f6b6d8992f0b::t_027225c748526f 183,187
+  s_23f6b6d8992f0b::t_8c217ee20c7bf9 86,88-89,156,177-182,184-186,188-206,301-302,317,363,382,400
+  s_23f6b6d8992f0b::t_cd0919c5922181 340-345
+  s_23f6b6d8992f0b::t_352a9eb2ba83a5 346
+deploy/internal/image_policy.py
+  s_23f6b6d8992f0b::t_f757443e9e8eac 28,35-36,183,190,192,194
+  s_23f6b6d8992f0b::t_027225c748526f 185
+.aci.yml
+  s_23f6b6d8992f0b::t_ea2b6ffb6dbeae 39-52,69-84,149-211
+  s_23f6b6d8992f0b::t_d1bdf4f04e51e0 212
+deploy/internal/source-lock.json
+  s_23f6b6d8992f0b::t_8844efc3e65918 38-42,185,190,195,205,225,230,235,255,272-431
+builder/health-checker.Dockerfile
+  s_23f6b6d8992f0b::t_027225c748526f 6,14,27-28
+  s_23f6b6d8992f0b::t_de0300075198c3 7-8,15-20
+  s_23f6b6d8992f0b::t_f757443e9e8eac 1-5,9-13,21-26,29-46
+deploy/internal/source_snapshot.py
+  s_23f6b6d8992f0b::t_f757443e9e8eac 22,32,57,290
+deploy/internal/README.md
+  s_23f6b6d8992f0b::t_905c73fd242950 33-41
+  s_23f6b6d8992f0b::t_37f9917ee3729c 7,9,13
+  s_23f6b6d8992f0b::t_c93cde94e810c3 42
+deploy/internal/health-checker.Dockerfile
+  s_23f6b6d8992f0b::t_ea2b6ffb6dbeae 1-63
+deploy/internal/aci.yml.in
+  s_23f6b6d8992f0b::t_565a4ce494d770 39-52,69-74
+  s_23f6b6d8992f0b::t_4721243d07fc10 75-84
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "5e135ce233cb660e46251733b4f1cf2c1282d00b",
+  "prompts": {},
+  "sessions": {
+    "s_23f6b6d8992f0b": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a19c74-2965-76e1-a4a4-233d6f1a32c7",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}
