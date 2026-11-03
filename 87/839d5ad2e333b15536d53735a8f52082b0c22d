@@ -1,0 +1,57 @@
+deploy/internal/test_source_snapshot.py
+  s_72f7e15cf1af9f::t_88be8a2e19fde5 139-140
+  s_72f7e15cf1af9f::t_4f123dba9a0a25 57-60,68,151,153-154,156-167,169-175
+deploy/internal/image_policy.py
+  s_72f7e15cf1af9f::t_14b57442032d78 28,184,191,193,195
+deploy/internal/scaling-controller.Dockerfile
+  s_72f7e15cf1af9f::t_caf2db3ae2bbac 1-11,13-97
+  s_72f7e15cf1af9f::t_e3448f81eb0716 12
+deploy/internal/aci.py
+  s_72f7e15cf1af9f::t_14b57442032d78 22,35-38,45,361,364,368,372-373,384-391,412,426,432,462,476,478-481,485,540,662
+AGENTS.md
+  s_72f7e15cf1af9f::t_26466a5d11a81b 896,942
+  s_72f7e15cf1af9f::t_85a4bbb2d301d6 882,894,939-941,943-944
+deploy/internal/source_snapshot.py
+  s_72f7e15cf1af9f::t_14b57442032d78 33
+.aci.yml
+  s_72f7e15cf1af9f::t_caf2db3ae2bbac 53-66,99-114,243-305
+  s_72f7e15cf1af9f::t_3feedd68eb39d2 306
+deploy/internal/test_build_routing.py
+  s_72f7e15cf1af9f::t_4f123dba9a0a25 431,441-447,449-450,452-455,457-458,460-476,479-480,491
+builder/README.md
+  s_72f7e15cf1af9f::t_e7421cd449376c 40-41
+  s_72f7e15cf1af9f::t_85a4bbb2d301d6 25-26,32-35,42-43,45
+  s_72f7e15cf1af9f::t_26466a5d11a81b 44
+deploy/internal/aci.yml.in
+  s_72f7e15cf1af9f::t_14b57442032d78 53-66,99-104
+  s_72f7e15cf1af9f::t_ff18d77982657b 105-114
+builder/scaling-controller.Dockerfile
+  s_72f7e15cf1af9f::t_830690bc627312 18-19,24-30,34-35,41-49
+deploy/internal/test_aci.py
+  s_72f7e15cf1af9f::t_c923b020cc6b8e 86,88-90,161,182-195,197-210,217-218,221-228,230-231,327-329,344-345,368,370-373,393-394,413-414,432-433,510,519-522
+  s_72f7e15cf1af9f::t_88be8a2e19fde5 196,211-216,324
+deploy/internal/README.md
+  s_72f7e15cf1af9f::t_85a4bbb2d301d6 7,9,13,43-50,118,122,133,137
+src/control-plane/scaling-controller/FUNCTIONALITY.md
+  s_72f7e15cf1af9f::t_26466a5d11a81b 226
+src/control-plane/scaling-controller/README.md
+  s_72f7e15cf1af9f::t_26466a5d11a81b 101
+deploy/internal/source-lock.json
+  s_72f7e15cf1af9f::t_28e652e35458c2 15,55,190,195,200,210,230,235,240,260,437-671
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "87839d5ad2e333b15536d53735a8f52082b0c22d",
+  "prompts": {},
+  "sessions": {
+    "s_72f7e15cf1af9f": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a19c6f-b052-7543-ac5b-988b6625ed5b",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}
