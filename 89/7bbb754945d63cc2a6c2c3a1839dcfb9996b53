@@ -1,0 +1,25 @@
+AGENTS.md
+  s_e1a56ca56f52e9::t_e093bb178375e6 150
+.github/workflows/ci.yml
+  s_e1a56ca56f52e9::t_e093bb178375e6 185
+builder/node.Dockerfile
+  s_e1a56ca56f52e9::t_e093bb178375e6 77
+src/sandboxd
+  s_e1a56ca56f52e9::t_e43fc494fb2cef 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "897bbb754945d63cc2a6c2c3a1839dcfb9996b53",
+  "prompts": {},
+  "sessions": {
+    "s_e1a56ca56f52e9": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a18148-2b0a-7fe3-9d6b-ba2f9ecd9fdb",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}
