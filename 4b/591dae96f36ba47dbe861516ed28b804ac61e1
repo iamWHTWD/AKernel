@@ -1,0 +1,31 @@
+AGENTS.md
+  s_72f7e15cf1af9f::t_1d5e27e1775877 196
+deploy/internal/source-lock.json
+  s_72f7e15cf1af9f::t_11b572d4705c30 225,265,671,677-678
+deploy/akernel/charts/monitor/dashboards/akernel-node-resources.json
+  s_72f7e15cf1af9f::t_1d5e27e1775877 121,158-176,222-243
+deploy/internal/upstream.json
+  s_72f7e15cf1af9f::t_1d5e27e1775877 4
+.aci.yml
+  s_72f7e15cf1af9f::t_1d5e27e1775877 33
+deploy/internal/sandboxd-source.json
+  s_72f7e15cf1af9f::t_1d5e27e1775877 3-5
+src/sandboxd
+  s_72f7e15cf1af9f::t_fd4daff50dfaef 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "4b591dae96f36ba47dbe861516ed28b804ac61e1",
+  "prompts": {},
+  "sessions": {
+    "s_72f7e15cf1af9f": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a19c6f-b052-7543-ac5b-988b6625ed5b",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}
