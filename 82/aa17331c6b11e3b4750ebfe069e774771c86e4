@@ -1,0 +1,39 @@
+deploy/standalone/README.md
+  s_333f90650885a6::t_ad00f56107d979 450-456
+deploy/README.md
+  s_333f90650885a6::t_ad00f56107d979 179-283,515-518
+deploy/akernel/charts/core/templates/node/daemonset.yaml
+  s_333f90650885a6::t_ad00f56107d979 75-105,334-337
+AGENTS.md
+  s_333f90650885a6::t_ad00f56107d979 190,381-396,932-935
+.github/workflows/ci.yml
+  s_333f90650885a6::t_ad00f56107d979 165
+deploy/tests/kubernetes/runc_filesystems.py
+  s_333f90650885a6::t_ad00f56107d979 1-203
+deploy/docs/dual-sdk-and-application-logs.md
+  s_333f90650885a6::t_ad00f56107d979 42-45
+deploy/pvm-runtime.md
+  s_333f90650885a6::t_ad00f56107d979 3-58,62,64,70,80-102,112-160,162-198,201-223,238-254,256-342,355-361
+  s_333f90650885a6::t_efcd532a70338a 225-237
+deploy/akernel/charts/core/tests/test_adx_chart.py
+  s_333f90650885a6::t_ad00f56107d979 7-8,10,19,30,50-140
+  s_333f90650885a6::t_77b05be6dfbadd 141
+deploy/tests/kubernetes/test_runc_filesystems.py
+  s_333f90650885a6::t_ad00f56107d979 1-270
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "82aa17331c6b11e3b4750ebfe069e774771c86e4",
+  "prompts": {},
+  "sessions": {
+    "s_333f90650885a6": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1ac15-f971-7b03-9408-0b629f696ae9",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}
