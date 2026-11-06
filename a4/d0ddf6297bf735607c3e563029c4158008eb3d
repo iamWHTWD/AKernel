@@ -1,0 +1,135 @@
+deploy/tests/dual_sdk/e2b_checkpoint.py
+  s_a3812cd013d54e::t_10d86c90ea17cd 1-141
+Makefile
+  s_a3812cd013d54e::t_10d86c90ea17cd 27,53,74,107,205-211,218
+deploy/akernel/charts/core/templates/node/configmap.yaml
+  s_a3812cd013d54e::t_10d86c90ea17cd 1-9,17-24,26,104-109
+deploy/README.md
+  s_a3812cd013d54e::t_10d86c90ea17cd 17-19,40
+deploy/terraform/test_adx_contract.py
+  s_a3812cd013d54e::t_10d86c90ea17cd 18-39,61-70
+deploy/terraform/aliyun/README.md
+  s_a3812cd013d54e::t_10d86c90ea17cd 136-137,189-225
+  s_a3812cd013d54e::t_89db77541d54fa 226
+deploy/tests/dual_sdk/qualification.py
+  s_a3812cd013d54e::t_10d86c90ea17cd 1-454
+sdk/python/pyproject.toml
+  s_a3812cd013d54e::t_10d86c90ea17cd 31
+sdk/python/tests/unit/test_init_timeout.py
+  s_a3812cd013d54e::t_10d86c90ea17cd 44
+deploy/akernel/charts/core/scripts/prepare-application-logs.py
+  s_a3812cd013d54e::t_10d86c90ea17cd 1-194
+deploy/akernel/charts/core/templates/_helpers.tpl
+  s_a3812cd013d54e::t_10d86c90ea17cd 156-185
+deploy/internal/source-lock.json
+  s_a3812cd013d54e::t_10d86c90ea17cd 33-37,60,88-92,158-162,175,290,300
+  s_a3812cd013d54e::t_ad02859012349c 15,50
+deploy/akernel/charts/core/values.yaml
+  s_a3812cd013d54e::t_10d86c90ea17cd 128-142,177-178,185-187,226-227,250-261
+sdk/python/README.md
+  s_a3812cd013d54e::t_10d86c90ea17cd 1179-1180,1184,1222
+deploy/terraform/aliyun/node-image-pull-policy.json
+  s_a3812cd013d54e::t_10d86c90ea17cd 1-5
+deploy/tests/dual_sdk/http_qualification.py
+  s_a3812cd013d54e::t_10d86c90ea17cd 1-174
+deploy/terraform/aliyun/node-image-pull.py
+  s_a3812cd013d54e::t_10d86c90ea17cd 1-564
+.aci.yml
+  s_a3812cd013d54e::t_10d86c90ea17cd 19,33
+deploy/scripts/configure.sh
+  s_a3812cd013d54e::t_10d86c90ea17cd 33,129-132,289-332,387-390,396,423,515
+deploy/terraform/aliyun/terraform.tfvars.example
+  s_a3812cd013d54e::t_10d86c90ea17cd 49-57
+deploy/internal/node.Dockerfile
+  s_a3812cd013d54e::t_10d86c90ea17cd 42-43
+deploy/tests/dual_sdk/README.md
+  s_a3812cd013d54e::t_10d86c90ea17cd 1-84
+builder/scripts/install-control-release.py
+  s_a3812cd013d54e::t_10d86c90ea17cd 1-96
+deploy/terraform/aliyun/node-image-pull.service
+  s_a3812cd013d54e::t_10d86c90ea17cd 1-13
+deploy/akernel/charts/core/templates/adx/configmap.yaml
+  s_a3812cd013d54e::t_10d86c90ea17cd 84-101,181-186,210-217,226,255-260,351-356
+sdk/python/examples/hostpath_mounts.py
+  s_a3812cd013d54e::t_10d86c90ea17cd 35-36
+deploy/terraform/aliyun/variables.tf
+  s_a3812cd013d54e::t_10d86c90ea17cd 196-217,345-349,693-697
+  s_a3812cd013d54e::t_de4c398a5bb93b 698
+deploy/akernel/charts/core/templates/node/secrets.yaml
+  s_a3812cd013d54e::t_10d86c90ea17cd 2-5,12-15,23
+deploy/akernel/charts/core/tests/test_application_logs.py
+  s_a3812cd013d54e::t_10d86c90ea17cd 1-87
+deploy/akernel/charts/core/templates/node/daemonset.yaml
+  s_a3812cd013d54e::t_10d86c90ea17cd 49,123-142,235-244,309-318
+.github/workflows/ci.yml
+  s_a3812cd013d54e::t_10d86c90ea17cd 114-122
+builder/control.Dockerfile
+  s_a3812cd013d54e::t_10d86c90ea17cd 1-17
+builder/scripts/test_runtime_contract.py
+  s_a3812cd013d54e::t_10d86c90ea17cd 81,83
+deploy/terraform/aliyun/node-image-pull.sh.tftpl
+  s_a3812cd013d54e::t_10d86c90ea17cd 1-24
+AGENTS.md
+  s_a3812cd013d54e::t_10d86c90ea17cd 397-399,816-820
+builder/node.Dockerfile
+  s_a3812cd013d54e::t_10d86c90ea17cd 41-42
+deploy/akernel/charts/core/templates/adx/coordinator.yaml
+  s_a3812cd013d54e::t_10d86c90ea17cd 40
+deploy/tests/dual_sdk/envd_isolation.py
+  s_a3812cd013d54e::t_10d86c90ea17cd 1-177
+deploy/scripts/test_configure.py
+  s_a3812cd013d54e::t_10d86c90ea17cd 1-144
+deploy/terraform/aliyun/main.tf
+  s_a3812cd013d54e::t_10d86c90ea17cd 43-77,133-137,177,197,226,278-288,342-378,519-523,526,528-535,576-580,583,585-592,640-647,650,665-670,904-957,959,967,972,978-995
+  s_a3812cd013d54e::t_76bd71d3e7ac7a 996
+deploy/internal/upstream.json
+  s_a3812cd013d54e::t_10d86c90ea17cd 4
+deploy/terraform/aliyun/values-akernel.yaml.tmpl
+  s_a3812cd013d54e::t_10d86c90ea17cd 82-89
+deploy/akernel/charts/core/tests/test_dual_sdk_logs.py
+  s_a3812cd013d54e::t_10d86c90ea17cd 1-158
+deploy/akernel/charts/core/templates/adx/ingress-api.yaml
+  s_a3812cd013d54e::t_10d86c90ea17cd 1-4,28-29,45,67-68,129-130
+builder/runtime.Dockerfile
+  s_a3812cd013d54e::t_10d86c90ea17cd 7-8
+deploy/terraform/aliyun/tests/test_node_image_pull.py
+  s_a3812cd013d54e::t_10d86c90ea17cd 1-339
+builder/README.md
+  s_a3812cd013d54e::t_10d86c90ea17cd 108-109,133-164,212
+deploy/docs/dual-sdk-and-application-logs.md
+  s_a3812cd013d54e::t_10d86c90ea17cd 1-146
+deploy/scripts/build-control-image.py
+  s_a3812cd013d54e::t_10d86c90ea17cd 1-48
+deploy/terraform/test_node_image_pull_terraform.py
+  s_a3812cd013d54e::t_10d86c90ea17cd 1-171
+builder/scripts/test_control_release.py
+  s_a3812cd013d54e::t_10d86c90ea17cd 1-81
+deploy/internal/runtime.Dockerfile
+  s_a3812cd013d54e::t_10d86c90ea17cd 8-9
+src/agent-dx
+  s_cbc5809b78fc64::t_05cf916a32c0b1 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "a4d0ddf6297bf735607c3e563029c4158008eb3d",
+  "prompts": {},
+  "sessions": {
+    "s_a3812cd013d54e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a167bf-f21f-7162-b623-da7daeda4712",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    },
+    "s_cbc5809b78fc64": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1aa10-3731-7771-845e-e5778d80741b",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}
