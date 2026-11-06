@@ -1,0 +1,24 @@
+docs/operations/kata-memory-oom-20261105.md
+  s_e4a0f48a921d4c::t_24ba0b5cd20393 69-77
+  s_e4a0f48a921d4c::t_8a9422517ad879 78-82
+docs/operations/kata-memory-20261105/image-artifacts-723986826.json
+  s_e4a0f48a921d4c::t_f657da338ac1ab 1-74
+docs/operations/kata-memory-20261105/rpm-validation-723962948.json
+  s_e4a0f48a921d4c::t_baf5cdd9767cff 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "cbe85aab7dd6837c893305c2fdbeb70fd47c8351",
+  "prompts": {},
+  "sessions": {
+    "s_e4a0f48a921d4c": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a04285-c85e-7d30-96b4-94b7960fff06",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "yao <zhouyao.zhou@antgroup.com>"
+    }
+  }
+}
