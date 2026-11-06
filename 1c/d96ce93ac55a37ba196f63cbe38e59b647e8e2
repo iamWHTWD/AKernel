@@ -1,0 +1,23 @@
+deploy/README.md
+  s_566a648e243a57::t_2483cb844d1f35 133-136
+deploy/tests/kubernetes/runc_filesystems.py
+  s_566a648e243a57::t_75a8510bfdd0bb 7-9,51-61,193
+deploy/tests/kubernetes/test_runc_filesystems.py
+  s_566a648e243a57::t_75a8510bfdd0bb 239-267
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "1cd96ce93ac55a37ba196f63cbe38e59b647e8e2",
+  "prompts": {},
+  "sessions": {
+    "s_566a648e243a57": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1ac15-a9a0-7622-8413-d97c963489e6",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}
