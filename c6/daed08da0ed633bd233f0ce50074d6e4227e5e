@@ -1,0 +1,27 @@
+deploy/akernel/charts/core/tests/test_adx_chart.py
+  s_a3812cd013d54e::t_1f008a80eb269a 57
+deploy/akernel/charts/core/templates/adx/management-policy.yaml
+  s_a3812cd013d54e::t_a712523c525318 9-10
+src/control-plane/node-upgrade/tests/test_upgrade.py
+  s_a3812cd013d54e::t_ca5c27250a9a36 216-222
+src/control-plane/node-upgrade/akernel_upgrade/engine.py
+  s_a3812cd013d54e::t_738b9676e2d69a 51-52
+src/control-plane/node-upgrade/README.md
+  s_a3812cd013d54e::t_a712523c525318 14-15
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "c6daed08da0ed633bd233f0ce50074d6e4227e5e",
+  "prompts": {},
+  "sessions": {
+    "s_a3812cd013d54e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a167bf-f21f-7162-b623-da7daeda4712",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}
