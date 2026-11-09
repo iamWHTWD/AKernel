@@ -1,0 +1,49 @@
+deploy/standalone/README.md
+  s_333f90650885a6::t_8209662f3325bc 80-84
+AGENTS.md
+  s_333f90650885a6::t_8209662f3325bc 267-270
+deploy/standalone/prepare-pvm-memory.py
+  s_333f90650885a6::t_d007b1af549e86 1-57,62-78
+  s_333f90650885a6::t_ac22244375b714 58-61
+deploy/standalone/start.sh
+  s_333f90650885a6::t_d007b1af549e86 202-205,332,353-354,421-425
+.github/workflows/ci.yml
+  s_333f90650885a6::t_6ab2b822bdbad8 156
+deploy/standalone/test_start_config.py
+  s_333f90650885a6::t_ac22244375b714 104-106,201-207
+  s_333f90650885a6::t_6ab2b822bdbad8 14-17,170-200,234,250
+  s_17e3ab8cb32fb1::t_c624558ec38acb 18,208
+deploy/akernel/charts/core/scripts/pvm-memory-limit.tpl
+  s_333f90650885a6::t_8c4c0cc6b2b924 1-38
+deploy/akernel/charts/core/templates/node/configmap.yaml
+  s_333f90650885a6::t_8c4c0cc6b2b924 90-96
+deploy/akernel/charts/core/tests/test_shared_checkpoint_storage.py
+  s_333f90650885a6::t_6ab2b822bdbad8 111-118,134,137-150,181,199
+  s_333f90650885a6::t_ac22244375b714 119-133,135-136
+deploy/pvm-runtime.md
+  s_333f90650885a6::t_8209662f3325bc 244-252
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "47d8563687ee738e39875b3aeb922049eae330f2",
+  "prompts": {},
+  "sessions": {
+    "s_17e3ab8cb32fb1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1aa52-fede-7990-889d-fb0248c3b312",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    },
+    "s_333f90650885a6": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1ac15-f971-7b03-9408-0b629f696ae9",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}
