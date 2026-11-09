@@ -1,0 +1,19 @@
+builder/node.Dockerfile
+  s_7371fa68f936af::t_ed3ba200fb8925 202,206
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "d86a00d0c9d9e00ca2ad91efe45b7df53ec5a123",
+  "prompts": {},
+  "sessions": {
+    "s_7371fa68f936af": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1bef7-ee79-7d21-ab19-a0b4dcecac08",
+        "model": "gpt-6.1-terra"
+      },
+      "human_author": "yao <zhouyao.zhou@antgroup.com>"
+    }
+  }
+}

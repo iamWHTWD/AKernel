@@ -1,0 +1,19 @@
+builder/deploy.Dockerfile
+  s_e4a0f48a921d4c::t_2ef5659918fb76 3,5-15
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "f547779a91d78f7916754cfd213ca89ecc0e718f",
+  "prompts": {},
+  "sessions": {
+    "s_e4a0f48a921d4c": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a04285-c85e-7d30-96b4-94b7960fff06",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "yao <zhouyao.zhou@antgroup.com>"
+    }
+  }
+}
