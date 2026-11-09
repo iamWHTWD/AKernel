@@ -1,0 +1,104 @@
+src/control-plane/scaling-controller/internal/executor/reconciler.go
+  s_95e7e7d1d53e78::t_1eeadae1b7c8c3 47,82,247-249,327
+  s_95e7e7d1d53e78::t_147e4ec98f2a7d 34
+  s_95e7e7d1d53e78::t_2c8fac28f8dbad 25-33,35-37
+  s_95e7e7d1d53e78::t_26801ed646f63b 41-46
+deploy/scaling-controller/templates/rbac.yaml
+  s_95e7e7d1d53e78::t_05de6b13dfc7f3 59,64,76
+  s_95e7e7d1d53e78::t_d7e7ab48ee32ae 60-63,65-75,77-79
+deploy/scaling-controller/values.yaml
+  s_95e7e7d1d53e78::t_d7e7ab48ee32ae 73-80
+src/control-plane/scaling-controller/internal/ackclient/client.go
+  s_95e7e7d1d53e78::t_4af0293f3f92f6 69-72,104-105
+builder/patches/sandboxd-auto-reboot.patch
+  s_95e7e7d1d53e78::t_026eb1680a9282 1-691
+builder/systemd_services/sandboxd.service
+  s_95e7e7d1d53e78::t_147e4ec98f2a7d 10
+src/control-plane/scaling-controller/internal/config/types.go
+  s_95e7e7d1d53e78::t_2a2e627efbbe0d 103-139,265-271
+src/control-plane/scaling-controller/internal/executor/marker.go
+  s_95e7e7d1d53e78::t_78e3c15f624c45 427,432,453-457,489-492
+  s_95e7e7d1d53e78::t_1eeadae1b7c8c3 428-431,493,504,512-514,518-523
+  s_95e7e7d1d53e78::t_1e0a3336d6048c 502-503
+src/control-plane/scaling-controller/internal/executor/state.go
+  s_95e7e7d1d53e78::t_147e4ec98f2a7d 63
+  s_95e7e7d1d53e78::t_c6906820f5cff8 236
+  s_95e7e7d1d53e78::t_2a2e627efbbe0d 19-20,61-62,64-66,175,178,180-183,244,248,250,258-260
+  s_95e7e7d1d53e78::t_42af612049a8d2 166,179,249
+src/control-plane/scaling-controller/internal/executor/upgrade.go
+  s_95e7e7d1d53e78::t_1eeadae1b7c8c3 211
+deploy/scaling-controller/templates/_helpers.tpl
+  s_95e7e7d1d53e78::t_d7e7ab48ee32ae 44
+src/control-plane/scaling-controller/internal/ackclient/types.go
+  s_95e7e7d1d53e78::t_d3b1705b60359a 19-21
+  s_95e7e7d1d53e78::t_4af0293f3f92f6 22
+src/control-plane/scaling-controller/internal/executor/auto_reboot.go
+  s_95e7e7d1d53e78::t_78e3c15f624c45 453-456,467,470,489,555-563,566
+  s_95e7e7d1d53e78::t_d7e7ab48ee32ae 134,136,231,356-358
+  s_95e7e7d1d53e78::t_475356ba161b79 159-167,187-188,261-262
+  s_95e7e7d1d53e78::t_2c8fac28f8dbad 5,23,79,234-240,283-285,287,295-306,346-353,359,449,521-526,530,535,538-540,543-553
+  s_95e7e7d1d53e78::t_1fd0de867516bb 80-82,472
+  s_95e7e7d1d53e78::t_708fee54633034 93,265-267,321-343,437-439,491,505-507
+  s_95e7e7d1d53e78::t_65b757fa9054d7 114,127-129,193-194
+  s_95e7e7d1d53e78::t_29789f2bca39bc 1-4,6-21,24-27,29-31,35-78,83,88-92,94-100,104-108,110-113,120-126,140-158,168-169,178-186,189-192,195-201,204-214,223-230,232-233,241-260,263-264,268-282,286,288-289,291-294,307-320,344-345,354-355,360-364,368-424,426-436,440-448,450-452,457-466,468-469,471,474-488,490,492-504,508-520,527-529,531,536-537,541-542,554,564-565,567
+  s_95e7e7d1d53e78::t_e1d78efeaee902 101-103,109,115-119,130-133,135,137-139,170-177,202-203,215-222,290,365-367
+  s_95e7e7d1d53e78::t_b9251adbcb698b 22,28,32-34,473,532-534
+  s_95e7e7d1d53e78::t_4af0293f3f92f6 84-87,425
+src/control-plane/scaling-controller/hack/rbac-apply.yaml
+  s_95e7e7d1d53e78::t_3b1f574c3c4a34 59-82
+src/control-plane/scaling-controller/cmd/scaling-controller/main.go
+  s_95e7e7d1d53e78::t_147e4ec98f2a7d 136
+  s_95e7e7d1d53e78::t_d7e7ab48ee32ae 22,34,131-135
+deploy/internal/aci.py
+  s_95e7e7d1d53e78::t_78e3c15f624c45 523-524
+src/control-plane/scaling-controller/internal/ecsclient/client.go
+  s_95e7e7d1d53e78::t_2a2e627efbbe0d 154-171
+  s_95e7e7d1d53e78::t_61f714f0bd4595 172
+src/control-plane/scaling-controller/internal/node/reboot_probe.go
+  s_95e7e7d1d53e78::t_d7e7ab48ee32ae 1-15,26-28,43,57,60-63,66-68,70,73,75
+  s_95e7e7d1d53e78::t_147e4ec98f2a7d 16-25,29-42,44-56,58-59,64-65,69,71-72,74
+deploy/scaling-controller/README.md
+  s_95e7e7d1d53e78::t_b9251adbcb698b 69-72,75-82,87
+  s_95e7e7d1d53e78::t_4af0293f3f92f6 73-74
+  s_95e7e7d1d53e78::t_10facb383ffb7e 83-86
+AGENTS.md
+  s_95e7e7d1d53e78::t_1fd0de867516bb 1000,1004
+  s_95e7e7d1d53e78::t_4ebc63c8dbec26 1001-1003
+builder/node.Dockerfile
+  s_95e7e7d1d53e78::t_147e4ec98f2a7d 165-166
+deploy/akernel/charts/core/templates/node/daemonset.yaml
+  s_95e7e7d1d53e78::t_147e4ec98f2a7d 269-272
+deploy/internal/node.Dockerfile
+  s_95e7e7d1d53e78::t_78e3c15f624c45 186-187
+deploy/internal/source-lock.json
+  s_95e7e7d1d53e78::t_0cc3ca1da3d68d 180-185,345,360,620,625,630,640,665,670,685,705,730-735,775,834-835
+  s_95e7e7d1d53e78::t_3c8a544a7003b3 615,745,755,795,800,833,836-837
+src/control-plane/scaling-controller/hack/check_helm.py
+  s_95e7e7d1d53e78::t_e1d78efeaee902 32-34
+src/control-plane/scaling-controller/internal/executor/controller_test.go
+  s_95e7e7d1d53e78::t_dfe3a7947f2499 183
+  s_95e7e7d1d53e78::t_b9251adbcb698b 88
+src/control-plane/scaling-controller/README.md
+  s_95e7e7d1d53e78::t_26801ed646f63b 63-69,76,82,92
+  s_95e7e7d1d53e78::t_3646ba8cdad023 70-75,77-81,83-91
+src/control-plane/scaling-controller/go.mod
+  s_95e7e7d1d53e78::t_64e0422881893f 42,48,52
+src/control-plane/scaling-controller/go.sum
+  s_95e7e7d1d53e78::t_aad0d09cdafd8c 66-68,93-94,104-105
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "2c483a565eea9541e7618ddd1b7a736eabfe3959",
+  "prompts": {},
+  "sessions": {
+    "s_95e7e7d1d53e78": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1bf2f-18be-7893-9a1e-c8c4d6e4516b",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}
