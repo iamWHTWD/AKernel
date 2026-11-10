@@ -1,0 +1,19 @@
+src/sandboxd
+  s_95e7e7d1d53e78::t_557cb66b621187 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "e0ddd8e398232800e447503d8bd1bdf91f5163e9",
+  "prompts": {},
+  "sessions": {
+    "s_95e7e7d1d53e78": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1bf2f-18be-7893-9a1e-c8c4d6e4516b",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}
