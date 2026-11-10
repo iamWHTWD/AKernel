@@ -1,0 +1,44 @@
+deploy/internal/runtime.Dockerfile
+  s_cb5bc6f9f3633a::t_ea597618a71374 20-22,30,32-37,40
+deploy/internal/test_aci.py
+  s_cb5bc6f9f3633a::t_d7577cbcd4830e 28-32,105-128
+deploy/internal/test_build_routing.py
+  s_cb5bc6f9f3633a::t_647b8c7162e926 144-167
+  s_cb5bc6f9f3633a::t_d7577cbcd4830e 32-34
+.aci.yml
+  s_cb5bc6f9f3633a::t_ea597618a71374 19
+  s_cb5bc6f9f3633a::t_2ef1c0ffb00a14 33
+deploy/internal/aci.py
+  s_cb5bc6f9f3633a::t_c2c1ee4530c2b7 17,45,136,180-188,190-195,310-315,380,383-385,498-502
+  s_cb5bc6f9f3633a::t_647b8c7162e926 189
+deploy/internal/README.md
+  s_cb5bc6f9f3633a::t_647b8c7162e926 89-90,142,148-150
+deploy/internal/build-routing.json
+  s_cb5bc6f9f3633a::t_ea597618a71374 39-42
+  s_cb5bc6f9f3633a::t_2ef1c0ffb00a14 43-47
+deploy/internal/source-lock.json
+  s_cb5bc6f9f3633a::t_ea597618a71374 350,355,373-377,380,400,405,415
+  s_cb5bc6f9f3633a::t_2ef1c0ffb00a14 365
+deploy/internal/runtime-oss.Dockerfile.in
+  s_cb5bc6f9f3633a::t_c3f8e010b0908f 1-25
+deploy/internal/runtime_contract.py
+  s_cb5bc6f9f3633a::t_981c4526b8ab2c 28-47,90
+deploy/internal/test_runtime_contract.py
+  s_cb5bc6f9f3633a::t_b268905d782c3a 65-80
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "50592db981319a85510c622a809472d6151a5b33",
+  "prompts": {},
+  "sessions": {
+    "s_cb5bc6f9f3633a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1bf0f-8a65-7c82-98e4-c163d5b53e84",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}
