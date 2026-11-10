@@ -1,0 +1,66 @@
+deploy/internal/source-lock.json
+  s_95e7e7d1d53e78::t_a390866b73c88f 340,610,615,620,625,635,660,665,680,700,725-730,740,750,770,790,795,828-830
+  s_95e7e7d1d53e78::t_1506fb6d82b8af 831-832
+builder/systemd_services/sandboxd.service
+  s_95e7e7d1d53e78::t_8f209a5629324b 10
+deploy/akernel/charts/core/templates/node/daemonset.yaml
+  s_95e7e7d1d53e78::t_27bd85ba9195aa 269-272
+deploy/scaling-controller/README.md
+  s_95e7e7d1d53e78::t_0a538eb030ec59 69-87
+deploy/scaling-controller/templates/_helpers.tpl
+  s_95e7e7d1d53e78::t_c68d19bf2cfeb1 44
+deploy/scaling-controller/templates/rbac.yaml
+  s_95e7e7d1d53e78::t_dc927e11495b45 59-79
+deploy/scaling-controller/values.yaml
+  s_95e7e7d1d53e78::t_fd982a7baeb0df 73-80
+src/control-plane/scaling-controller/README.md
+  s_95e7e7d1d53e78::t_298f2191094bba 63-92
+src/control-plane/scaling-controller/cmd/scaling-controller/main.go
+  s_95e7e7d1d53e78::t_34850d584cfc36 22,34,131-136
+src/control-plane/scaling-controller/go.mod
+  s_95e7e7d1d53e78::t_c806d06d4fb93e 42,48,52
+src/control-plane/scaling-controller/go.sum
+  s_95e7e7d1d53e78::t_8c550ad05613ac 66-68,93-94,104-105
+src/control-plane/scaling-controller/hack/check_helm.py
+  s_95e7e7d1d53e78::t_0d0acbadd4a1d2 32-34
+src/control-plane/scaling-controller/hack/rbac-apply.yaml
+  s_95e7e7d1d53e78::t_47f4a4934bd6dc 59-82
+src/control-plane/scaling-controller/internal/ackclient/client.go
+  s_95e7e7d1d53e78::t_1e8f02d39c74a9 69-72,104-105
+src/control-plane/scaling-controller/internal/ackclient/types.go
+  s_95e7e7d1d53e78::t_515d917af8c176 19-22
+src/control-plane/scaling-controller/internal/config/types.go
+  s_95e7e7d1d53e78::t_926b36c32abf3e 103-139,265-271
+src/control-plane/scaling-controller/internal/ecsclient/client.go
+  s_95e7e7d1d53e78::t_24fc18a74800e9 154-172
+src/control-plane/scaling-controller/internal/executor/auto_reboot.go
+  s_95e7e7d1d53e78::t_a8eae9d87328f7 1-567
+src/control-plane/scaling-controller/internal/executor/controller_test.go
+  s_95e7e7d1d53e78::t_03e4b6034c0326 88,183
+src/control-plane/scaling-controller/internal/executor/marker.go
+  s_95e7e7d1d53e78::t_b1591491968224 427-432,453-457,489-493,502-504,512-514,518-523
+src/control-plane/scaling-controller/internal/executor/reconciler.go
+  s_95e7e7d1d53e78::t_762bf297da7b6c 25-37,41-47,82,247-249,327
+src/control-plane/scaling-controller/internal/executor/state.go
+  s_95e7e7d1d53e78::t_3a90d3ce82f5e1 19-20,61-66,166,175,178-183,236,244,248-250,258-260
+src/control-plane/scaling-controller/internal/executor/upgrade.go
+  s_95e7e7d1d53e78::t_3aff090ca37619 211
+src/control-plane/scaling-controller/internal/node/reboot_probe.go
+  s_95e7e7d1d53e78::t_7ba08ee6ff9bcc 1-75
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "e3bd0c02944a6d21ff54388232cff3b792e48493",
+  "prompts": {},
+  "sessions": {
+    "s_95e7e7d1d53e78": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1bf2f-18be-7893-9a1e-c8c4d6e4516b",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}
