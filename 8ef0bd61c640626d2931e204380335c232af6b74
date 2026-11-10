@@ -1,0 +1,67 @@
+.github/workflows/ci.yml
+  s_333f90650885a6::t_7b604b59d9de7a 114-122
+AGENTS.md
+  s_333f90650885a6::t_847c1d83968346 408-410
+Makefile
+  s_333f90650885a6::t_f417f5ed574411 27,55,77,109,209-215
+builder/README.md
+  s_333f90650885a6::t_bd285bb7dfad42 168
+builder/node.Dockerfile
+  s_333f90650885a6::t_13c38bb3296766 41-42
+builder/runtime.Dockerfile
+  s_333f90650885a6::t_09751b02bdd057 7-8
+builder/scripts/test_runtime_contract.py
+  s_333f90650885a6::t_a636a385a7de2b 81,83
+deploy/README.md
+  s_333f90650885a6::t_b50c79d33b5cbc 112
+deploy/scripts/configure.sh
+  s_333f90650885a6::t_cc3dc6b28d9863 33,131-134,299-342,407-410,416,443,539
+deploy/scripts/test_configure.py
+  s_333f90650885a6::t_9013fb07b01394 1-144
+deploy/terraform/aliyun/README.md
+  s_333f90650885a6::t_b151ab8f4c326e 210-247
+deploy/terraform/aliyun/main.tf
+  s_333f90650885a6::t_620e131b0b86cb 43-77,133-137,177,200,229,281-291,345-381,522-526,529,531-538,579-583,586,588-595,643-650,653,668-673,907-960,962,975,981-999
+deploy/terraform/aliyun/node-image-pull-policy.json
+  s_333f90650885a6::t_0749e1ccabf67a 1-5
+deploy/terraform/aliyun/node-image-pull.py
+  s_333f90650885a6::t_fc78510505e71e 1-564
+deploy/terraform/aliyun/node-image-pull.service
+  s_333f90650885a6::t_adb3f591de4d04 1-13
+deploy/terraform/aliyun/node-image-pull.sh.tftpl
+  s_333f90650885a6::t_68acabc5e41aec 1-24
+deploy/terraform/aliyun/terraform.tfvars.example
+  s_333f90650885a6::t_092b34b42d614b 49-57
+deploy/terraform/aliyun/tests/test_node_image_pull.py
+  s_333f90650885a6::t_9c89d348064817 1-339
+deploy/terraform/aliyun/values-akernel.yaml.tmpl
+  s_333f90650885a6::t_6ed3e48163a4a0 82-89
+deploy/terraform/aliyun/variables.tf
+  s_333f90650885a6::t_f65ded25d88974 196-217,345-349
+deploy/terraform/test_adx_contract.py
+  s_333f90650885a6::t_fef3dad9142bf1 179-200,222-231
+deploy/terraform/test_node_image_pull_terraform.py
+  s_333f90650885a6::t_226204202b0523 1-171
+sdk/python/pyproject.toml
+  s_333f90650885a6::t_f5a7817adc9d97 31
+sdk/python/tests/unit/test_init_timeout.py
+  s_333f90650885a6::t_0ca7e898fba1ea 44
+src/agent-dx
+  s_333f90650885a6::t_2c6999296a8274 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "8ef0bd61c640626d2931e204380335c232af6b74",
+  "prompts": {},
+  "sessions": {
+    "s_333f90650885a6": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1ac15-f971-7b03-9408-0b629f696ae9",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}

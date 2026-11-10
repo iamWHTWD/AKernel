@@ -1,0 +1,38 @@
+deploy/docs/dual-sdk-and-application-logs.md
+  s_37d3d6814e97b2::t_79d7b5a17febbf 42-45
+.github/workflows/ci.yml
+  s_37d3d6814e97b2::t_79d7b5a17febbf 165
+deploy/README.md
+  s_37d3d6814e97b2::t_79d7b5a17febbf 104-208,440-443
+AGENTS.md
+  s_37d3d6814e97b2::t_79d7b5a17febbf 198,370-385,939-942
+deploy/pvm-runtime.md
+  s_37d3d6814e97b2::t_79d7b5a17febbf 3-58,62,64,70,80-102,112-159,162-199,201-246,248-334,347-353
+deploy/akernel/charts/core/tests/test_adx_chart.py
+  s_37d3d6814e97b2::t_60d055d093c67b 52
+  s_37d3d6814e97b2::t_79d7b5a17febbf 7-8,10,30,64-154
+deploy/akernel/charts/core/templates/node/daemonset.yaml
+  s_37d3d6814e97b2::t_79d7b5a17febbf 81-111,340-343
+deploy/standalone/README.md
+  s_37d3d6814e97b2::t_79d7b5a17febbf 431-437
+deploy/tests/kubernetes/runc_filesystems.py
+  s_37d3d6814e97b2::t_79d7b5a17febbf 1-203
+deploy/tests/kubernetes/test_runc_filesystems.py
+  s_37d3d6814e97b2::t_79d7b5a17febbf 1-270
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "bb51657b59726cbe337290e34c456cfda6ad9d4c",
+  "prompts": {},
+  "sessions": {
+    "s_37d3d6814e97b2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a586-c4a5-7eb1-b281-03c458202041",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}

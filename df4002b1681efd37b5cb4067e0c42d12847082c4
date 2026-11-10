@@ -1,0 +1,29 @@
+.github/workflows/ci.yml
+  s_566a648e243a57::t_2f0f1c37e4e9d2 165
+AGENTS.md
+  s_566a648e243a57::t_253ce2d3d2db15 367-375
+deploy/tests/kubernetes/runc_filesystems.py
+  s_566a648e243a57::t_37df4b92185735 182
+  s_566a648e243a57::t_dfac4a37deb047 1-181,183-192
+deploy/README.md
+  s_566a648e243a57::t_253ce2d3d2db15 135-155,158-179
+deploy/tests/kubernetes/test_runc_filesystems.py
+  s_566a648e243a57::t_37df4b92185735 3,5-7,9,12,213-237
+  s_566a648e243a57::t_dfac4a37deb047 1-2,4,8,10-11,13-212,238-241
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "df4002b1681efd37b5cb4067e0c42d12847082c4",
+  "prompts": {},
+  "sessions": {
+    "s_566a648e243a57": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1ac15-a9a0-7622-8413-d97c963489e6",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}
