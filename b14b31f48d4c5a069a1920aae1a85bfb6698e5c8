@@ -1,0 +1,94 @@
+src/control-plane/scaling-controller/README.md
+  s_a3812cd013d54e::t_1ffcfe21fe1aad 79
+  s_a3812cd013d54e::t_85dea30339d558 109
+  s_a3812cd013d54e::t_f75f9bcb91b0b9 16,18,20,22-26,28,30,32-38,42,53,55,77,81,129,163,172,174,176
+  s_a3812cd013d54e::t_998a0cc6469ae1 153,161,167,178
+  s_a3812cd013d54e::t_017e741c62f524 171,173
+  s_a3812cd013d54e::t_a8ef9fe5df1aeb 78,80
+src/control-plane/scaling-controller/internal/executor/scaleup.go
+  s_a3812cd013d54e::t_f75f9bcb91b0b9 45,53-59,122,130-133,172,215-217,228,302-307,357-361,388,392,397,409,489,495,498-499
+  s_a3812cd013d54e::t_629c27509909ca 393-396
+  s_a3812cd013d54e::t_94ba19cec4da3e 422-423
+  s_a3812cd013d54e::t_16b60844681a05 500
+builder/README.md
+  s_a3812cd013d54e::t_998a0cc6469ae1 33
+builder/scaling-controller.Dockerfile
+  s_a3812cd013d54e::t_998a0cc6469ae1 43
+deploy/internal/README.md
+  s_a3812cd013d54e::t_998a0cc6469ae1 47
+deploy/scaling-controller/templates/rbac.yaml
+  s_a3812cd013d54e::t_0ef108e395b452 33
+src/control-plane/scaling-controller/hack/check_manifests.py
+  s_a3812cd013d54e::t_f75f9bcb91b0b9 40
+src/control-plane/scaling-controller/internal/executor/cloud_policy.go
+  s_a3812cd013d54e::t_f75f9bcb91b0b9 1-79
+src/control-plane/scaling-controller/internal/decider/pool.go
+  s_a3812cd013d54e::t_f75f9bcb91b0b9 63-66,76-82
+  s_a3812cd013d54e::t_383a07dbbf60d7 83-84
+src/control-plane/scaling-controller/internal/executor/upgrade.go
+  s_a3812cd013d54e::t_70d601f8dbca8d 10,424-426,429-436,439-442,445-457
+  s_a3812cd013d54e::t_4964c3b33da5e9 427-428,437-438,443-444
+  s_a3812cd013d54e::t_209e3f0d7df49f 458-459
+src/control-plane/scaling-controller/internal/executor/parent_memory_metrics.go
+  s_a3812cd013d54e::t_f75f9bcb91b0b9 132-135,153-156
+deploy/scaling-controller/values.yaml
+  s_a3812cd013d54e::t_0ef108e395b452 44
+  s_a3812cd013d54e::t_f75f9bcb91b0b9 74
+src/control-plane/scaling-controller/internal/executor/reconciler.go
+  s_a3812cd013d54e::t_f75f9bcb91b0b9 244-245,250-251,255,258-260,274,287,290-298,311,376,502,506,508
+  s_a3812cd013d54e::t_94ba19cec4da3e 283-286,289,299
+deploy/internal/test_aci.py
+  s_a3812cd013d54e::t_f3239fbdc9cfaa 230
+src/control-plane/scaling-controller/Makefile
+  s_a3812cd013d54e::t_998a0cc6469ae1 43
+src/control-plane/scaling-controller/internal/decider/scaleup.go
+  s_a3812cd013d54e::t_f75f9bcb91b0b9 43-55,106,126-130
+src/control-plane/scaling-controller/internal/metrics/metrics.go
+  s_a3812cd013d54e::t_f75f9bcb91b0b9 44-45
+deploy/scaling-controller/README.md
+  s_a3812cd013d54e::t_1ffcfe21fe1aad 40,94
+  s_a3812cd013d54e::t_0ef108e395b452 92-93
+  s_a3812cd013d54e::t_f75f9bcb91b0b9 18,27,33,36-39,41-42,91
+deploy/scaling-controller/templates/_helpers.tpl
+  s_a3812cd013d54e::t_f75f9bcb91b0b9 78
+  s_a3812cd013d54e::t_0ef108e395b452 24
+src/control-plane/scaling-controller/hack/config.yaml
+  s_a3812cd013d54e::t_f75f9bcb91b0b9 53,104
+src/control-plane/scaling-controller/internal/ecsclient/client.go
+  s_a3812cd013d54e::t_f75f9bcb91b0b9 38,109
+src/control-plane/scaling-controller/internal/config/types.go
+  s_a3812cd013d54e::t_f75f9bcb91b0b9 243-245,248
+AGENTS.md
+  s_a3812cd013d54e::t_f75f9bcb91b0b9 937-955
+  s_a3812cd013d54e::t_998a0cc6469ae1 961,965
+src/control-plane/scaling-controller/internal/executor/recovery.go
+  s_a3812cd013d54e::t_f75f9bcb91b0b9 1-72
+deploy/internal/source-lock.json
+  s_a3812cd013d54e::t_1d9af790be999e 15,60,200,455,460,490,495,550,555,565,575-580,585,605,615-620,630,635,640,645
+  s_a3812cd013d54e::t_576383db607da4 245
+deploy/internal/scaling-controller.Dockerfile
+  s_a3812cd013d54e::t_998a0cc6469ae1 59
+src/control-plane/scaling-controller/internal/executor/state.go
+  s_a3812cd013d54e::t_f75f9bcb91b0b9 49-50,158,179-180,193,222,230
+src/control-plane/scaling-controller/internal/executor/controller_test.go
+  s_a3812cd013d54e::t_f75f9bcb91b0b9 32-40,74-78,83-86,91,97,105,108-109,112-114,128,169-170,172-173,177-182,188-200
+  s_a3812cd013d54e::t_b2c6f3d876380e 217
+  s_a3812cd013d54e::t_8127c9c7c7c00e 142,165,205,208,215-216,218,220-221
+  s_a3812cd013d54e::t_a9b29c35d3171d 10,133,139-140,143-157,176,219
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "b14b31f48d4c5a069a1920aae1a85bfb6698e5c8",
+  "prompts": {},
+  "sessions": {
+    "s_a3812cd013d54e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a167bf-f21f-7162-b623-da7daeda4712",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}

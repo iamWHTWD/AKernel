@@ -1,0 +1,26 @@
+deploy/internal/sandboxd-build.sh
+  s_23f6b6d8992f0b::t_9a08bf8f8c8a32 33,37,40-41,46-48,63,65-66,69-70,72-74,76,80-85,87
+deploy/internal/test_sandboxd_build.py
+  s_23f6b6d8992f0b::t_9a08bf8f8c8a32 93,135-136
+  s_23f6b6d8992f0b::t_fb2abd2e564fc6 91-92,94,137
+deploy/internal/README.md
+  s_23f6b6d8992f0b::t_9a08bf8f8c8a32 57-59
+deploy/internal/source-lock.json
+  s_23f6b6d8992f0b::t_c3e8be382789f2 185,215,250
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "841c55db10247a1ce98061d0d953012436a8a644",
+  "prompts": {},
+  "sessions": {
+    "s_23f6b6d8992f0b": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a19c74-2965-76e1-a4a4-233d6f1a32c7",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}

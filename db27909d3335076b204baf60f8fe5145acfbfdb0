@@ -1,0 +1,72 @@
+src/control-plane/scaling-controller/internal/executor/controller_test.go
+  s_72f7e15cf1af9f::t_d56e8a9d48b15e 84,108,112,132,152-153,155,159-160
+  s_72f7e15cf1af9f::t_c71fc9a6625b9b 195
+  s_72f7e15cf1af9f::t_4d7c3dbe506b63 140,156,168-170
+  s_72f7e15cf1af9f::t_67172b5575b941 31-39,73-77,90,96,104,107,111,113,127,166-167,171-178,186,193-194,196-199
+src/control-plane/scaling-controller/internal/executor/recovery.go
+  s_72f7e15cf1af9f::t_a5e609634adb88 1-72
+src/control-plane/scaling-controller/internal/decider/pool.go
+  s_72f7e15cf1af9f::t_78e1135949b740 63-64,76-82
+  s_72f7e15cf1af9f::t_d0eacf511c8337 65-66
+  s_a3812cd013d54e::t_57b3e58e16d06d 83-84
+src/control-plane/scaling-controller/internal/metrics/metrics.go
+  s_72f7e15cf1af9f::t_5b600b5e59e086 44-45
+src/control-plane/scaling-controller/internal/executor/parent_memory_metrics.go
+  s_72f7e15cf1af9f::t_d0eacf511c8337 132-135,153-156
+AGENTS.md
+  s_72f7e15cf1af9f::t_e2fea4f6d83dfe 931-947
+deploy/scaling-controller/README.md
+  s_72f7e15cf1af9f::t_e2fea4f6d83dfe 18,37-41,90-91
+src/control-plane/scaling-controller/internal/executor/reconciler.go
+  s_72f7e15cf1af9f::t_a5e609634adb88 232-233,271-272
+  s_72f7e15cf1af9f::t_5b600b5e59e086 238-239,243,246-248,262,273,275-285,291,353,478,482,484
+src/control-plane/scaling-controller/internal/ecsclient/client.go
+  s_72f7e15cf1af9f::t_709c0ef6359ed0 38,109
+src/control-plane/scaling-controller/internal/executor/cloud_policy.go
+  s_72f7e15cf1af9f::t_6a39f0743d63b7 5,61,67-68
+  s_72f7e15cf1af9f::t_0cddcbe537bcc9 1-4,6-60,62-63,65-66,69-71,79
+  s_72f7e15cf1af9f::t_3108566060290b 64,72-78
+src/control-plane/scaling-controller/README.md
+  s_72f7e15cf1af9f::t_db04aca0aa4da9 134
+  s_72f7e15cf1af9f::t_941585dd717c80 16,18-28,32,34,36,38,42,53,77-80,89,123,127,136,138
+  s_72f7e15cf1af9f::t_06581aa52fd696 55
+src/control-plane/scaling-controller/internal/decider/scaleup.go
+  s_72f7e15cf1af9f::t_d0eacf511c8337 43-55,106,126-130
+src/control-plane/scaling-controller/internal/executor/state.go
+  s_72f7e15cf1af9f::t_6a39f0743d63b7 176
+  s_72f7e15cf1af9f::t_a5e609634adb88 177
+  s_72f7e15cf1af9f::t_fe68d73a1c7bab 49
+  s_72f7e15cf1af9f::t_709c0ef6359ed0 50,155,190,216,224
+src/control-plane/scaling-controller/internal/executor/scaleup.go
+  s_72f7e15cf1af9f::t_3108566060290b 208
+  s_72f7e15cf1af9f::t_2d15a461f82ca7 45
+  s_72f7e15cf1af9f::t_bb4ca46fe9b2b3 221
+  s_72f7e15cf1af9f::t_6a39f0743d63b7 53-59,115,123-126,165,209-210,284-289,339-343,366,370-372,384,397-398,461,467,470-471
+  s_72f7e15cf1af9f::t_af7d41d0787a8b 472
+deploy/internal/source-lock.json
+  s_72f7e15cf1af9f::t_aa811bb86698fe 450,545,555,565-570,575,595,605-610,620,625,630
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "db27909d3335076b204baf60f8fe5145acfbfdb0",
+  "prompts": {},
+  "sessions": {
+    "s_72f7e15cf1af9f": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a19c6f-b052-7543-ac5b-988b6625ed5b",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    },
+    "s_a3812cd013d54e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a167bf-f21f-7162-b623-da7daeda4712",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}

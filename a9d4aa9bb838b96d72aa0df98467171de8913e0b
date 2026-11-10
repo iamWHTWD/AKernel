@@ -1,0 +1,31 @@
+docs/operations/kata-memory-20261105/README.md
+  s_e4a0f48a921d4c::t_d50e65a0df4898 1-18
+docs/operations/kata-memory-20261105/additional-results.json
+  s_e4a0f48a921d4c::t_6e5e28c40fa2d2 1
+docs/operations/kata-memory-20261105/deployed-results.json
+  s_e4a0f48a921d4c::t_d2f9bbd2474f5d 1
+docs/operations/kata-memory-20261105/experiment-deployed-matrix.py
+  s_e4a0f48a921d4c::t_277ab1d849b43b 1-43
+docs/operations/kata-memory-20261105/final-verification.json
+  s_e4a0f48a921d4c::t_abdf4cb530aecf 1
+docs/operations/kata-memory-20261105/matrix-results.jsonl
+  s_e4a0f48a921d4c::t_a6c98c14111996 1-12
+docs/operations/kata-memory-oom-20261105.md
+  s_e4a0f48a921d4c::t_2b92cb24264b73 1-68
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "a9d4aa9bb838b96d72aa0df98467171de8913e0b",
+  "prompts": {},
+  "sessions": {
+    "s_e4a0f48a921d4c": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a04285-c85e-7d30-96b4-94b7960fff06",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "yao <zhouyao.zhou@antgroup.com>"
+    }
+  }
+}
