@@ -1,0 +1,24 @@
+src/control-plane/node-upgrade/akernel_upgrade/protocol.py
+  s_cb5bc6f9f3633a::t_f90313d5d571d2 120,122
+src/control-plane/node-upgrade/akernel_upgrade/engine.py
+  s_cb5bc6f9f3633a::t_f90313d5d571d2 351,969
+src/control-plane/node-upgrade/tests/test_upgrade.py
+  s_cb5bc6f9f3633a::t_b683026e866828 514-529,532-540
+  s_cb5bc6f9f3633a::t_f90313d5d571d2 530-531
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "3f27267298203cbd44dbf6bf7304d47308a93f33",
+  "prompts": {},
+  "sessions": {
+    "s_cb5bc6f9f3633a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1bf0f-8a65-7c82-98e4-c163d5b53e84",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}
