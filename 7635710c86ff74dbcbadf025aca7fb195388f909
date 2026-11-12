@@ -1,0 +1,78 @@
+deploy/internal/test_source_snapshot.py
+  s_9190abe4044263::t_3b5669c19b3d76 65,72,85-86,93-94,360-369
+  s_9190abe4044263::t_9761c76ef74e7d 370
+deploy/internal/source_snapshot.py
+  s_9190abe4044263::t_2aaf39ece3feb2 30-31,362,373-377,385,405,409-410,420
+deploy/internal/build-routing.json
+  s_9190abe4044263::t_245a3a9a9e7312 3-6
+deploy/internal/erofs.Dockerfile
+  s_9190abe4044263::t_c7e3f370b997ae 1-123
+deploy/internal/README.md
+  s_cb5bc6f9f3633a::t_778f1323b3137a 148,155-156
+  s_9190abe4044263::t_2013e6c78f926a 7,9,120,135-143,154
+deploy/internal/runtime-oss.Dockerfile.in
+  s_cb5bc6f9f3633a::t_778f1323b3137a 1-25
+deploy/internal/test_build_routing.py
+  s_9190abe4044263::t_c9f6dd9507b319 32-33
+deploy/internal/aci.py
+  s_cb5bc6f9f3633a::t_778f1323b3137a 17,48,183-186,365,368-370,483-487
+  s_9190abe4044263::t_245a3a9a9e7312 608-609
+  s_9190abe4044263::t_5a067f0648dc8f 41-43,570-607,610-612,614,723
+builder/scripts/publish-runtime-rootfs.sh
+  s_9190abe4044263::t_53de5f30380623 9
+  s_9190abe4044263::t_02715aeb5ea7a1 27-31
+  s_9190abe4044263::t_c89ce2b15c8a94 1-8,10-26,32-37
+.aci.yml
+  s_9190abe4044263::t_c7e3f370b997ae 19,33
+deploy/internal/aci-erofs.yml.in
+  s_9190abe4044263::t_53de5f30380623 32
+  s_9190abe4044263::t_c89ce2b15c8a94 1-31,33-39
+deploy/internal/test_runtime_contract.py
+  s_cb5bc6f9f3633a::t_7401ca02256a1b 65-80
+deploy/internal/runtime.Dockerfile
+  s_9190abe4044263::t_c7e3f370b997ae 20-22,30,32-37,40
+deploy/internal/test_aci.py
+  s_cb5bc6f9f3633a::t_7401ca02256a1b 104-127
+  s_9190abe4044263::t_c9c04b58f141a1 24,28-31,468,471-486,491
+  s_9190abe4044263::t_245a3a9a9e7312 469-470,489-490
+  s_1528de8ce556a0::t_e1a56c6e8cc40d 487
+deploy/internal/runtime_contract.py
+  s_cb5bc6f9f3633a::t_778f1323b3137a 28-47,90
+.aci-erofs.yml
+  s_9190abe4044263::t_7f0c825b7ea111 32
+  s_9190abe4044263::t_c7e3f370b997ae 1-31,33-39
+deploy/internal/source-lock.json
+  s_9190abe4044263::t_71e069ce8eb6fd 248-252,355-360,365,375,383-387,390,405,410,415,425,435
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "7635710c86ff74dbcbadf025aca7fb195388f909",
+  "prompts": {},
+  "sessions": {
+    "s_1528de8ce556a0": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1ce76-6b4b-73b0-a870-97f6b219fc80",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    },
+    "s_9190abe4044263": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1c4e0-26d3-77e3-a282-46973c02292a",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    },
+    "s_cb5bc6f9f3633a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1bf0f-8a65-7c82-98e4-c163d5b53e84",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}

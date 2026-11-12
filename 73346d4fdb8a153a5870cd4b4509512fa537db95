@@ -1,0 +1,25 @@
+deploy/internal/source-lock.json
+  s_9190abe4044263::t_e0320cb0a6fd0b 350,355,360,375,410
+deploy/internal/README.md
+  s_9190abe4044263::t_7a17682a259771 7,9,120,137,143
+deploy/internal/aci.py
+  s_9190abe4044263::t_27f4a7c8fd34d6 569,590,594
+deploy/internal/test_aci.py
+  s_9190abe4044263::t_440cc50641dc63 104-114,455-456,462,478-480
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "73346d4fdb8a153a5870cd4b4509512fa537db95",
+  "prompts": {},
+  "sessions": {
+    "s_9190abe4044263": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1c4e0-26d3-77e3-a282-46973c02292a",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}
