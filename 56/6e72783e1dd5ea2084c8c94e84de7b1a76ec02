@@ -1,0 +1,45 @@
+deploy/internal/test_source_snapshot.py
+  s_9190abe4044263::t_db24ee230f1db5 83
+deploy/internal/aci.py
+  s_9190abe4044263::t_db24ee230f1db5 17,435,483-485,488,580-589
+deploy/internal/runtime-oss.Dockerfile.in
+  s_9190abe4044263::t_db24ee230f1db5 17-19
+deploy/internal/aci.yml.in
+  s_9190abe4044263::t_db24ee230f1db5 19
+deploy/internal/source_snapshot.py
+  s_9190abe4044263::t_db24ee230f1db5 360,402-403,413
+deploy/internal/source-lock.json
+  s_9190abe4044263::t_3e1b55f3325c40 350,355,360,365,375,385,390,405,410,435
+deploy/internal/build_erofs.sh
+  s_9190abe4044263::t_db24ee230f1db5 61-63
+deploy/internal/test_aci.py
+  s_9190abe4044263::t_badf574b47a3ff 478-484,491-501
+.aci-erofs.yml
+  s_9190abe4044263::t_db24ee230f1db5 19,83-85,88-98,101
+deploy/internal/runtime.Dockerfile
+  s_9190abe4044263::t_db24ee230f1db5 17,33-35
+AGENTS.md
+  s_9190abe4044263::t_db24ee230f1db5 948
+deploy/internal/aci-erofs.yml.in
+  s_9190abe4044263::t_db24ee230f1db5 19,23-33,36
+deploy/internal/README.md
+  s_9190abe4044263::t_badf574b47a3ff 137,143,146,149
+deploy/internal/node.Dockerfile
+  s_9190abe4044263::t_db24ee230f1db5 57
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "566e72783e1dd5ea2084c8c94e84de7b1a76ec02",
+  "prompts": {},
+  "sessions": {
+    "s_9190abe4044263": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1c4e0-26d3-77e3-a282-46973c02292a",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}
