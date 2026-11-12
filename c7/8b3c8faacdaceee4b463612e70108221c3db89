@@ -1,0 +1,31 @@
+builder/node.Dockerfile
+  s_02f2190c22c87a::t_90b040191d7c7e 41-42
+builder/distill-fs-versions.env
+  s_02f2190c22c87a::t_90b040191d7c7e 6-10
+builder/managed-docker/qualification-sources.json
+  s_02f2190c22c87a::t_90b040191d7c7e 8,12,16,20-21,29-30,42,44-49
+builder/runtime.Dockerfile
+  s_02f2190c22c87a::t_90b040191d7c7e 7-8
+src/agent-dx
+  s_02f2190c22c87a::t_f0ca321dbeebb3 1
+src/distill-fs
+  s_02f2190c22c87a::t_5d94c312bdb837 1
+src/sandboxd
+  s_02f2190c22c87a::t_da36f85e7e87bd 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "c78b3c8faacdaceee4b463612e70108221c3db89",
+  "prompts": {},
+  "sessions": {
+    "s_02f2190c22c87a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1bfba-40d5-7f53-ae3b-b4c55019c4d8",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}
