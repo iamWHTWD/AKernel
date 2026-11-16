@@ -1,0 +1,51 @@
+.github/workflows/ci.yml
+  s_566a648e243a57::t_6191169c81c80d 114-122
+AGENTS.md
+  s_566a648e243a57::t_f90d41efbbf59b 389-391
+Makefile
+  s_566a648e243a57::t_a9889f78b24889 27,53,74,106,204-210
+deploy/scripts/configure.sh
+  s_566a648e243a57::t_503cb0b752136e 33,129-132,289-332,387-390,396,423,515
+deploy/scripts/test_configure.py
+  s_566a648e243a57::t_731a5eef39973e 1-144
+deploy/terraform/aliyun/README.md
+  s_566a648e243a57::t_5a2330bed42e31 189-226
+deploy/terraform/aliyun/main.tf
+  s_566a648e243a57::t_e8e4a8440ff6d0 43-77,133-137,177,197,226,278-288,342-378,519-523,526,528-535,576-580,583,585-592,640-647,650,665-670,904-957,959,972,978-996
+deploy/terraform/aliyun/node-image-pull-policy.json
+  s_566a648e243a57::t_5d05462b3a7f3f 1-5
+deploy/terraform/aliyun/node-image-pull.py
+  s_566a648e243a57::t_7c724500d9ed8f 1-564
+deploy/terraform/aliyun/node-image-pull.service
+  s_566a648e243a57::t_71fd6541a4a070 1-13
+deploy/terraform/aliyun/node-image-pull.sh.tftpl
+  s_566a648e243a57::t_96cfa28c1c2513 1-24
+deploy/terraform/aliyun/terraform.tfvars.example
+  s_566a648e243a57::t_e8076d23220efc 49-57
+deploy/terraform/aliyun/tests/test_node_image_pull.py
+  s_566a648e243a57::t_bef555bb4c1f95 1-339
+deploy/terraform/aliyun/values-akernel.yaml.tmpl
+  s_566a648e243a57::t_526deea49a5715 82-89
+deploy/terraform/aliyun/variables.tf
+  s_566a648e243a57::t_3fc52be365736c 196-217,345-349
+deploy/terraform/test_adx_contract.py
+  s_566a648e243a57::t_5aacec88e4bffd 18-39,61-70
+deploy/terraform/test_node_image_pull_terraform.py
+  s_566a648e243a57::t_ae23fcde50e971 1-171
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "e26e1654f961f1491033e08ea9173483091a890d",
+  "prompts": {},
+  "sessions": {
+    "s_566a648e243a57": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1ac15-a9a0-7622-8413-d97c963489e6",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}

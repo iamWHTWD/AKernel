@@ -1,0 +1,54 @@
+deploy/pvm/test_host_profile.py
+  s_333f90650885a6::t_a38758f34ae9e8 8,50-51,53-56,58,64,66-73
+  s_333f90650885a6::t_aed6e3f2a4e8e9 57,59-61
+sdk/python/tests/e2e/README.md
+  s_333f90650885a6::t_aed6e3f2a4e8e9 20-27
+deploy/standalone/README.md
+  s_333f90650885a6::t_aed6e3f2a4e8e9 61-62,73-79
+  s_333f90650885a6::t_698533ef2c9cd1 80
+deploy/akernel/charts/core/templates/node/configmap.yaml
+  s_333f90650885a6::t_51c350852e10ec 60-63,68-74
+deploy/README.md
+  s_333f90650885a6::t_aed6e3f2a4e8e9 23,60-71
+deploy/standalone/test_start_config.py
+  s_333f90650885a6::t_903f5cecd572ca 60,141-162,164-176
+  s_333f90650885a6::t_a38758f34ae9e8 163
+deploy/pvm/run-adx-ci.sh
+  s_333f90650885a6::t_aed6e3f2a4e8e9 69
+  s_333f90650885a6::t_a38758f34ae9e8 67-68,150
+sdk/python/tests/e2e/run.py
+  s_333f90650885a6::t_a38758f34ae9e8 34
+deploy/standalone/start.sh
+  s_333f90650885a6::t_a38758f34ae9e8 27,334,362
+  s_333f90650885a6::t_51c350852e10ec 195-201,335-340,348-356
+  s_333f90650885a6::t_296bff1fa389c4 357
+deploy/standalone/test_start_platform.py
+  s_333f90650885a6::t_a38758f34ae9e8 60
+  s_333f90650885a6::t_903f5cecd572ca 180-185
+deploy/akernel/charts/core/values.yaml
+  s_333f90650885a6::t_51c350852e10ec 508-510
+deploy/akernel/charts/core/tests/test_shared_checkpoint_storage.py
+  s_333f90650885a6::t_903f5cecd572ca 76-120
+deploy/pvm-runtime.md
+  s_333f90650885a6::t_86280d3799d5c6 233-240
+AGENTS.md
+  s_333f90650885a6::t_fa489683d5db05 244-249
+src/sandboxd
+  s_333f90650885a6::t_b702618f500337 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "fa19bfa7e7d1fc244a7cb75795b3480a43cdf815",
+  "prompts": {},
+  "sessions": {
+    "s_333f90650885a6": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1ac15-f971-7b03-9408-0b629f696ae9",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}

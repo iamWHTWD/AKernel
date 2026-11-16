@@ -1,0 +1,38 @@
+deploy/docs/dual-sdk-and-application-logs.md
+  s_566a648e243a57::t_ff77c79db9d58e 42-45
+deploy/akernel/charts/core/templates/node/daemonset.yaml
+  s_566a648e243a57::t_0cef5eaff18e2c 85-96,99,104,336
+deploy/pvm-runtime.md
+  s_566a648e243a57::t_c12e942480041a 3-18,20-57,62,64,70,80-101,112-159,162-163,166-199,201-227,230-246,248-333,347-353
+  s_566a648e243a57::t_3ea12d56507309 19,58,102,164-165,334
+  s_566a648e243a57::t_64e35e4bf07608 228-229
+deploy/standalone/README.md
+  s_566a648e243a57::t_667d091a93ac34 431-437
+AGENTS.md
+  s_566a648e243a57::t_667d091a93ac34 190,898-901
+  s_566a648e243a57::t_f9e9b23fb6806d 362-370
+deploy/README.md
+  s_566a648e243a57::t_ff77c79db9d58e 421-424
+  s_566a648e243a57::t_4476b1bdd366f5 106-108
+  s_566a648e243a57::t_f9e9b23fb6806d 104-105,109-110,120-152,154-167,178-189
+  s_566a648e243a57::t_b1daf8033ddf32 111-119,153,168-177
+deploy/akernel/charts/core/tests/test_adx_chart.py
+  s_566a648e243a57::t_78d4e87e37a400 79-83,85
+  s_566a648e243a57::t_0cef5eaff18e2c 8,56-57,62-63,65,67-78,84,95-120,123,125-127,133-140
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "2b02f173a0c8a0cd85619e3e954cedde4f8849ae",
+  "prompts": {},
+  "sessions": {
+    "s_566a648e243a57": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1ac15-a9a0-7622-8413-d97c963489e6",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}

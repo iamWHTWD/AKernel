@@ -1,0 +1,21 @@
+AGENTS.md
+  s_333f90650885a6::t_03f5d65e3fd076 744-746
+deploy/README.md
+  s_333f90650885a6::t_03f5d65e3fd076 46-48
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "d676b67a1e27dab2a321b1971b64866a03c6cddf",
+  "prompts": {},
+  "sessions": {
+    "s_333f90650885a6": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1ac15-f971-7b03-9408-0b629f696ae9",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": null
+    }
+  }
+}

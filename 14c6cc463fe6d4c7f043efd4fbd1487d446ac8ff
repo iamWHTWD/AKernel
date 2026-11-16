@@ -1,0 +1,147 @@
+src/control-plane/scaling-controller/internal/executor/marker.go
+  s_a3812cd013d54e::t_41362ce0476bb2 174,243-245,321,392-394,417,424-426
+builder/scripts/test_adx_service.py
+  s_a3812cd013d54e::t_72e58c2e605f44 17,38
+src/control-plane/node-upgrade/manage.py
+  s_a3812cd013d54e::t_8047f46df3d027 1-152
+deploy/akernel/charts/core/templates/adx/management-policy.yaml
+  s_a3812cd013d54e::t_72e58c2e605f44 1-14,18,25-35
+  s_a3812cd013d54e::t_9817c375931416 15-17,19-24
+deploy/scripts/build-image.sh
+  s_a3812cd013d54e::t_5ea0507b8cfd45 17-18,74,95-104,328-336,347-348,388-391,394,424-429,461-463
+deploy/akernel/charts/core/templates/node/daemonset.yaml
+  s_a3812cd013d54e::t_72e58c2e605f44 1-4,25,35-36
+src/control-plane/node-upgrade/akernel_upgrade/errors.py
+  s_a3812cd013d54e::t_8047f46df3d027 1-17
+src/control-plane/scaling-controller/internal/executor/releaser.go
+  s_a3812cd013d54e::t_41362ce0476bb2 21-23
+src/control-plane/node-upgrade/akernel_upgrade/clients.py
+  s_a3812cd013d54e::t_8047f46df3d027 1-297
+src/control-plane/node-upgrade/bootstrap.py
+  s_a3812cd013d54e::t_8047f46df3d027 1-74
+deploy/internal/runtime_contract.py
+  s_a3812cd013d54e::t_ec5128ab386cf0 65-74,88
+builder/reuse-runtime.Dockerfile
+  s_a3812cd013d54e::t_cc27fa1bacc4bd 21-22
+  s_a3812cd013d54e::t_72e58c2e605f44 1-20,23-30
+deploy/akernel/charts/core/tests/test_adx_chart.py
+  s_a3812cd013d54e::t_6456553bdbd21b 48,50-56
+  s_a3812cd013d54e::t_72e58c2e605f44 16,27,47,49,57-59
+  s_a3812cd013d54e::t_868c921975bf94 60
+src/control-plane/scaling-controller/internal/executor/reconciler.go
+  s_a3812cd013d54e::t_2b68fd18089c52 59,189-192,208-213,225-226,283-288,300-302,453
+src/control-plane/node-upgrade/scripts_configmap.py
+  s_a3812cd013d54e::t_8047f46df3d027 1-48
+builder/scripts/verify-runtime-rootfs.sh
+  s_a3812cd013d54e::t_72e58c2e605f44 1-32
+builder/node.Dockerfile
+  s_a3812cd013d54e::t_5ea0507b8cfd45 424-427
+deploy/akernel/charts/core/values.yaml
+  s_a3812cd013d54e::t_5ea0507b8cfd45 202-203
+  s_a3812cd013d54e::t_667272b1612f8a 97-99
+src/control-plane/scaling-controller/README.md
+  s_a3812cd013d54e::t_70dee5df40ff43 157,159-161
+  s_a3812cd013d54e::t_d8c5b83489de71 69-108,153,165
+src/control-plane/node-upgrade/akernel_upgrade/engine.py
+  s_a3812cd013d54e::t_8047f46df3d027 1-151,154-177,180-594,596-601,605,608-1042
+  s_a3812cd013d54e::t_9c616b71ef96cc 595,602-604,606-607
+  s_a3812cd013d54e::t_81109f4851c286 152-153,178-179
+src/control-plane/node-upgrade/akernel_upgrade/protocol.py
+  s_a3812cd013d54e::t_8047f46df3d027 1-21,26-69,74-311
+  s_a3812cd013d54e::t_d9422c8dd279dd 22-25
+  s_a3812cd013d54e::t_81109f4851c286 70-73
+src/control-plane/node-upgrade/akernel_upgrade/canary.py
+  s_a3812cd013d54e::t_8047f46df3d027 1-75
+src/control-plane/node-upgrade/requirements.txt
+  s_a3812cd013d54e::t_8047f46df3d027 1
+src/control-plane/scaling-controller/hack/deployment.yaml
+  s_a3812cd013d54e::t_2b68fd18089c52 39
+builder/systemd_services/adx.service
+  s_a3812cd013d54e::t_72e58c2e605f44 8
+deploy/internal/source-lock.json
+  s_a3812cd013d54e::t_7c00ed091cf62e 125
+  s_a3812cd013d54e::t_8f328ebe2a3bda 130,245,260
+  s_a3812cd013d54e::t_0d5d94a8bd8f30 15,45-50,65,140,173-177,180,200,205,225,460,485,500,510,550,580,590,610,615,620,625-630
+deploy/internal/test_runtime_contract.py
+  s_a3812cd013d54e::t_6456553bdbd21b 25-26,59-61,63,74-75,97-98
+  s_a3812cd013d54e::t_8b8bb32d590a94 62
+src/control-plane/scaling-controller/internal/executor/scaleup.go
+  s_a3812cd013d54e::t_41362ce0476bb2 82-90,236-243,262-263,277-279,310,344-345,360-362,392-394
+builder/scripts/adx-service.sh
+  s_a3812cd013d54e::t_667272b1612f8a 16
+src/control-plane/node-upgrade/config.example.json
+  s_a3812cd013d54e::t_8047f46df3d027 1-25
+src/control-plane/scaling-controller/hack/rbac-apply.yaml
+  s_a3812cd013d54e::t_2b68fd18089c52 36
+src/control-plane/scaling-controller/internal/config/types.go
+  s_a3812cd013d54e::t_41362ce0476bb2 59,163-169,193,285-290
+deploy/internal/README.md
+  s_a3812cd013d54e::t_9817c375931416 133-145
+deploy/akernel/charts/core/templates/adx/coordinator.yaml
+  s_a3812cd013d54e::t_72e58c2e605f44 16-20,102-105
+src/control-plane/scaling-controller/internal/executor/upgrade.go
+  s_a3812cd013d54e::t_2b68fd18089c52 1-364,366-448
+  s_a3812cd013d54e::t_5fcfa4f7eb0756 365
+builder/README.md
+  s_a3812cd013d54e::t_386742786bce07 218-219
+  s_a3812cd013d54e::t_9817c375931416 212-217,220-228
+deploy/internal/test_aci.py
+  s_a3812cd013d54e::t_8b8bb32d590a94 98-99,102-104,106-107,109,111
+  s_a3812cd013d54e::t_6456553bdbd21b 96-97,100-101,105,108,110
+deploy/internal/aci.py
+  s_a3812cd013d54e::t_ec5128ab386cf0 43,134,177-185,362-369,481-482
+src/control-plane/node-upgrade/job.yaml
+  s_a3812cd013d54e::t_8047f46df3d027 1-128
+src/control-plane/scaling-controller/internal/executor/controller_test.go
+  s_a3812cd013d54e::t_4ca441ec3dfb6b 146,160
+  s_a3812cd013d54e::t_70dee5df40ff43 77-78,142-144,161,197-199
+src/control-plane/node-upgrade/tests/test_upgrade.py
+  s_a3812cd013d54e::t_6456553bdbd21b 5,340-341,357-362
+  s_a3812cd013d54e::t_d778f6677bf770 1-2,4,7,11,13,15-22,30,186-189,191-275,278-283,286-298,300-302,304-309,311-339,343-356,363-369
+  s_a3812cd013d54e::t_8047f46df3d027 3,6,8-10,12,14,23-29,31-120,122-123,125-130,132-185,284-285,299,303,310,370-373
+  s_a3812cd013d54e::t_d9422c8dd279dd 131
+  s_a3812cd013d54e::t_1c38491a4824c2 190,276-277,342
+  s_a3812cd013d54e::t_81109f4851c286 121,124
+src/control-plane/node-upgrade/README.md
+  s_a3812cd013d54e::t_37e45e99057c0c 14-15
+  s_a3812cd013d54e::t_11ae2dcfe2bdce 140
+  s_a3812cd013d54e::t_8047f46df3d027 1-2,4-6,8-13,16-136,138-139
+  s_a3812cd013d54e::t_9817c375931416 3,137
+  s_a3812cd013d54e::t_d9422c8dd279dd 7
+deploy/akernel/charts/core/templates/adx/configmap.yaml
+  s_a3812cd013d54e::t_72e58c2e605f44 103-105
+deploy/internal/node.Dockerfile
+  s_a3812cd013d54e::t_cc27fa1bacc4bd 446-449
+builder/scripts/test-elf-arch.py
+  s_a3812cd013d54e::t_6456553bdbd21b 36-44
+  s_a3812cd013d54e::t_1c38491a4824c2 7-9,31-35,45-60
+src/control-plane/scaling-controller/hack/check_helm.py
+  s_a3812cd013d54e::t_2b68fd18089c52 28-35
+deploy/README.md
+  s_a3812cd013d54e::t_9817c375931416 574-575
+AGENTS.md
+  s_a3812cd013d54e::t_9817c375931416 58-59,166-169
+src/control-plane/scaling-controller/internal/executor/state.go
+  s_a3812cd013d54e::t_2b68fd18089c52 56,92-93,214-216,238-239
+  s_a3812cd013d54e::t_34e48fcaa6b4a7 240
+builder/scripts/test-build-image.py
+  s_a3812cd013d54e::t_1c38491a4824c2 45-70,157-158,702
+src/control-plane/node-upgrade/akernel_upgrade/__init__.py
+  s_a3812cd013d54e::t_8047f46df3d027 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "14c6cc463fe6d4c7f043efd4fbd1487d446ac8ff",
+  "prompts": {},
+  "sessions": {
+    "s_a3812cd013d54e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a167bf-f21f-7162-b623-da7daeda4712",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}

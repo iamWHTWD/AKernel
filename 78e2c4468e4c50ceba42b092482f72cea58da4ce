@@ -1,0 +1,64 @@
+deploy/scaling-controller/values.yaml
+  s_72f7e15cf1af9f::t_edcc8095cea0c8 70
+src/control-plane/scaling-controller/hack/check_manifests.py
+  s_72f7e15cf1af9f::t_edcc8095cea0c8 40
+src/control-plane/scaling-controller/internal/executor/controller_test.go
+  s_72f7e15cf1af9f::t_53693d3764a68d 175-176
+  s_72f7e15cf1af9f::t_47fd8a36e57ba1 85,231-233,238-239,242
+  s_72f7e15cf1af9f::t_19f07d23961431 97-98,102,136,171-173,179,183-184,234,243,245
+  s_72f7e15cf1af9f::t_b550c293cbeeb8 101,103,138,140,165,174,230,235-237,240-241,244,246-247
+  s_72f7e15cf1af9f::t_f8cd93cc21bbbb 248
+src/control-plane/scaling-controller/README.md
+  s_72f7e15cf1af9f::t_9b0d2dbf7c03fc 180
+  s_72f7e15cf1af9f::t_edcc8095cea0c8 30-36,87
+  s_72f7e15cf1af9f::t_1c96e19e9c3da8 178
+deploy/internal/source-lock.json
+  s_72f7e15cf1af9f::t_172ddd20ea4607 475,505,510,565,610,630,640,645,656-660
+  s_72f7e15cf1af9f::t_44b39581b092b1 600
+src/control-plane/scaling-controller/hack/config.yaml
+  s_72f7e15cf1af9f::t_edcc8095cea0c8 51,103
+src/control-plane/scaling-controller/internal/executor/scaleup.go
+  s_72f7e15cf1af9f::t_5a3ed45f28174c 391-395
+src/control-plane/scaling-controller/internal/executor/zero.go
+  s_72f7e15cf1af9f::t_5a3ed45f28174c 1-90
+AGENTS.md
+  s_72f7e15cf1af9f::t_edcc8095cea0c8 948-953,966-972
+deploy/scaling-controller/README.md
+  s_72f7e15cf1af9f::t_edcc8095cea0c8 36-49
+src/control-plane/scaling-controller/internal/config/types.go
+  s_72f7e15cf1af9f::t_edcc8095cea0c8 98,250
+src/control-plane/scaling-controller/internal/executor/reconciler.go
+  s_72f7e15cf1af9f::t_5a3ed45f28174c 274,289-294,384
+src/control-plane/scaling-controller/internal/executor/marker.go
+  s_72f7e15cf1af9f::t_5a3ed45f28174c 202-205,253-254
+  s_dff7cbff2dae93::t_348953c6f2b7cc 255
+src/control-plane/scaling-controller/internal/executor/releaser.go
+  s_72f7e15cf1af9f::t_5a3ed45f28174c 84-86
+deploy/scaling-controller/templates/_helpers.tpl
+  s_72f7e15cf1af9f::t_1c96e19e9c3da8 81-82
+  s_72f7e15cf1af9f::t_edcc8095cea0c8 80,83
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "78e2c4468e4c50ceba42b092482f72cea58da4ce",
+  "prompts": {},
+  "sessions": {
+    "s_72f7e15cf1af9f": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a19c6f-b052-7543-ac5b-988b6625ed5b",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    },
+    "s_dff7cbff2dae93": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1af92-420a-7a92-a705-fbd1abde0928",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}

@@ -1,0 +1,32 @@
+deploy/internal/test_aci.py
+  s_37d3d6814e97b2::t_1207af389be2f5 163-164
+deploy/internal/source-lock.json
+  s_37d3d6814e97b2::t_0b55c5560473ca 395
+  s_37d3d6814e97b2::t_8560d1ddb3caed 45,135,180,190,365,385,425,851,857-858
+deploy/internal/sandboxd-source.json
+  s_37d3d6814e97b2::t_82348b24158e1d 3-5
+.aci.yml
+  s_37d3d6814e97b2::t_342d93b00f8139 19,33
+deploy/internal/node.Dockerfile
+  s_37d3d6814e97b2::t_342d93b00f8139 42-43
+deploy/internal/runtime.Dockerfile
+  s_37d3d6814e97b2::t_342d93b00f8139 8-9
+deploy/internal/upstream.json
+  s_37d3d6814e97b2::t_82348b24158e1d 4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "1ee814198d7c4008bff4debf57feaffcf696a9bf",
+  "prompts": {},
+  "sessions": {
+    "s_37d3d6814e97b2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a586-c4a5-7eb1-b281-03c458202041",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}

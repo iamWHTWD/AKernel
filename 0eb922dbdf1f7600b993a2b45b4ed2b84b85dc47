@@ -1,0 +1,19 @@
+src/sandboxd
+  s_e1a56ca56f52e9::t_9f379f468c0b52 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "0eb922dbdf1f7600b993a2b45b4ed2b84b85dc47",
+  "prompts": {},
+  "sessions": {
+    "s_e1a56ca56f52e9": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a18148-2b0a-7fe3-9d6b-ba2f9ecd9fdb",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}

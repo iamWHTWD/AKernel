@@ -1,0 +1,40 @@
+deploy/akernel/charts/core/templates/health-checker/serviceaccount.yaml
+  s_23f6b6d8992f0b::t_3e0ca330e41581 1-9
+deploy/akernel/charts/core/templates/health-checker/_helpers.tpl
+  s_23f6b6d8992f0b::t_3e0ca330e41581 1-22
+deploy/akernel/charts/core/templates/health-checker/secret.yaml
+  s_23f6b6d8992f0b::t_3e0ca330e41581 1-13
+deploy/akernel/charts/core/templates/health-checker/clusterrole.yaml
+  s_23f6b6d8992f0b::t_3e0ca330e41581 1-13
+deploy/akernel/charts/core/templates/health-checker/configmap.yaml
+  s_23f6b6d8992f0b::t_3e0ca330e41581 1,10-23,25-29
+  s_23f6b6d8992f0b::t_10fb6fde89692f 2-9,24
+deploy/akernel/charts/core/values.yaml
+  s_23f6b6d8992f0b::t_3e0ca330e41581 29-48,53-92
+  s_23f6b6d8992f0b::t_10fb6fde89692f 49-52
+deploy/akernel/examples/health-checker.yaml
+  s_23f6b6d8992f0b::t_10fb6fde89692f 13-14
+  s_23f6b6d8992f0b::t_3e0ca330e41581 1-12,15-28
+deploy/akernel/charts/core/tests/test_health_checker.py
+  s_23f6b6d8992f0b::t_b9082810415710 1-164
+deploy/akernel/charts/core/templates/health-checker/clusterrolebinding.yaml
+  s_23f6b6d8992f0b::t_3e0ca330e41581 1-16
+deploy/akernel/charts/core/templates/health-checker/deployment.yaml
+  s_23f6b6d8992f0b::t_3e0ca330e41581 1-101
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "804b34f2897cdf507fc61da1cd0c58b074e0dd0d",
+  "prompts": {},
+  "sessions": {
+    "s_23f6b6d8992f0b": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a19c74-2965-76e1-a4a4-233d6f1a32c7",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}

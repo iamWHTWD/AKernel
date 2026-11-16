@@ -1,0 +1,171 @@
+builder/image-bridge/discover.go
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-272
+sdk/python/akernel_sdk/_managed_build.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-186
+sdk/python/akernel_sdk/_backends/base.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 107,128
+sdk/python/tests/integration/test_compose_network.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-335
+builder/image-bridge/go.mod
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-78
+builder/managed-docker/test_compose_native.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-149
+sdk/python/akernel_sdk/commands.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 46,168
+deploy/akernel/charts/core/values.yaml
+  s_37d3d6814e97b2::t_8f8950fa318e9c 246-257,496-506
+builder/managed-docker/compose.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-712
+deploy/akernel/charts/core/tests/test_default_shm.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-59
+sdk/python/akernel_sdk/_image_bridge_guest.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-240
+deploy/akernel/charts/core/templates/node/configmap.yaml
+  s_37d3d6814e97b2::t_8f8950fa318e9c 104-108
+builder/image-bridge/discover_test.go
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-172
+deploy/docs/runtime-rootfs-pinning.md
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-32
+sdk/python/tests/unit/test_managed_compose.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-165
+.github/workflows/ci.yml
+  s_37d3d6814e97b2::t_8f8950fa318e9c 18-45
+builder/runtime.Dockerfile
+  s_37d3d6814e97b2::t_8f8950fa318e9c 7-8
+builder/systemd_services/akernel-managed-images.service
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-15
+builder/image-bridge/main.go
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-353
+builder/managed-docker/Dockerfile
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-12
+.github/actions/python-distributions/action.yml
+  s_37d3d6814e97b2::t_8f8950fa318e9c 63-68
+deploy/akernel/charts/core/scripts/pin-runtime-rootfs.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-98
+sdk/python/akernel_sdk/_addresses.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 79-83
+deploy/akernel/charts/core/tests/test_pin_runtime_rootfs.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-91
+builder/image-bridge/main_test.go
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-74
+sdk/python/akernel_sdk/_service_process_guest.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-170
+sdk/python/tests/unit/test_adx_backend.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 15,20,22,34,77-308,321-331,338-339,346-347,355-364,385-386,388-391,430-431,445-453,464-471,477-481,494-529,537,718-761
+sdk/python/tests/unit/test_service_process.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-217
+builder/node.Dockerfile
+  s_37d3d6814e97b2::t_8f8950fa318e9c 41-42,480
+sdk/python/pyproject.toml
+  s_37d3d6814e97b2::t_8f8950fa318e9c 7,33-34,47
+sdk/python/akernel_sdk/__init__.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 18-26,118-126,130-138
+sdk/python/akernel_sdk/_image_plan.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-175
+sdk/python/akernel_sdk/_service_process.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-191
+sdk/python/akernel_sdk/_backends/errors.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 17-20,42-45,65-66,82-83
+sdk/python/akernel_sdk/sandbox.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 774,819,859,880,895-897,949
+builder/dind/Dockerfile
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-12
+sdk/python/examples/managed_compose.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-31
+sdk/python/tests/unit/test_snapshot_create.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 66-68,111-112
+builder/managed-docker/test_export_retry.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-192
+sdk/python/examples/compose_checkpoint.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-67
+builder/managed-docker/test_provider_service.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-135
+sdk/python/akernel_sdk/_compose.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-945
+builder/managed-docker/profile_metadata.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-38
+sdk/python/tests/unit/test_fork.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 202-204,309
+builder/image-bridge/NOTICE
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-5
+builder/managed-docker/qualification-sources.json
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-63
+builder/managed-docker/image_provider.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-379
+deploy/akernel/charts/core/templates/node/daemonset.yaml
+  s_37d3d6814e97b2::t_8f8950fa318e9c 5-13,90-117,303-308
+deploy/akernel/charts/core/tests/test_runtime_rootfs_pin.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-87
+sdk/python/tests/unit/test_docker_runtime.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-396
+sdk/python/tests/unit/test_image_plan.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-139
+builder/managed-docker/control-capacity.example.yaml
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-12
+sdk/python/akernel_sdk/_image_resolver.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-246
+builder/managed-docker/provider_service.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-179
+builder/managed-docker/profile.example.toml
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-19
+deploy/README.md
+  s_37d3d6814e97b2::t_8f8950fa318e9c 252-258
+builder/managed-docker/test_image_provider.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-176
+sdk/python/tests/unit/test_compose.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-337
+sdk/python/akernel_sdk/_backends/adx.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 20-21,25-26,37,49,81,144-148,317-318,360-364,366,406-407,451-456,763-765,786,813-814,856-857,865-866,1091-1094,1158-1163,1169-1172,1198-1242,1410-1471,1479,1538-1539,1606,1623
+builder/image-bridge/README.md
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-29
+sdk/python/akernel_sdk/_docker_runtime.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-253
+AGENTS.md
+  s_37d3d6814e97b2::t_8f8950fa318e9c 207-213,1050-1096
+builder/managed-docker/test_profile_metadata.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-17
+builder/managed-docker/test_compose.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-228
+builder/managed-docker/test_publication.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-397
+sdk/python/tests/unit/test_addresses.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 19,25,102-108,122-157
+sdk/python/tests/unit/test_snapshots.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 235-242,257-260
+sdk/python/tests/unit/test_command_compat.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 16-32
+sdk/python/tests/unit/test_managed_runtime_profile.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-220
+sdk/python/docs/managed-compose.md
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-160
+sdk/python/tests/unit/test_compose_network.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-285
+sdk/python/akernel_sdk/_docker_network_guest.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-161
+builder/managed-docker/README.md
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-137
+deploy/standalone/config/config.json
+  s_37d3d6814e97b2::t_8f8950fa318e9c 215-225
+builder/managed-docker/test_compose_outputs.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 1-192
+sdk/python/tests/unit/test_types.py
+  s_37d3d6814e97b2::t_8f8950fa318e9c 75-76,129-135,211,222-224,230-238,240-242,252-254,261-263,269-271
+sdk/python/README.md
+  s_37d3d6814e97b2::t_8f8950fa318e9c 3-4,93-101,494-500,1449-1450,1471-1718
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "c3ddf607e6f1dd87371a442c1084a34b3446a7a9",
+  "prompts": {},
+  "sessions": {
+    "s_37d3d6814e97b2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a586-c4a5-7eb1-b281-03c458202041",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}

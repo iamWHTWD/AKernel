@@ -1,0 +1,23 @@
+.aci.yml
+  s_cb5bc6f9f3633a::t_a08d155eac76ba 19,33
+deploy/internal/build-routing.json
+  s_cb5bc6f9f3633a::t_7993d91f456944 41-42
+deploy/internal/source-lock.json
+  s_cb5bc6f9f3633a::t_e5dde42cb19cd1 365
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "df9a855b7b3ab368e9e313821ed42eb8444f3c75",
+  "prompts": {},
+  "sessions": {
+    "s_cb5bc6f9f3633a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1bf0f-8a65-7c82-98e4-c163d5b53e84",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}

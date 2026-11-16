@@ -1,0 +1,102 @@
+src/control-plane/health-checker/internal/checker/ingress.go
+  s_95500bf9d661cc::t_5a52843a5c0435 24,53
+  s_95500bf9d661cc::t_eafc917b629aee 17
+  s_95500bf9d661cc::t_a22b150a6e1f3d 78
+  s_95500bf9d661cc::t_e1629f5721f2cb 80-81,83-84,86-87
+  s_95500bf9d661cc::t_736f8cfdb5a22f 19-23,45-52
+  s_95500bf9d661cc::t_be5cd1e509fe84 56,58-59,66,73,77,79,89
+src/control-plane/health-checker/internal/checker/sandbox_test.go
+  s_95500bf9d661cc::t_16300bcc6561e0 13,42-43,48-49,54-56,59-60,64-67
+  s_95500bf9d661cc::t_108728829a8e9e 11-12,17-19,23-24,26,30,32,36-41,45-47,57-58,62
+src/control-plane/health-checker/internal/checker/sandbox_impact.go
+  s_95500bf9d661cc::t_a22b150a6e1f3d 7,23,25,91
+  s_95500bf9d661cc::t_eafc917b629aee 58,107
+  s_95500bf9d661cc::t_ab15e5b4336326 69-70
+src/control-plane/health-checker/internal/checker/checker.go
+  s_95500bf9d661cc::t_a611ee1e3b32bb 27,142
+src/control-plane/health-checker/internal/notifier/dingtalk.go
+  s_95500bf9d661cc::t_a611ee1e3b32bb 49
+src/control-plane/health-checker/cmd/health-checker/main_test.go
+  s_95500bf9d661cc::t_a448eb7cf165f8 22
+  s_95500bf9d661cc::t_799e99f23efe54 25,27-34,37-38,40-41,43,46-47
+src/control-plane/health-checker/internal/config/sandbox.go
+  s_95500bf9d661cc::t_eafc917b629aee 9,26,37
+  s_95500bf9d661cc::t_7c842be5c80ddf 4,69,73,133-135
+  s_95500bf9d661cc::t_2fe094bd882d9f 84,117
+  s_95500bf9d661cc::t_87a9f2733d1eaa 76-77,80-83,85,108-109,118
+src/control-plane/health-checker/internal/checker/sandbox_metrics.go
+  s_95500bf9d661cc::t_736f8cfdb5a22f 12-15,89-90
+  s_95500bf9d661cc::t_80f6fd5136b498 48
+  s_95500bf9d661cc::t_eafc917b629aee 56-59,62,64
+  s_95500bf9d661cc::t_be5cd1e509fe84 39,61,71,105,112,117,121-124,126,129-133,137-139,205
+  s_95500bf9d661cc::t_a22b150a6e1f3d 30-35,42,51-52,63,75-83
+  s_95500bf9d661cc::t_4965a730335bdc 37
+src/control-plane/health-checker/README.md
+  s_95500bf9d661cc::t_3bf6945629c908 167
+  s_95500bf9d661cc::t_108728829a8e9e 165,168-172
+  s_95500bf9d661cc::t_833d797662a688 166
+src/control-plane/health-checker/internal/checker/sandbox.go
+  s_95500bf9d661cc::t_736f8cfdb5a22f 22
+  s_95500bf9d661cc::t_1f33dec8f698f6 67-68
+  s_95500bf9d661cc::t_eafc917b629aee 14,33
+  s_95500bf9d661cc::t_7c842be5c80ddf 52-60
+src/control-plane/health-checker/internal/loop/loop_test.go
+  s_95500bf9d661cc::t_3bf6945629c908 22,63-67,100-104
+src/control-plane/health-checker/internal/checker/resources.go
+  s_95500bf9d661cc::t_736f8cfdb5a22f 356
+  s_95500bf9d661cc::t_cd3cebbe1c946a 8,83,116
+  s_95500bf9d661cc::t_eafc917b629aee 21,151,320,343
+  s_95500bf9d661cc::t_30f53b7c87deab 175-176,178-179,186-204,206,211,214-230,251-255
+  s_95500bf9d661cc::t_7c842be5c80ddf 207-210
+src/control-plane/health-checker/internal/alert/latch.go
+  s_95500bf9d661cc::t_a611ee1e3b32bb 137,155
+src/control-plane/health-checker/internal/checker/resources_test.go
+  s_95500bf9d661cc::t_979cf848083a28 7-9,12,21,27-29,40-48,51-53,55,57-58,60-61,63-75,80-85,89,91,96-102,107-108,110-111,115-117,124,127-134,136-137,139,141,143-144,147-154,156-159,163,165-166,170-175,179-180,184-186,188-195,203,206,210,214,217-221,223,226
+  s_95500bf9d661cc::t_3bf6945629c908 32,140,142
+  s_95500bf9d661cc::t_5d61fc8525aebc 30-31,33-37,227-229,231-249,251-252,254-265,267,269-272,276-279,281-283
+  s_95500bf9d661cc::t_16300bcc6561e0 56,92-95,109,112-113,118-123,160-162,176-178,182-183,197,207-209,211-212
+  s_95500bf9d661cc::t_49f4eeb46d9e20 76,103-106,169,199-201
+src/control-plane/health-checker/internal/config/config_test.go
+  s_95500bf9d661cc::t_a14cd18c363948 3
+src/control-plane/health-checker/internal/checker/prometheus.go
+  s_95500bf9d661cc::t_7c842be5c80ddf 142-143,281-283,285
+  s_95500bf9d661cc::t_ab15e5b4336326 65-66,359-360,362-384
+  s_95500bf9d661cc::t_eafc917b629aee 74,83,127,165,297,307,361
+  s_95500bf9d661cc::t_be5cd1e509fe84 12,14,164,166,169-171,177-200,202-215,217-218,229-254,261-262,264-280,284,286-296,298-305,311-313,315-320,329,341-358
+  s_95500bf9d661cc::t_cd3cebbe1c946a 13,172-176,216,255-260,263,306,308-309,314,321-328,330-340
+  s_95500bf9d661cc::t_1f33dec8f698f6 18-23
+  s_95500bf9d661cc::t_a22b150a6e1f3d 8,167-168,201,219-228,310
+src/control-plane/health-checker/internal/config/metrics_test.go
+  s_95500bf9d661cc::t_108728829a8e9e 8,10,19-20,24-27
+  s_95500bf9d661cc::t_49f4eeb46d9e20 30-32
+  s_95500bf9d661cc::t_16300bcc6561e0 11-15,29
+src/control-plane/health-checker/internal/config/metrics.go
+  s_95500bf9d661cc::t_2fe094bd882d9f 142
+  s_95500bf9d661cc::t_ab15e5b4336326 85
+  s_95500bf9d661cc::t_87a9f2733d1eaa 127-128,130-134,143-146,156-169,171-180,182
+  s_95500bf9d661cc::t_7c842be5c80ddf 4,117,126,155,170
+  s_95500bf9d661cc::t_eafc917b629aee 27,39
+src/control-plane/health-checker/internal/loop/loop.go
+  s_95500bf9d661cc::t_a611ee1e3b32bb 41
+  s_95500bf9d661cc::t_553c5960b2a770 19-27,33-40,43,59-67
+src/control-plane/health-checker/internal/checker/window.go
+  s_95500bf9d661cc::t_736f8cfdb5a22f 4,86-87,93-121,123,125,127-170,175-206
+  s_95500bf9d661cc::t_eafc917b629aee 10,54,171
+  s_95500bf9d661cc::t_7c842be5c80ddf 88-92,122,124,126,172-174
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "573567f8980b3b6ee042eb454e7ffc6b200e16ac",
+  "prompts": {},
+  "sessions": {
+    "s_95500bf9d661cc": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12e39-4e84-7fa2-99b3-81fcb45394a6",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}

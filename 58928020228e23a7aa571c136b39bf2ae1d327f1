@@ -1,0 +1,56 @@
+src/control-plane/node-upgrade/akernel_upgrade/engine.py
+  s_a3812cd013d54e::t_fb24f3840379f8 52-53,55,59,144-147,159,172-173,199-200,218,506-507,579-583,587,590-596,598-599,601-602,789,791,945,962,965
+  s_a3812cd013d54e::t_9c1984e183f288 607-608,619-621,632-637,640-643,645-648,652-654,659,695-698,717,747,764-765,798-810,905,909-916
+  s_a3812cd013d54e::t_b7b277b28afcd1 182
+  s_a3812cd013d54e::t_43298ea3637d65 624-626,638-639,680,891
+  s_a3812cd013d54e::t_2ee8af642b57ee 792-793
+  s_a3812cd013d54e::t_594c581a6fd225 679,890
+  s_a3812cd013d54e::t_709fca2910f077 904
+src/control-plane/node-upgrade/tests/test_upgrade.py
+  s_a3812cd013d54e::t_9ea9a196d74ffa 183-189,212
+  s_a3812cd013d54e::t_b7b277b28afcd1 182,224
+  s_a3812cd013d54e::t_0615eaf82eaac6 30,121,124,131,159,163,216,225,236,247,261,273-274,279,332,363,382,389-390,392-396,398-399,401-403
+  s_a3812cd013d54e::t_a3dfd40cc1e0c0 190-211
+  s_a3812cd013d54e::t_c364b1e83bba2a 340-341
+src/control-plane/node-upgrade/manage.py
+  s_a3812cd013d54e::t_9ad947003b724a 114
+  s_a3812cd013d54e::t_fb24f3840379f8 69,78,81,117
+src/control-plane/node-upgrade/requirements.txt
+  s_a3812cd013d54e::t_fb24f3840379f8 1
+src/control-plane/node-upgrade/job.yaml
+  s_a3812cd013d54e::t_217be86cd01f2a 3
+src/control-plane/node-upgrade/config.example.json
+  s_a3812cd013d54e::t_fb24f3840379f8 21
+src/control-plane/node-upgrade/tests/test_migration_replay.py
+  s_a3812cd013d54e::t_43298ea3637d65 50,118-139,149,152-153,157-166
+  s_a3812cd013d54e::t_93f1eea574a6f5 150-151,154-156
+  s_a3812cd013d54e::t_9c1984e183f288 5-7,14
+  s_a3812cd013d54e::t_436d1acb88b685 1-4,8-13,15-49,51-117,167-170
+  s_a3812cd013d54e::t_709fca2910f077 140-148
+src/control-plane/node-upgrade/bootstrap.py
+  s_a3812cd013d54e::t_2ee8af642b57ee 34-35,38-39,43,45,47-48,51,57
+src/control-plane/node-upgrade/akernel_upgrade/protocol.py
+  s_a3812cd013d54e::t_9c1984e183f288 32-33
+  s_a3812cd013d54e::t_fb24f3840379f8 23,75-76,79-80
+  s_a3812cd013d54e::t_2ee8af642b57ee 49,56-58
+src/control-plane/node-upgrade/README.md
+  s_a3812cd013d54e::t_43298ea3637d65 124
+  s_a3812cd013d54e::t_b7b277b28afcd1 7-8,29,37
+  s_a3812cd013d54e::t_217be86cd01f2a 3,10-11,31,41,50-52,73,77,79,81,98,102,118,126,139
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "58928020228e23a7aa571c136b39bf2ae1d327f1",
+  "prompts": {},
+  "sessions": {
+    "s_a3812cd013d54e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a167bf-f21f-7162-b623-da7daeda4712",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}

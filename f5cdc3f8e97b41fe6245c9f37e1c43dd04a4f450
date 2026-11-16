@@ -1,0 +1,25 @@
+deploy/internal/upstream.json
+  s_37d3d6814e97b2::t_889be9df86d0c8 4
+.aci.yml
+  s_37d3d6814e97b2::t_acd4a9bee2901e 33
+deploy/internal/sandboxd-source.json
+  s_37d3d6814e97b2::t_889be9df86d0c8 3-5
+deploy/internal/source-lock.json
+  s_37d3d6814e97b2::t_4b1f242fc05718 285,385,425,841,847-848
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "f5cdc3f8e97b41fe6245c9f37e1c43dd04a4f450",
+  "prompts": {},
+  "sessions": {
+    "s_37d3d6814e97b2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a586-c4a5-7eb1-b281-03c458202041",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}

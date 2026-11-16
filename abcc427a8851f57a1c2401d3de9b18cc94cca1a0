@@ -1,0 +1,65 @@
+deploy/terraform/huaweicloud/README.md
+  s_333f90650885a6::t_0c775a2440f2c8 9-29
+deploy/README.md
+  s_333f90650885a6::t_78f4463117037f 22-23,39-45,54-55,60-61,69-71
+  s_333f90650885a6::t_d28e15990f7a72 62-68
+deploy/standalone/README.md
+  s_333f90650885a6::t_78f4463117037f 72-79
+AGENTS.md
+  s_333f90650885a6::t_78f4463117037f 243-247,251-257,737-740
+  s_333f90650885a6::t_d28e15990f7a72 248-249
+  s_333f90650885a6::t_74588bed75029b 741
+.github/workflows/ci.yml
+  s_333f90650885a6::t_97267ae9e1cf2d 306
+deploy/terraform/test_adx_contract.py
+  s_333f90650885a6::t_e0eda8d67790f5 8,19-176,340,344-353,357,359
+sdk/python/tests/e2e/standalone/test_sdk_contracts.py
+  s_333f90650885a6::t_97267ae9e1cf2d 19,33-81
+deploy/terraform/aliyun/variables.tf
+  s_333f90650885a6::t_0c775a2440f2c8 811-826
+deploy/terraform/aliyun/README.md
+  s_333f90650885a6::t_0c775a2440f2c8 13-33
+builder/scripts/prepare-adx-config.py
+  s_333f90650885a6::t_db382d0216095f 2,13-56,99,104-105,184-185,187-188
+deploy/scripts/configure.sh
+  s_333f90650885a6::t_0c775a2440f2c8 34-35,134-141,298-306,320,412-413,460-461,485-486
+builder/node.Dockerfile
+  s_333f90650885a6::t_db382d0216095f 479-480,482-485
+builder/scripts/test_afs_config.py
+  s_333f90650885a6::t_d86b19241f1d50 3,28-145
+  s_333f90650885a6::t_674e28e0a6cb05 146-147
+deploy/pvm-runtime.md
+  s_333f90650885a6::t_78f4463117037f 194-200
+deploy/terraform/aliyun/terraform.tfvars.example
+  s_333f90650885a6::t_0c775a2440f2c8 145-149
+Makefile
+  s_333f90650885a6::t_0c775a2440f2c8 28-29,55,107-108
+deploy/terraform/huaweicloud/main.tf
+  s_333f90650885a6::t_6cc9b61d22e6f6 90-92
+deploy/terraform/huaweicloud/terraform.tfvars.example
+  s_333f90650885a6::t_0c775a2440f2c8 91-95
+deploy/terraform/huaweicloud/values-akernel.yaml.tmpl
+  s_333f90650885a6::t_0c775a2440f2c8 145-147
+deploy/terraform/aliyun/main.tf
+  s_333f90650885a6::t_6cc9b61d22e6f6 138-140
+deploy/terraform/huaweicloud/variables.tf
+  s_333f90650885a6::t_0c775a2440f2c8 833-848
+deploy/terraform/aliyun/values-akernel.yaml.tmpl
+  s_333f90650885a6::t_0c775a2440f2c8 168-170
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "abcc427a8851f57a1c2401d3de9b18cc94cca1a0",
+  "prompts": {},
+  "sessions": {
+    "s_333f90650885a6": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1ac15-f971-7b03-9408-0b629f696ae9",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}
