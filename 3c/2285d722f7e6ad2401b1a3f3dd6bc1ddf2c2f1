@@ -1,0 +1,30 @@
+deploy/akernel/charts/core/values.yaml
+  s_e4a0f48a921d4c::t_d95fced6e7da4b 474,562
+deploy/cluster/sa127-sqa-mainsite/akernel-core-stable-kata.yaml
+  s_e4a0f48a921d4c::t_d95fced6e7da4b 218
+  s_7371fa68f936af::t_8296a53d2b32b0 279
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "3c2285d722f7e6ad2401b1a3f3dd6bc1ddf2c2f1",
+  "prompts": {},
+  "sessions": {
+    "s_7371fa68f936af": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1bef7-ee79-7d21-ab19-a0b4dcecac08",
+        "model": "gpt-6.1-terra"
+      },
+      "human_author": "yao <zhouyao.zhou@antgroup.com>"
+    },
+    "s_e4a0f48a921d4c": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a04285-c85e-7d30-96b4-94b7960fff06",
+        "model": "gpt-6.1-terra"
+      },
+      "human_author": "yao <zhouyao.zhou@antgroup.com>"
+    }
+  }
+}
