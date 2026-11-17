@@ -1,0 +1,27 @@
+.aci.yml
+  s_37d3d6814e97b2::t_8d702444eceb8e 19,33
+deploy/internal/upstream.json
+  s_37d3d6814e97b2::t_1fc0d2eca74dfa 4
+deploy/internal/node.Dockerfile
+  s_37d3d6814e97b2::t_8d702444eceb8e 42-43
+deploy/internal/runtime.Dockerfile
+  s_37d3d6814e97b2::t_8d702444eceb8e 8-9
+deploy/internal/source-lock.json
+  s_37d3d6814e97b2::t_789b557cabb9d5 135,180,190,425,435
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "c88838f142b7f9d3fb8da76abd37c14f36f14993",
+  "prompts": {},
+  "sessions": {
+    "s_37d3d6814e97b2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a586-c4a5-7eb1-b281-03c458202041",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}
