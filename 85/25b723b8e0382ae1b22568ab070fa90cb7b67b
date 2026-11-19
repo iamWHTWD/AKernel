@@ -1,0 +1,48 @@
+builder/scripts/prepare-e2b-runtime.py
+  s_9b09f9dfa8b043::t_e335c74603af41 11,31
+  s_9b09f9dfa8b043::t_6361f23ac9174a 12-13,24-30,32-38,62-64,79,81
+builder/runtime.Dockerfile
+  s_9b09f9dfa8b043::t_6361f23ac9174a 40,93-96
+builder/scripts/test_runtime_contract.py
+  s_9b09f9dfa8b043::t_e335c74603af41 135,142
+  s_9b09f9dfa8b043::t_75e2e923ea041e 137,143-144
+builder/scripts/test_e2b_runtime.py
+  s_9b09f9dfa8b043::t_e335c74603af41 2,9,67-116
+  s_9b09f9dfa8b043::t_5d5eba35384b29 117
+builder/node.Dockerfile
+  s_9b09f9dfa8b043::t_1e09861bdfd824 7,147-169,447,450
+  s_9b09f9dfa8b043::t_75e2e923ea041e 565,568
+builder/README.md
+  s_9b09f9dfa8b043::t_c6215753f44c2e 21-22,30-31
+  s_9b09f9dfa8b043::t_976ae80dc54bb8 5,7-9,20,26-29,33-35,80
+  s_9b09f9dfa8b043::t_ab109990575cf7 32
+builder/scripts/verify-e2b-release.py
+  s_9b09f9dfa8b043::t_59b2c54b0a30de 6,12-14,33,35-38
+  s_9b09f9dfa8b043::t_6361f23ac9174a 4-5,11,22-32,34,42-51
+AGENTS.md
+  s_9b09f9dfa8b043::t_976ae80dc54bb8 154-160
+builder/scripts/test-build-image.py
+  s_9b09f9dfa8b043::t_66519955411579 45,52,57-67,74
+  s_9b09f9dfa8b043::t_c6215753f44c2e 255
+  s_9b09f9dfa8b043::t_1e09861bdfd824 46-48,55
+deploy/scripts/build-image.sh
+  s_9b09f9dfa8b043::t_c6215753f44c2e 316-318
+  s_9b09f9dfa8b043::t_1e09861bdfd824 320,323,412
+  s_9b09f9dfa8b043::t_6361f23ac9174a 24,324-326
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "8525b723b8e0382ae1b22568ab070fa90cb7b67b",
+  "prompts": {},
+  "sessions": {
+    "s_9b09f9dfa8b043": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1ed0c-e0a2-7ef2-8d8d-c6bdaac7d15e",
+        "model": "gpt-6.2-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}
