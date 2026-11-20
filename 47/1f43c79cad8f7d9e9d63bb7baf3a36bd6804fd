@@ -1,0 +1,32 @@
+deploy/README.md
+  s_e1a56ca56f52e9::t_e21d509306402d 20-21
+AGENTS.md
+  s_e1a56ca56f52e9::t_e21d509306402d 237-238,464
+  s_e1a56ca56f52e9::t_06f04f2cb12c65 465
+.gitmodules
+  s_e1a56ca56f52e9::t_e21d509306402d 3
+deploy/standalone/README.md
+  s_e1a56ca56f52e9::t_e21d509306402d 104-105
+sdk/python/README.md
+  s_e1a56ca56f52e9::t_e434d0ee6776b4 18,514-532
+sdk/python/tests/integration/test_sandbox.py
+  s_e1a56ca56f52e9::t_d1081dc58bb253 129-167,250-296
+src/sandboxd
+  s_e1a56ca56f52e9::t_bcb07618309a53 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "471f43c79cad8f7d9e9d63bb7baf3a36bd6804fd",
+  "prompts": {},
+  "sessions": {
+    "s_e1a56ca56f52e9": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a18148-2b0a-7fe3-9d6b-ba2f9ecd9fdb",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+builder/managed-docker/qualification-sources.json
+  s_02f2190c22c87a::t_82e67f357dd7af 4,38,42,50
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "84e1c03cba8ec1b949aa2c3c6c7c66ab991c8f85",
+  "prompts": {},
+  "sessions": {
+    "s_02f2190c22c87a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1bfba-40d5-7f53-ae3b-b4c55019c4d8",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}

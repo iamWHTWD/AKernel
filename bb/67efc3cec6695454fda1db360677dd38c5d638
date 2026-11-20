@@ -1,0 +1,62 @@
+deploy/internal/source_snapshot.py
+  s_9190abe4044263::t_65927f6997dea4 23,362-365,376,378-379,386,406-407,411-412,422-426
+deploy/internal/README.md
+  s_9190abe4044263::t_a3bca4ab8f7aba 140,145,147-148
+  s_9190abe4044263::t_cd33d072a536de 7,9,11,120,135,137,143,151
+  s_9190abe4044263::t_cca83b21d3b3c2 146
+deploy/internal/source-lock.json
+  s_9190abe4044263::t_4fe13849af0b3a 440
+  s_9190abe4044263::t_0512691a7c4009 355,360,365,373-382,390,395,410,415
+  s_9190abe4044263::t_34b8ccafce9792 350
+deploy/internal/runtime_contract.py
+  s_9190abe4044263::t_65927f6997dea4 11-12,50-55
+  s_9190abe4044263::t_b09167a9fb1676 56-57
+deploy/internal/test_aci.py
+  s_9190abe4044263::t_cd33d072a536de 474,476-483,487-503
+  s_9190abe4044263::t_9104ee7f7d6123 469
+  s_9190abe4044263::t_292dc15ec4839a 14,504-508
+deploy/internal/aci.yml.in
+  s_9190abe4044263::t_12eee39c25b93a 19
+deploy/internal/runtime.Dockerfile
+  s_9190abe4044263::t_65927f6997dea4 5,17-18,20-21,24-25,28,40-56
+.aci-erofs.yml
+  s_9190abe4044263::t_9104ee7f7d6123 10,13-16,25,83-91
+  s_9190abe4044263::t_65927f6997dea4 12,17,19-24,26-82
+deploy/internal/build_runtime_from_erofs.py
+  s_9190abe4044263::t_32e875fe7cdfde 1,3-14,17-50,52-56,75-82,88,98-108,110-112,115,117-118,120,122-126
+  s_9190abe4044263::t_ce598b3fa93079 2,15-16,51,57-74,83-87,89-97,109,113-114,116,119,121
+deploy/internal/test_source_snapshot.py
+  s_9190abe4044263::t_4fe13849af0b3a 97
+  s_9190abe4044263::t_cd33d072a536de 361-364,367-370
+deploy/internal/build_erofs.sh
+  s_9190abe4044263::t_000c1d05701a79 1,4-63
+deploy/internal/aci-erofs.yml.in
+  s_9190abe4044263::t_9104ee7f7d6123 10,13-16,20-26
+  s_9190abe4044263::t_000c1d05701a79 12,17,19
+deploy/internal/node.Dockerfile
+  s_9190abe4044263::t_65927f6997dea4 56-57,59-60
+deploy/internal/aci.py
+  s_9190abe4044263::t_65927f6997dea4 17,445-447
+  s_9190abe4044263::t_12eee39c25b93a 47,435-438,443-444,448-459,469,505,507-511,513-525,607-615,617-619
+  s_9190abe4044263::t_000c1d05701a79 504
+deploy/internal/runtime-oss.Dockerfile.in
+  s_9190abe4044263::t_000c1d05701a79 4-6,9,21-37
+AGENTS.md
+  s_9190abe4044263::t_081bd93c552729 948
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "bb67efc3cec6695454fda1db360677dd38c5d638",
+  "prompts": {},
+  "sessions": {
+    "s_9190abe4044263": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1c4e0-26d3-77e3-a282-46973c02292a",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}

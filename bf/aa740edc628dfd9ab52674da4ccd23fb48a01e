@@ -1,0 +1,21 @@
+deploy/terraform/test_node_image_pull_terraform.py
+  s_4db5b7b66ad54d::t_24d4d97bd144b6 9,11,43,85-103
+deploy/terraform/aliyun/main.tf
+  s_4db5b7b66ad54d::t_6370174fdba042 918
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "bfaa740edc628dfd9ab52674da4ccd23fb48a01e",
+  "prompts": {},
+  "sessions": {
+    "s_4db5b7b66ad54d": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a13944-d7d4-79a2-992a-db41f4daa0e7",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}

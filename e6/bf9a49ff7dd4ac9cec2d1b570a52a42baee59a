@@ -1,0 +1,19 @@
+deploy/akernel/charts/monitor/dashboards/akernel-node-resources.json
+  s_5dcbbca748fd45::t_97ee3125bd246c 121,143,158-176,208,219,222-243
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "e6bf9a49ff7dd4ac9cec2d1b570a52a42baee59a",
+  "prompts": {},
+  "sessions": {
+    "s_5dcbbca748fd45": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a4e5-8a67-7ff3-853c-8cc6e8d34080",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}

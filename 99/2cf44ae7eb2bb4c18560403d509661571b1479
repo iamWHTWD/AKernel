@@ -1,0 +1,19 @@
+src/sandboxd
+  s_880b4270876978::t_c44a9a596cbfb8 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "992cf44ae7eb2bb4c18560403d509661571b1479",
+  "prompts": {},
+  "sessions": {
+    "s_880b4270876978": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12e08-acf1-7402-b1a2-8732163df82d",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}

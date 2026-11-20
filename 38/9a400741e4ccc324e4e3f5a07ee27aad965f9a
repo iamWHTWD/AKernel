@@ -1,0 +1,33 @@
+src/control-plane/scaling-controller/go.mod
+  s_880b4270876978::t_b66c6d6e75f5cd 11,50
+src/control-plane/scaling-controller/internal/config/parent_memory_test.go
+  s_880b4270876978::t_adac6330874f2c 11-15,17-23,25-28,31-33
+  s_880b4270876978::t_7d7c7b5d7ee350 8
+src/control-plane/scaling-controller/internal/executor/parent_memory_test.go
+  s_880b4270876978::t_427ffd13104e15 124-126
+  s_880b4270876978::t_4b5325a9223d99 53-67
+  s_880b4270876978::t_fdc9c695ca8005 19-20,24,34,45,74,76,78-90,97-101,128
+  s_880b4270876978::t_95db1d63a986ef 73,75,96,102,104,127,134-146
+  s_880b4270876978::t_8f8b9db53b45b0 8,17,23,26-27,30,32-33,35-40,42-44,46-52,68-69,71-72,77,91-94,103,105-113,115-123,133
+  s_880b4270876978::t_0b1edca21bc184 70
+src/control-plane/scaling-controller/internal/executor/parent_memory_metrics_test.go
+  s_880b4270876978::t_354cda76d74969 125-145
+  s_880b4270876978::t_a00ae4257d0e1b 10-11,15-17,20-22,25-26,28-29,31-36,38-49,54-56,59,61-62,64,66,69,72-76,78,80-97,100-102,104-106,108-118,149
+  s_880b4270876978::t_1c44870842f267 37,50-53,57-58,60,77,79,98-99,107,119,123-124,146-148
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "389a400741e4ccc324e4e3f5a07ee27aad965f9a",
+  "prompts": {},
+  "sessions": {
+    "s_880b4270876978": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12e08-acf1-7402-b1a2-8732163df82d",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}

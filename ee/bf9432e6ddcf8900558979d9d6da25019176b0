@@ -1,0 +1,35 @@
+sdk/python/tests/unit/test_e2e_memory_budget_fixture.py
+  s_333f90650885a6::t_a775e327b1d101 64-66,69-70
+  s_333f90650885a6::t_320a43cf74a371 1-2,4-12,18,20,22-24,33-40,48-51,58-63,67-68,71-74,76-84
+  s_333f90650885a6::t_0e150540038209 3,14-17,19,41-42,47,52,57,75
+  s_333f90650885a6::t_7a618447411919 13
+  s_333f90650885a6::t_53feff803c190b 21,25-32,43-46,53-56
+deploy/pvm/run-adx-ci.sh
+  s_333f90650885a6::t_320a43cf74a371 137-142
+deploy/pvm/test_host_profile.py
+  s_333f90650885a6::t_320a43cf74a371 5,49-61,63-87
+  s_333f90650885a6::t_0adc20e435559a 88-89
+  s_333f90650885a6::t_a775e327b1d101 62
+sdk/python/tests/e2e/standalone/test_sdk_contracts.py
+  s_333f90650885a6::t_53feff803c190b 84-86
+  s_333f90650885a6::t_320a43cf74a371 44-45
+  s_333f90650885a6::t_0e150540038209 47-50,52,62-68,72,77,87-89,94-97,101
+deploy/terraform/test_adx_contract.py
+  s_333f90650885a6::t_1ca8ef177653d5 22-24,52,124-126
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "eebf9432e6ddcf8900558979d9d6da25019176b0",
+  "prompts": {},
+  "sessions": {
+    "s_333f90650885a6": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1ac15-f971-7b03-9408-0b629f696ae9",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": null
+    }
+  }
+}

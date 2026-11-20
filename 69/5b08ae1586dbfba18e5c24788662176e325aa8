@@ -1,0 +1,33 @@
+builder/README.md
+  s_566a648e243a57::t_9782d2d18b5545 168
+builder/scripts/test_runtime_contract.py
+  s_566a648e243a57::t_9782d2d18b5545 81,83
+sdk/python/tests/unit/test_init_timeout.py
+  s_566a648e243a57::t_9782d2d18b5545 44
+builder/runtime.Dockerfile
+  s_566a648e243a57::t_9782d2d18b5545 7-8
+builder/node.Dockerfile
+  s_566a648e243a57::t_9782d2d18b5545 41-42
+sdk/python/pyproject.toml
+  s_566a648e243a57::t_9782d2d18b5545 31
+deploy/README.md
+  s_566a648e243a57::t_9782d2d18b5545 40
+src/agent-dx
+  s_566a648e243a57::t_fd9463b681cbdc 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "695b08ae1586dbfba18e5c24788662176e325aa8",
+  "prompts": {},
+  "sessions": {
+    "s_566a648e243a57": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1ac15-a9a0-7622-8413-d97c963489e6",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}

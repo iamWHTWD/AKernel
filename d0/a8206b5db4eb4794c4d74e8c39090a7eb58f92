@@ -1,0 +1,24 @@
+AGENTS.md
+  s_6888c75e518eb6::t_bbe5df232ec986 944
+src/control-plane/scaling-controller/README.md
+  s_6888c75e518eb6::t_bbe5df232ec986 5,121,125
+  s_6888c75e518eb6::t_216cad92ed85e3 82
+deploy/internal/source-lock.json
+  s_6888c75e518eb6::t_496e6235dcca58 450
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "d0a8206b5db4eb4794c4d74e8c39090a7eb58f92",
+  "prompts": {},
+  "sessions": {
+    "s_6888c75e518eb6": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a5f3-ccad-7393-ad84-828c9886f444",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}

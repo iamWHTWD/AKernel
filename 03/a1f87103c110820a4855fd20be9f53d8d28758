@@ -1,0 +1,43 @@
+src/control-plane/health-checker/cmd/health-checker/main_test.go
+  s_23f6b6d8992f0b::t_8e6d30578cde7b 20,33,35-37,40-41,44
+src/control-plane/health-checker/FUNCTIONAL_OVERVIEW.md
+  s_23f6b6d8992f0b::t_a3a2e6097232f9 68,168
+  s_23f6b6d8992f0b::t_213d2197be2178 220-222,226,228,250
+  s_23f6b6d8992f0b::t_a4931f1552c6a9 175
+  s_23f6b6d8992f0b::t_881abafc5196a6 10,192,254-256,260,262,266-272,274,276
+src/control-plane/health-checker/README.md
+  s_23f6b6d8992f0b::t_c98ccb5ba85adc 53,70
+  s_23f6b6d8992f0b::t_881abafc5196a6 196
+  s_23f6b6d8992f0b::t_a3a2e6097232f9 51,66
+  s_23f6b6d8992f0b::t_2b82f64c59ab11 52
+src/control-plane/health-checker/internal/checker/prometheus.go
+  s_23f6b6d8992f0b::t_e6cc8ec4e6ac03 256,266-268
+  s_23f6b6d8992f0b::t_a48287ad736513 131,135,255,257-265,269-271
+src/control-plane/health-checker/internal/checker/core_test.go
+  s_23f6b6d8992f0b::t_75df6fd0bc7e75 42,56,65-66,68,96-97,99,106,115-116,123-125,164-167,171,173,175,177,186,190,203,206,208
+  s_23f6b6d8992f0b::t_8e6d30578cde7b 30,185,189,191-202,211,214
+  s_23f6b6d8992f0b::t_9eb149f2e149ad 176
+  s_23f6b6d8992f0b::t_07e50d31a4f1ce 90,98,118,184,204-205,207,210,212
+  s_23f6b6d8992f0b::t_65e11658a96418 187-188
+  s_23f6b6d8992f0b::t_e4f5d16f42874e 55,57-62
+src/control-plane/health-checker/internal/checker/business_metrics.go
+  s_23f6b6d8992f0b::t_a48287ad736513 48-49,51,57,66,68,71-73,168
+deploy/internal/source-lock.json
+  s_23f6b6d8992f0b::t_9d05fea9692e6e 280,290,300,340,350,355
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "03a1f87103c110820a4855fd20be9f53d8d28758",
+  "prompts": {},
+  "sessions": {
+    "s_23f6b6d8992f0b": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a19c74-2965-76e1-a4a4-233d6f1a32c7",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}

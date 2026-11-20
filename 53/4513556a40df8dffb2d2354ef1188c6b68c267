@@ -1,0 +1,19 @@
+deploy/cluster/sa127-sqa-mainsite/akernel-core-test-yanwen.yaml
+  s_7371fa68f936af::t_214c71b3e311b2 278
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "534513556a40df8dffb2d2354ef1188c6b68c267",
+  "prompts": {},
+  "sessions": {
+    "s_7371fa68f936af": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1bef7-ee79-7d21-ab19-a0b4dcecac08",
+        "model": "gpt-6.1-terra"
+      },
+      "human_author": "yao <zhouyao.zhou@antgroup.com>"
+    }
+  }
+}

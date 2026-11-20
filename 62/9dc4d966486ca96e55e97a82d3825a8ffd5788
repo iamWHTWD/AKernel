@@ -1,0 +1,29 @@
+deploy/akernel/charts/core/tests/test_shared_checkpoint_storage.py
+  s_333f90650885a6::t_152e88996110aa 7,111-146,150-161
+  s_333f90650885a6::t_2a80a006ff240d 81-94,147-149
+deploy/standalone/start.sh
+  s_333f90650885a6::t_152e88996110aa 348-349,353,355,357
+  s_333f90650885a6::t_2a80a006ff240d 354,364
+deploy/akernel/charts/core/templates/node/configmap.yaml
+  s_333f90650885a6::t_2a80a006ff240d 69
+  s_333f90650885a6::t_152e88996110aa 70-73,75-76,79
+deploy/standalone/test_start_config.py
+  s_333f90650885a6::t_152e88996110aa 163-192,196-207
+  s_333f90650885a6::t_2a80a006ff240d 144-155,193-195
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "629dc4d966486ca96e55e97a82d3825a8ffd5788",
+  "prompts": {},
+  "sessions": {
+    "s_333f90650885a6": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1ac15-f971-7b03-9408-0b629f696ae9",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}

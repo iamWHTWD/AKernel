@@ -1,0 +1,19 @@
+docs/operations/kata-cpu-sizing-20261029.md
+  s_e4a0f48a921d4c::t_9f136a11ba1fa4 18,21,50-54,78-97
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "e313e56d202df18e606ce43f2f6e3d2fd70af35d",
+  "prompts": {},
+  "sessions": {
+    "s_e4a0f48a921d4c": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a04285-c85e-7d30-96b4-94b7960fff06",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "yao <zhouyao.zhou@antgroup.com>"
+    }
+  }
+}

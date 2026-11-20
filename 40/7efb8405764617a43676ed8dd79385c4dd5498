@@ -1,0 +1,48 @@
+src/control-plane/scaling-controller/internal/executor/parent_memory_test.go
+  s_880b4270876978::t_56512792b0863a 47,136
+src/control-plane/scaling-controller/internal/executor/parent_memory_metrics.go
+  s_880b4270876978::t_56b13293719ffc 48,198
+src/control-plane/scaling-controller/internal/executor/metricsource.go
+  s_880b4270876978::t_56b13293719ffc 93-97
+src/control-plane/scaling-controller/README.md
+  s_880b4270876978::t_9a0f5ad78d9515 53-82
+src/control-plane/scaling-controller/internal/executor/node_memory_metrics_test.go
+  s_880b4270876978::t_12270401a9343b 93-97
+  s_880b4270876978::t_5313f6ba398d42 1-92,98-192
+src/control-plane/scaling-controller/hack/config.yaml
+  s_880b4270876978::t_9a0f5ad78d9515 20-23
+src/control-plane/scaling-controller/internal/executor/utilization_capacity.go
+  s_880b4270876978::t_9a0f5ad78d9515 168
+  s_880b4270876978::t_56512792b0863a 97,111,161
+src/control-plane/scaling-controller/internal/config/types_test.go
+  s_880b4270876978::t_5313f6ba398d42 56-74
+src/control-plane/scaling-controller/internal/config/types.go
+  s_880b4270876978::t_56b13293719ffc 85,91-99,218-224
+  s_880b4270876978::t_7f145b37910c44 225
+src/control-plane/scaling-controller/internal/executor/node_memory_metrics.go
+  s_880b4270876978::t_73706117eedd0b 13,15-16,20-27,34-58,60-64
+  s_880b4270876978::t_56b13293719ffc 1-12,14,17-19,65-131
+  s_880b4270876978::t_9a0f5ad78d9515 28-33,59
+src/control-plane/scaling-controller/internal/executor/reconciler.go
+  s_880b4270876978::t_12270401a9343b 105,131-134
+  s_880b4270876978::t_56512792b0863a 135,198,690,695,698-699,712,714-716,718,724,753,1112
+  s_880b4270876978::t_73706117eedd0b 16,696-697,703-708,711,1016,1110-1111,1119
+src/control-plane/scaling-controller/internal/executor/utilization_capacity_test.go
+  s_880b4270876978::t_56512792b0863a 96,178
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "407efb8405764617a43676ed8dd79385c4dd5498",
+  "prompts": {},
+  "sessions": {
+    "s_880b4270876978": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12e08-acf1-7402-b1a2-8732163df82d",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}

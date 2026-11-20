@@ -1,0 +1,120 @@
+src/control-plane/scaling-controller/internal/executor/releaser.go
+  s_72f7e15cf1af9f::t_618b2ebeec0684 62,64,340-343
+  s_72f7e15cf1af9f::t_7042addd49b006 63
+src/control-plane/scaling-controller/internal/executor/auto_reboot.go
+  s_72f7e15cf1af9f::t_6c532a11855732 18,25-60,69,73-74,76,80-89,91-190,246,263-333,348,353,358,367,373,379,382,386,392,426,453,460,470,494,498,506,523,536,542,562
+  s_72f7e15cf1af9f::t_96d17e053fe581 22
+  s_72f7e15cf1af9f::t_618b2ebeec0684 66,70,193,196,199,202,210,216,244,347,365,380,383,387,390,413,416,424,432,436,440,451,459,463,468,477,489,492,499,504,512,516,521,531,534,541,547-553,557,560
+  s_72f7e15cf1af9f::t_edbb1fabb9599f 1-17,19-21,23-24,61-65,67-68,71-72,75,77-79,90,191-192,194-195,197-198,200-201,203-209,211-215,217-243,245,247-262,334-346,349-352,354-357,359-364,366,368-372,374-378,381,384-385,388-389,391,393-412,414-415,417-423,425,427-431,433-435,437-439,441-450,452,454-458,461-462,464-467,469,471-476,478-488,490-491,493,495-497,500-503,505,507-511,513-515,517-520,522,524-530,532-533,535,537-540,543-546,554-556,558-559,561
+deploy/akernel/charts/core/templates/scaling-controller/deployment.yaml
+  s_72f7e15cf1af9f::t_07ccd88b4d823b 2,43-46,62-63,65,76-86,89-93,118-122,124-134
+builder/node.Dockerfile
+  s_72f7e15cf1af9f::t_01d140404bae6b 234-241,566,637
+src/control-plane/scaling-controller/internal/node/pods.go
+  s_72f7e15cf1af9f::t_5d02e4c2d89de2 135
+deploy/akernel/charts/core/values.yaml
+  s_72f7e15cf1af9f::t_5bf10691282678 138-142
+  s_72f7e15cf1af9f::t_07ccd88b4d823b 655-661
+  s_72f7e15cf1af9f::t_5cb836256816a1 662-671
+builder/patches/sandboxd-auto-reboot.patch
+  s_72f7e15cf1af9f::t_1acad843990904 62,89,93-97,104,307,310,324-325,333-368,492,495,507-508,569-595
+  s_72f7e15cf1af9f::t_fa12d31fe9e5f6 1-61,63-88,90-92,98-103,105-306,308-309,311-323,326-332,369-491,493-494,496-506,509-568,596-650
+deploy/akernel/charts/core/templates/node/daemonset.yaml
+  s_72f7e15cf1af9f::t_fa12d31fe9e5f6 3,6,11
+  s_72f7e15cf1af9f::t_07ccd88b4d823b 2,57-59,156-182,215-221,301-326
+  s_72f7e15cf1af9f::t_f7a6f3706dd910 4-5,7-10
+  s_72f7e15cf1af9f::t_e013cae789b9ee 222
+src/control-plane/scaling-controller/README.md
+  s_72f7e15cf1af9f::t_618b2ebeec0684 15-23,25-43,45,47,49,51,55-56,60
+  s_72f7e15cf1af9f::t_3030bdedb9d309 24,44,46,50,52-54,58-59
+  s_72f7e15cf1af9f::t_1acad843990904 48,57
+deploy/akernel/charts/core/templates/scaling-controller/clusterrole.yaml
+  s_72f7e15cf1af9f::t_07ccd88b4d823b 28-35
+AGENTS.md
+  s_72f7e15cf1af9f::t_3030bdedb9d309 674-675
+builder/systemd_services/node-reboot-agent.service
+  s_72f7e15cf1af9f::t_01d140404bae6b 1-9,12-17
+  s_72f7e15cf1af9f::t_9eb78727bfac08 10-11
+src/control-plane/scaling-controller/cmd/node-reboot-agent/agent.go
+  s_72f7e15cf1af9f::t_2b679b1d12c6ce 1-55,66-114,116-134,146-198,200-271
+  s_72f7e15cf1af9f::t_63b3c16b2c7dbc 56-65,115,135-145,199
+deploy/akernel/charts/core/templates/scaling-controller/reboot-proof-service.yaml
+  s_72f7e15cf1af9f::t_07ccd88b4d823b 1-19
+src/control-plane/scaling-controller/internal/config/auto_reboot.go
+  s_72f7e15cf1af9f::t_6c532a11855732 13-38
+  s_72f7e15cf1af9f::t_80326fff4c0937 1-12,39-62
+src/control-plane/scaling-controller/cmd/node-reboot-agent/main.go
+  s_72f7e15cf1af9f::t_60ab2fbafea393 1-115,117-132
+  s_72f7e15cf1af9f::t_9bf9fb0fce0f75 116
+deploy/akernel/charts/core/templates/scaling-controller/configmap.yaml
+  s_72f7e15cf1af9f::t_07ccd88b4d823b 4-12,73-74
+  s_72f7e15cf1af9f::t_76180a9321c08d 75
+src/control-plane/scaling-controller/internal/rebootproof/server.go
+  s_72f7e15cf1af9f::t_6c532a11855732 1-38
+deploy/akernel/charts/core/templates/_helpers.tpl
+  s_72f7e15cf1af9f::t_07ccd88b4d823b 8-12
+src/control-plane/scaling-controller/internal/executor/auto_reboot_test.go
+  s_72f7e15cf1af9f::t_1acad843990904 50,67,94,109,118,130,170,176,185-190,250,254,263
+  s_72f7e15cf1af9f::t_d6028f1c3ed985 1-49,51-66,68-93,95-108,110-117,119-129,131-169,171-175,177-184,191-249,251-253,255-262,264-265
+src/control-plane/scaling-controller/internal/executor/reconciler.go
+  s_72f7e15cf1af9f::t_6c532a11855732 34
+  s_72f7e15cf1af9f::t_96d17e053fe581 91
+  s_72f7e15cf1af9f::t_5320248eb34a6a 87-90,92-98,109-111,142,164,169-170,178-179
+builder/systemd_services/sandboxd.service
+  s_72f7e15cf1af9f::t_01d140404bae6b 9
+src/control-plane/scaling-controller/internal/rebootproof/report.go
+  s_72f7e15cf1af9f::t_96d17e053fe581 21-26,155-162,169-171,173-180,182
+  s_72f7e15cf1af9f::t_6c532a11855732 1-20,27-98,100-154,163-168,172,181,183-184
+  s_72f7e15cf1af9f::t_7f844b81b4bd27 99
+src/control-plane/scaling-controller/cmd/scaling-controller/main.go
+  s_72f7e15cf1af9f::t_96d17e053fe581 37,164-167,193-216,245-249
+  s_72f7e15cf1af9f::t_b16d93a64d83f3 250-256
+builder/patches/.gitattributes
+  s_72f7e15cf1af9f::t_ed044a5b347f58 1-2
+deploy/akernel/charts/core/templates/scaling-controller/node-lease-reader.yaml
+  s_72f7e15cf1af9f::t_b2ae3a19b25a3b 1-26
+src/control-plane/scaling-controller/cmd/node-reboot-agent/agent_test.go
+  s_72f7e15cf1af9f::t_c9c81f20847304 1-193
+src/control-plane/scaling-controller/cmd/node-reboot-agent/http.go
+  s_72f7e15cf1af9f::t_f0440edb615c23 1-159
+src/control-plane/scaling-controller/internal/ackclient/client.go
+  s_72f7e15cf1af9f::t_814edd1506b70c 108-111,140-147
+src/control-plane/scaling-controller/internal/ackclient/types.go
+  s_72f7e15cf1af9f::t_065a4f7aa47cf4 24-29
+src/control-plane/scaling-controller/internal/config/types.go
+  s_72f7e15cf1af9f::t_28ad336ec63f19 40,258
+src/control-plane/scaling-controller/internal/ecsclient/client.go
+  s_72f7e15cf1af9f::t_fab516b38b253a 1,8,42,55,60-62,75-78,112-117,146,151-183
+src/control-plane/scaling-controller/internal/ecsclient/client_test.go
+  s_72f7e15cf1af9f::t_67406bb198eae5 1-64
+src/control-plane/scaling-controller/internal/executor/fakes_test.go
+  s_72f7e15cf1af9f::t_bc5bc7da6628b0 250-252,283-289
+src/control-plane/scaling-controller/internal/executor/marker.go
+  s_72f7e15cf1af9f::t_7689ebe6fdd266 32-34
+src/control-plane/scaling-controller/internal/executor/utilization_capacity.go
+  s_72f7e15cf1af9f::t_6826178a29c95c 164-165
+src/control-plane/scaling-controller/internal/node/keys.go
+  s_72f7e15cf1af9f::t_179f94377e0b15 16-18
+src/control-plane/scaling-controller/internal/rebootproof/report_test.go
+  s_72f7e15cf1af9f::t_d9152f41c74136 1-94
+src/control-plane/scaling-controller/internal/sandboxapi/client.go
+  s_72f7e15cf1af9f::t_39f7f3a5f80c07 123-126,131-135
+src/control-plane/scaling-controller/internal/sandboxapi/types.go
+  s_72f7e15cf1af9f::t_35e1070dfbb467 71
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "446a528e514f4abe801cf216abfb2001e79bf439",
+  "prompts": {},
+  "sessions": {
+    "s_72f7e15cf1af9f": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a19c6f-b052-7543-ac5b-988b6625ed5b",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}

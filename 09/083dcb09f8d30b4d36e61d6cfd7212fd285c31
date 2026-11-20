@@ -1,0 +1,19 @@
+.aci.yml
+  s_e4a0f48a921d4c::t_5010f05f203ae8 40-42
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "09083dcb09f8d30b4d36e61d6cfd7212fd285c31",
+  "prompts": {},
+  "sessions": {
+    "s_e4a0f48a921d4c": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a04285-c85e-7d30-96b4-94b7960fff06",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "yao <zhouyao.zhou@antgroup.com>"
+    }
+  }
+}

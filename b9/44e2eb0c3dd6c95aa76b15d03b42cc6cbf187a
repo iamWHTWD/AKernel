@@ -1,0 +1,38 @@
+builder/README.md
+  s_9b09f9dfa8b043::t_19dfd8b604e3e7 33-36
+  s_9b09f9dfa8b043::t_c83da9782708dd 7-11,14,25-27,42-43
+  s_9b09f9dfa8b043::t_c006f23d3c7ac3 44
+deploy/docs/runtime-rootfs-pinning.md
+  s_9b09f9dfa8b043::t_d7f8160222c6ac 5,56
+  s_9b09f9dfa8b043::t_c83da9782708dd 30-53
+builder/scripts/verify-e2b-release.py
+  s_9b09f9dfa8b043::t_19dfd8b604e3e7 20-21,27-30,38-39,41-42
+builder/scripts/test_e2b_runtime.py
+  s_9b09f9dfa8b043::t_48e6ab2da19f93 82,101
+  s_9b09f9dfa8b043::t_aef671af2c85c8 83-100
+deploy/standalone/README.md
+  s_9b09f9dfa8b043::t_c83da9782708dd 106-109
+deploy/scripts/build-image.sh
+  s_9b09f9dfa8b043::t_c83da9782708dd 318-322
+  s_9b09f9dfa8b043::t_0568a4f2ea02bf 323
+builder/scripts/test-build-image.py
+  s_9b09f9dfa8b043::t_3526b6e5309767 46,57-72,262
+AGENTS.md
+  s_9b09f9dfa8b043::t_c83da9782708dd 153-158
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "b944e2eb0c3dd6c95aa76b15d03b42cc6cbf187a",
+  "prompts": {},
+  "sessions": {
+    "s_9b09f9dfa8b043": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1ed0c-e0a2-7ef2-8d8d-c6bdaac7d15e",
+        "model": "gpt-6.2-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}

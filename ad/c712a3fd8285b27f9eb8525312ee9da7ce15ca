@@ -1,0 +1,75 @@
+deploy/internal/source-lock.json
+  s_72f7e15cf1af9f::t_f2c22247584f47 15,55,190,235,450,455,485,490,545,560,575,595,605,610
+  s_72f7e15cf1af9f::t_014088cfc1dc49 445
+deploy/internal/test_aci.py
+  s_72f7e15cf1af9f::t_aca99dd133d154 214
+src/control-plane/scaling-controller/hack/config.yaml
+  s_72f7e15cf1af9f::t_aca99dd133d154 53,104
+deploy/scaling-controller/templates/_helpers.tpl
+  s_72f7e15cf1af9f::t_bfae89a1060da9 76-79
+deploy/scaling-controller/README.md
+  s_72f7e15cf1af9f::t_4291bac4bfbcd2 27-38
+src/control-plane/scaling-controller/hack/check_manifests.py
+  s_72f7e15cf1af9f::t_1146df6514e884 40
+src/control-plane/scaling-controller/FUNCTIONALITY.md
+  s_72f7e15cf1af9f::t_e4e0c22ded0f84 268-275
+  s_72f7e15cf1af9f::t_d96959f97943c9 3-5
+  s_72f7e15cf1af9f::t_840edc77cdc5b3 82,87
+  s_72f7e15cf1af9f::t_3868a7b4bbd7a6 7-8,226
+  s_72f7e15cf1af9f::t_1dcc7d54088723 254-267
+builder/README.md
+  s_72f7e15cf1af9f::t_b93bd504fca56c 33
+src/control-plane/scaling-controller/internal/executor/reconciler.go
+  s_72f7e15cf1af9f::t_8c05b52acf93eb 241,312,330-348,362
+src/control-plane/scaling-controller/README.md
+  s_72f7e15cf1af9f::t_2cfcec117cbcb7 99
+  s_72f7e15cf1af9f::t_879df02a58b44f 18-23
+  s_72f7e15cf1af9f::t_d2ff0b1723b027 24,107,113,115-119,121,123,125
+AGENTS.md
+  s_72f7e15cf1af9f::t_4291bac4bfbcd2 931-936
+  s_72f7e15cf1af9f::t_b93bd504fca56c 942,946
+src/control-plane/scaling-controller/internal/executor/controller_test.go
+  s_72f7e15cf1af9f::t_446d74daeb4018 4-8,16-17,20-22,152-156
+  s_72f7e15cf1af9f::t_854b3bd6a4a9ef 175,181-182
+  s_72f7e15cf1af9f::t_f131b22a532212 138,158,186-189,193,195-196,198-199
+  s_72f7e15cf1af9f::t_d424797429dbc3 44-45,61,66,77,82,89,94,99,118
+  s_72f7e15cf1af9f::t_d96d6a753ccd9b 192,197
+  s_72f7e15cf1af9f::t_1e57d3e2d31e86 50,63,68,85-86,104,133,142-145,179,183-184,191,194
+  s_72f7e15cf1af9f::t_792a5a47ccfe1a 26-31,34-36,55,78-79
+  s_72f7e15cf1af9f::t_9463588fe5a0f5 32-33,37-39,47,54,57,65,70,72,74-75,88,111,117,121-122,137,140-141,146-149,157,160-164,168-174,176-178,180,185
+deploy/scaling-controller/values.yaml
+  s_72f7e15cf1af9f::t_aca99dd133d154 73
+src/control-plane/scaling-controller/internal/decider/scaleup.go
+  s_72f7e15cf1af9f::t_78660e5a0cefb8 15,18-21,93-111,121-143,267-273,275-289
+  s_72f7e15cf1af9f::t_4e1a50f2b4de33 13-14,274,290-291
+src/control-plane/scaling-controller/Makefile
+  s_72f7e15cf1af9f::t_aca99dd133d154 43
+src/control-plane/scaling-controller/internal/config/types.go
+  s_72f7e15cf1af9f::t_78660e5a0cefb8 120-129,236-237
+builder/scaling-controller.Dockerfile
+  s_72f7e15cf1af9f::t_aca99dd133d154 43
+src/control-plane/scaling-controller/internal/executor/releaser.go
+  s_72f7e15cf1af9f::t_8c05b52acf93eb 81-83
+deploy/internal/README.md
+  s_72f7e15cf1af9f::t_d2ff0b1723b027 47
+deploy/internal/scaling-controller.Dockerfile
+  s_72f7e15cf1af9f::t_f2c22247584f47 59
+src/control-plane/scaling-controller/internal/executor/parent_memory_metrics.go
+  s_72f7e15cf1af9f::t_8c05b52acf93eb 115,127-147,150-153
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "adc712a3fd8285b27f9eb8525312ee9da7ce15ca",
+  "prompts": {},
+  "sessions": {
+    "s_72f7e15cf1af9f": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a19c6f-b052-7543-ac5b-988b6625ed5b",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}

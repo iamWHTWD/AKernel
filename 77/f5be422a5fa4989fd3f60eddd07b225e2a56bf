@@ -1,0 +1,14 @@
+src/node/sandboxd
+  h_7f0f9524ceb1f1 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "77f5be422a5fa4989fd3f60eddd07b225e2a56bf",
+  "prompts": {},
+  "humans": {
+    "h_7f0f9524ceb1f1": {
+      "author": "yao <zhouyao.zhou@antgroup.com>"
+    }
+  }
+}

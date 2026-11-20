@@ -1,0 +1,23 @@
+.aci.yml
+  s_37d3d6814e97b2::t_a9f070e4986ae3 33
+deploy/internal/upstream.json
+  s_37d3d6814e97b2::t_cbdd8db666c559 4
+deploy/internal/source-lock.json
+  s_37d3d6814e97b2::t_9ba83ec063492a 265
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "864e7f8b4cd30c279e639a8590b20c3cc32466d5",
+  "prompts": {},
+  "sessions": {
+    "s_37d3d6814e97b2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a586-c4a5-7eb1-b281-03c458202041",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}

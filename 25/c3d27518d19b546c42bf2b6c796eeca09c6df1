@@ -1,0 +1,41 @@
+AGENTS.md
+  s_72f7e15cf1af9f::t_b362c87af86f43 931-935
+src/control-plane/scaling-controller/README.md
+  s_72f7e15cf1af9f::t_b362c87af86f43 18,24-25,30,81
+  s_72f7e15cf1af9f::t_5e29d2788dd40f 132-133
+src/control-plane/scaling-controller/internal/executor/controller_test.go
+  s_72f7e15cf1af9f::t_3039e5da2cfb36 169,177-178,183,186
+  s_72f7e15cf1af9f::t_b362c87af86f43 168
+src/control-plane/scaling-controller/internal/decider/pool.go
+  s_72f7e15cf1af9f::t_fabd42b549f57f 79
+deploy/scaling-controller/values.yaml
+  s_72f7e15cf1af9f::t_c8fffb7fee7464 73
+deploy/scaling-controller/templates/_helpers.tpl
+  s_72f7e15cf1af9f::t_c8fffb7fee7464 77
+deploy/scaling-controller/README.md
+  s_72f7e15cf1af9f::t_c8fffb7fee7464 27,33,36-38
+src/control-plane/scaling-controller/hack/config.yaml
+  s_72f7e15cf1af9f::t_fabd42b549f57f 53,104
+src/control-plane/scaling-controller/hack/check_manifests.py
+  s_72f7e15cf1af9f::t_fabd42b549f57f 40
+src/control-plane/scaling-controller/internal/config/types.go
+  s_72f7e15cf1af9f::t_fabd42b549f57f 234-236,239
+deploy/internal/source-lock.json
+  s_72f7e15cf1af9f::t_b895e5ee26e86d 450,480,485,540,545,575
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "25c3d27518d19b546c42bf2b6c796eeca09c6df1",
+  "prompts": {},
+  "sessions": {
+    "s_72f7e15cf1af9f": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a19c6f-b052-7543-ac5b-988b6625ed5b",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}

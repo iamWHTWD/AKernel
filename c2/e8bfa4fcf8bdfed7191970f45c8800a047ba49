@@ -1,0 +1,91 @@
+src/control-plane/node-upgrade/tests/test_migration_replay.py
+  s_9190abe4044263::t_078ae8f3c14572 1-170
+deploy/registry-connectivity/README.md
+  s_9190abe4044263::t_078ae8f3c14572 1-237
+deploy/registry-connectivity/tests/test_check.py
+  s_9190abe4044263::t_078ae8f3c14572 1-135
+deploy/registry-connectivity/Dockerfile
+  s_9190abe4044263::t_078ae8f3c14572 1-7
+src/control-plane/node-upgrade/manage.py
+  s_9190abe4044263::t_078ae8f3c14572 69,78,81,114,117
+deploy/internal/upstream.json
+  s_9190abe4044263::t_078ae8f3c14572 4
+deploy/registry-connectivity/check.py
+  s_9190abe4044263::t_078ae8f3c14572 1-337
+deploy/README.md
+  s_9190abe4044263::t_078ae8f3c14572 20-24
+src/control-plane/node-upgrade/README.md
+  s_9190abe4044263::t_078ae8f3c14572 3,7-8,10-11,29,31,37,41,50-52,73,77,79,81,98,102,118,124,126,139
+deploy/registry-connectivity/.dockerignore
+  s_9190abe4044263::t_078ae8f3c14572 1-5
+builder/runtime.Dockerfile
+  s_9190abe4044263::t_078ae8f3c14572 7-8
+builder/node.Dockerfile
+  s_9190abe4044263::t_078ae8f3c14572 41-42
+deploy/registry-connectivity/tests/test_redirects.py
+  s_9190abe4044263::t_078ae8f3c14572 1-187
+deploy/registry-connectivity/tests/test_transport.py
+  s_9190abe4044263::t_078ae8f3c14572 1-135
+deploy/internal/source-lock.json
+  s_9190abe4044263::t_078ae8f3c14572 135,180,190,445
+deploy/registry-connectivity/requirements.txt
+  s_9190abe4044263::t_078ae8f3c14572 1-15
+src/control-plane/node-upgrade/config.example.json
+  s_9190abe4044263::t_078ae8f3c14572 21
+deploy/internal/node.Dockerfile
+  s_9190abe4044263::t_078ae8f3c14572 42-43
+src/control-plane/node-upgrade/akernel_upgrade/protocol.py
+  s_9190abe4044263::t_078ae8f3c14572 23,32-33,49,56-58,75-76,79-80
+src/control-plane/node-upgrade/job.yaml
+  s_9190abe4044263::t_078ae8f3c14572 3
+.github/workflows/ci.yml
+  s_9190abe4044263::t_078ae8f3c14572 196
+deploy/registry-connectivity/tests/test_chart.py
+  s_9190abe4044263::t_078ae8f3c14572 1-98
+src/control-plane/node-upgrade/requirements.txt
+  s_9190abe4044263::t_078ae8f3c14572 1
+builder/managed-docker/qualification-sources.json
+  s_9190abe4044263::t_078ae8f3c14572 8,12,16,20-21,44-49
+src/control-plane/node-upgrade/tests/test_upgrade.py
+  s_9190abe4044263::t_078ae8f3c14572 30,121,124,131,159,163,182-212,216,224-225,236,247,261,273-274,279,332,340-341,363,382,389-390,392-396,398-399,401-403
+deploy/registry-connectivity/chart/templates/resources.yaml
+  s_9190abe4044263::t_078ae8f3c14572 1-206
+deploy/registry-connectivity/chart/Chart.yaml
+  s_9190abe4044263::t_078ae8f3c14572 1-5
+deploy/registry-connectivity/chart/values.yaml
+  s_9190abe4044263::t_078ae8f3c14572 1-52
+src/control-plane/node-upgrade/akernel_upgrade/engine.py
+  s_9190abe4044263::t_078ae8f3c14572 52-53,55,59,144-147,159,172-173,182,199-200,218,506-507,579-583,587,590-596,598-599,601-602,607-608,619-621,624-626,632-643,645-648,652-654,659,679-680,695-698,717,747,764-765,789,791-793,798-810,890-891,904-905,909-916,945,962,965
+src/control-plane/node-upgrade/bootstrap.py
+  s_9190abe4044263::t_078ae8f3c14572 34-35,38-39,43,45,47-48,51,57
+.aci-erofs.yml
+  s_9190abe4044263::t_c307310711b835 20-21
+.aci.yml
+  s_9190abe4044263::t_5cabd95016584c 33
+src/agent-dx
+  s_cb5bc6f9f3633a::t_65ca10e606ad12 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "c2e8bfa4fcf8bdfed7191970f45c8800a047ba49",
+  "prompts": {},
+  "sessions": {
+    "s_9190abe4044263": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1c4e0-26d3-77e3-a282-46973c02292a",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    },
+    "s_cb5bc6f9f3633a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1bf0f-8a65-7c82-98e4-c163d5b53e84",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "wanghongtao.wangho <wanghongtao.wangho@antgroup.com>"
+    }
+  }
+}
